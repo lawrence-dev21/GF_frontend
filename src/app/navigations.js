@@ -5,32 +5,32 @@ export const navigations = [
     name: 'User Management',
     icon: 'manage_accounts',
     children: [
-      { name: 'Users', iconText: 'SI', path: '/usermanagement/user' },
-      { name: 'Active users', iconText: 'SU', path: '/session/signup' },
+      { name: 'Users', iconText: 'SI', path: '/users' },
+      { name: 'Add User', iconText: 'SU', path: '/users/add' },
     ],
   },
   {
     name: 'Beneficiary Management',
     icon: 'wc',
     children: [
-      { name: 'Beneficiaries', iconText: 'SI', path: '/beneficiarymanagement/beneficiaries' },
-      { name: 'Annual Promotion', iconText: 'SU', path: '/session/signup' },
+      { name: 'Beneficiaries', iconText: 'SI', path: '/beneficiaries' },
+      // { name: 'Annual Promotion', iconText: 'SU', path: '/session/signup' },
     ],
   },
   {
     name: 'CSE',
     icon: 'menu_book',
     children: [
-      { name: 'Materials', iconText: 'SI', path: '/comprehesive/cse' },
-      { name: 'Clubs', iconText: 'SU', path: '/session/signup' },
+      { name: 'Materials', iconText: 'SI', path: '/cse' },
+      // { name: 'Clubs', iconText: 'SU', path: '/session/signup' },
     ],
   },
   {
     name: 'School Management',
     icon: 'account_balance',
     children: [
-      { name: 'Schools', iconText: 'SI', path: '/Schoolmgt/Schools' },
-      { name: 'Add School', iconText: 'SU', path: '/session/signup' },
+      { name: 'Schools', iconText: 'SI', path: '/schools' },
+      // { name: 'Add School', iconText: 'SU', path: '/session/signup' },
     ],
   },
   { label: 'Others', type: 'label' },
@@ -50,29 +50,6 @@ export const navigations = [
     icon: 'assessment',
     children: [
       { name: 'All reports', iconText: 'SI', path: '/session/signup' },
-    ],
-  },
-
-
-  {
-    name: 'Components',
-    icon: 'favorite',
-    badge: { value: '30+', color: 'secondary' },
-    children: [
-      { name: 'Auto Complete', path: '/material/autocomplete', iconText: 'A' },
-      { name: 'Buttons', path: '/material/buttons', iconText: 'B' },
-      { name: 'Checkbox', path: '/material/checkbox', iconText: 'C' },
-      { name: 'Dialog', path: '/material/dialog', iconText: 'D' },
-      { name: 'Expansion Panel', path: '/material/expansion-panel', iconText: 'E' },
-      { name: 'Form', path: '/material/form', iconText: 'F' },
-      { name: 'Icons', path: '/material/icons', iconText: 'I' },
-      { name: 'Menu', path: '/material/menu', iconText: 'M' },
-      { name: 'Progress', path: '/material/progress', iconText: 'P' },
-      { name: 'Radio', path: '/material/radio', iconText: 'R' },
-      { name: 'Switch', path: '/material/switch', iconText: 'S' },
-      { name: 'Slider', path: '/material/slider', iconText: 'S' },
-      { name: 'Snackbar', path: '/material/snackbar', iconText: 'S' },
-      { name: 'Table', path: '/material/table', iconText: 'T' },
     ],
   },
 ];

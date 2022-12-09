@@ -1,6 +1,6 @@
 
 import {styled } from "@mui/system";
-import School from "./Schooltable";
+import UserTable from "./UserTable";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -11,13 +11,13 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const AppForm = () => {
+const Users = () => {
   return (
     <Container>
-         <School />
+         <UserTable/>
     </Container>
   );
 };
 
-export default AppForm;
+export default Users;
 

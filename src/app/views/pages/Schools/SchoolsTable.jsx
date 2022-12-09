@@ -7,7 +7,7 @@ import { Grid} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 
 
-const Cse = () => {
+const SchoolsTable = () => {
     const columns = [
         {
             name: 'firstname',
@@ -63,10 +63,10 @@ const Cse = () => {
             <Grid item xs={12} sm={6} md={4} lg={3}>
             </Grid>
             <Grid item padding={2}>
-                <MUIDataTable title={'Comprehensive Sexiual Education materials'} data={datalist} columns={columns} options={options} />
+                <MUIDataTable title={'Schools'} data={datalist} columns={columns} options={options} />
             </Grid>
         </Grid>
     );
 };
 
-export default Cse;
+export default SchoolsTable;

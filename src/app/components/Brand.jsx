@@ -4,7 +4,7 @@ import logo from './logo/zambia-coats-of-arm.jpg'
 
 const Logo = () => {
   return (
-      <img src={logo} alt="" width="80" />
+      <img src={logo} alt="" width="80" style={{ borderRadius: 4 }} />
   );
 };
 
@@ -12,7 +12,9 @@ const BrandRoot = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '20px 18px 20px 29px',
+  margin: 'auto'
+  // padding: '20px',
+  // padding: '20px 18px 20px 29px',
 }));
 
 

@@ -7,7 +7,7 @@ import { Grid} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 
 
-const School = () => {
+const BeneficiaryTable = () => {
     const columns = [
         {
             name: 'firstname',
@@ -63,10 +63,10 @@ const School = () => {
             <Grid item xs={12} sm={6} md={4} lg={3}>
             </Grid>
             <Grid item padding={2}>
-                <MUIDataTable title={'Schools'} data={datalist} columns={columns} options={options} />
+                <MUIDataTable title={'Beneficiaries'} data={datalist} columns={columns} options={options} />
             </Grid>
         </Grid>
     );
 };
 
-export default School;
+export default BeneficiaryTable;

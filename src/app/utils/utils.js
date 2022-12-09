@@ -171,3 +171,7 @@ export const flat = (array) => {
   });
   return result;
 };
+
+export const base64ToImage = (data, type='image', format='jpeg') => {
+    return  `data:${type}/${format};base64,${data}`
+}

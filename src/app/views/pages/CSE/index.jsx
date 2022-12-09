@@ -1,6 +1,6 @@
 
 import {styled } from "@mui/system";
-import Cse from "./csetable";
+import CSETable from "./CSETable";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -11,13 +11,13 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const AppForm = () => {
+const CSE = () => {
   return (
     <Container>
-         <Cse />
+         <CSETable />
     </Container>
   );
 };
 
-export default AppForm;
+export default CSE;
 

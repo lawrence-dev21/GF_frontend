@@ -1,6 +1,6 @@
 
 import {styled } from "@mui/system";
-import Beneficiary from "./benetable";
+import BeneficiaryTable from "./BeneficiaryTable";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -11,13 +11,13 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const AppForm = () => {
+const Beneficiaries = () => {
   return (
     <Container>
-         <Beneficiary />
+         <BeneficiaryTable />
     </Container>
   );
 };
 
-export default AppForm;
+export default Beneficiaries;
 
