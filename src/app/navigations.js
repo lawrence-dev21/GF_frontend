@@ -30,7 +30,7 @@ export const navigations = [
     icon: 'account_balance',
     children: [
       { name: 'Schools', iconText: 'SI', path: '/schools' },
-      // { name: 'Add School', iconText: 'SU', path: '/session/signup' },
+      { name: 'Add School', iconText: 'SU', path: '/schools/add' },
     ],
   },
   { label: 'Others', type: 'label' },

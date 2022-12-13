@@ -1,0 +1,41 @@
+//                       ['Frank', 'Chaiwa', 'fc@.com','112435/12/1','Software Engineer', '1994-01-01', '2022-11-24'],
+//                       ['Michael', 'chuck', 'mck@.com','112435/12/1','Accounts', '1991-11-10', '2022-11-24'],
+//                       ['Given', 'mwaba', 'gm@.com','112435/12/1','Procurement', '1994-11-7', '2022-11-24'],
+//                       ['David', 'Mbao', 'dm@.com','112435/12/1','Finance', '1977-10-08', '2022-11-24'],
+//                       ['Chewe', 'Chileshe', 'cc@.com','112435/12/1','ICT cyberscurity', '1989-02-03', '2022-11-24'],             
+
+export const userList = [
+        {
+            firstName: 'Lawrence',
+            lastName: 'Kasonde',
+            name: 'Lawrence Kasonde',
+            email: 'lawrence.kasonde@moe.gov.zm',
+            nrc: '123456/12/1',
+            gender: 'Male',
+            role: 'SA',
+            position: 'Full-Stack Developer',
+            mobile: '',
+            dataOfBirth: '1990-12-01',
+            creationDate: '2022-09-01',
+            avatar: '',
+            id: '323sa680b32497dsfdsgga21rt47',
+            password: 'Lusaka@123',
+        },
+        {
+            firstName: 'Ngalande',
+            lastName: 'Banda',
+            name: 'Ngalande Banda',
+            email: 'nb@moe.gov.zm',
+            nrc: '112435/12/1',
+            gender: 'Male',
+            role: 'SA',
+            position: 'Full-Stack Developer',
+            mobile: '',
+            dataOfBirth: '1986-12-03',
+            creationDate: '2022-09-01',
+            avatar: '',
+            id: 'o23sa680b32497defdsgga21rt47',
+            password: 'Lusaka@123',
+        }
+]
+

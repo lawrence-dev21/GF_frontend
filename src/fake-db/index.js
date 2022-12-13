@@ -1,6 +1,6 @@
 import Mock from './mock';
 
-import './db/users';
+import './db/index';
 import './db/notification';
 
 Mock.onAny().passThrough();

@@ -28,9 +28,9 @@ const TextField = styled(TextValidator)(() => ({
 }));
 
 
-const UserForm = () => {
+const SchoolForm = () => {
   const [state, setState] = useState({});
-  const title = useTitle(': Add User')
+  const title = useTitle(': Add School')
   const dispatch = useDispatch()
   const [ spacing ] = useState({
     paddingTop: isMobile() ? '12px' : '24px',
@@ -74,11 +74,11 @@ const _handleReaderLoaded = (readerEvent) => {
   };
 
 const [systemRoles] = useState ([
-                          {value: 'SA', label: 'Super Admin'},
-                          {value: 'ADMIN', label: 'Admin'},
-                          {value: 'EDITOR', label: 'Editor'},
-                          {value: 'GUEST', label: 'Guest'},
-                      ])
+              {value: 'SA', label: 'Super Admin'},
+              {value: 'ADMIN', label: 'Admin'},
+              {value: 'EDITOR', label: 'Editor'},
+              {value: 'GUEST', label: 'Guest'},
+          ])
 
   const {
     avatar,
@@ -293,4 +293,4 @@ const [systemRoles] = useState ([
   );
 };
 
-export default UserForm;
+export default SchoolForm;

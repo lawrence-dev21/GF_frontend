@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getUsers, deleteUser } from '../../../redux/actions/UserActions'
 import { useSelector, useDispatch  } from 'react-redux'
 
-const selectUsers = state => state.users.usersList
+const selectUsers = state => state.users.userList
 
 const UserTable = () => {
     // first get a columns state
@@ -52,14 +52,14 @@ const UserTable = () => {
             name: 'email',
             label: 'Email'
         },
-        {
-            name: 'nrc',
-            label: 'NRC'
-        },
-        {
-            name: 'gender',
-            label: 'Gender'
-        },
+        // {
+        //     name: 'nrc',
+        //     label: 'NRC'
+        // },
+        // {
+        //     name: 'gender',
+        //     label: 'Gender'
+        // },
         {
             name: 'role',
             label: 'Role'
@@ -86,6 +86,7 @@ const UserTable = () => {
     const options = {
         rowsSelected: selectedRows,
         selectableRowsHideCheckboxes: false,
+        responsive: 'scroll',
         viewColumns: true,
         Selection: true,
         onRowClick: (s) => {
@@ -121,9 +122,9 @@ const UserTable = () => {
                             user.firstName,
                             user.lastName,
                             user.email,
-                            user.nrc,
-                            user.gender,
+                            // user.nrc,
                             user.role,
+                            user.gender,
                             user.mobile,
                             user.dataOfBirth,
                             user.creationDate,

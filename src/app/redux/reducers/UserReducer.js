@@ -7,7 +7,7 @@ import {
 
 
 const initialState = {
-  usersList: [],
+  userList: [],
 };
 
 
@@ -16,22 +16,26 @@ const UserReducer = function (state = initialState, action) {
 	switch(action.type) {
 		case GET_USERS: {
 		return {
-				usersList: [...action.payload]
+			...state,
+				userList: [...action.payload]
 			}
 		}
 		case ADD_USER: {
 			return {
-				usersList: [...action.payload]
+				...state,
+				userList: [...action.payload]
 			}
 		}
 		case DELETE_USER: {
 			return {
-				usersList: [...action.payload]
+				...state,
+				userList: [...action.payload]
 			}
 		}
 		case UPDATE_USER: {
 			return {
-				usersList: [...action.payload]
+				...state,
+				userList: [...action.payload]
 			}
 		}
 		default: {

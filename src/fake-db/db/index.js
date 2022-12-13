@@ -1,42 +1,21 @@
 import Mock from '../mock'
 import shortId from 'shortid'
 import jwt from 'jsonwebtoken';
+import { userList } from './data';
 
 const JWT_SECRET = 'jwt_secret_key';
 const JWT_VALIDITY = '7 days';
 
+// Create different files for all the routes
 
-const UsersDB = {
-    usersList: [
-        {
-            firstName: 'Lawrence',
-            lastName: 'Kasonde',
-            name: 'Lawrence Kasonde',
-            email: 'lawrence.kasonde@moe.gov.zm',
-            nrc: '123456/12/1',
-            gender: 'Male',
-            role: 'SA',
-            position: 'Full-Stack Developer',
-            mobile: '',
-            dataOfBirth: '1990-12-01',
-            creationDate: '2022-09-01',
-            avatar: '',
-            id: '323sa680b32497dsfdsgga21rt47',
-            password: 'Lusaka@123',
-        },
-    ],
+const DB = {
+    userList,
 }
 
-//                       ['Ngalande', 'Banda', 'nb@.com','112435/12/1','Developer', '1986-12-03', '2022-11-24'],
-//                       ['Frank', 'Chaiwa', 'fc@.com','112435/12/1','Software Engineer', '1994-01-01', '2022-11-24'],
-//                       ['Michael', 'chuck', 'mck@.com','112435/12/1','Accounts', '1991-11-10', '2022-11-24'],
-//                       ['Given', 'mwaba', 'gm@.com','112435/12/1','Procurement', '1994-11-7', '2022-11-24'],
-//                       ['David', 'Mbao', 'dm@.com','112435/12/1','Finance', '1977-10-08', '2022-11-24'],
-//                       ['Chewe', 'Chileshe', 'cc@.com','112435/12/1','ICT cyberscurity', '1989-02-03', '2022-11-24'],             
 
 
 Mock.onGet('/api/users').reply((config) => {
-    const response = UsersDB.usersList
+    const response = DB.userList
     return [200, response]
 })
 
@@ -44,11 +23,11 @@ Mock.onGet('/api/users').reply((config) => {
 Mock.onPost('/api/users/add').reply((config) => {
     const data = JSON.parse(config.data)
     console.log('inside mock', config.data)
-    const userRegExists = UsersDB.usersList.filter(user => user.nrc === data.nrc)
-    const userEmailExists = UsersDB.usersList.filter(user => user.email === data.email)
+    const userRegExists = DB.userList.filter(user => user.nrc === data.nrc)
+    const userEmailExists = DB.userList.filter(user => user.email === data.email)
     console.log('User Exists:', userRegExists)
     if((userRegExists.length > 0) || (userEmailExists.length > 0) ){
-    	return [500, UsersDB.usersList]
+    	return [500, DB.userList]
     } else {
         const creationDate = new Date()
         let dateOfBirth = new Date()
@@ -58,21 +37,21 @@ Mock.onPost('/api/users/add').reply((config) => {
     	const newUser = {
             ...data,
             id: shortId.generate(),
-            name: (data.firstName, data.lastName),
+            name: data.firstName + ' ' + data.lastName,
             creationDate: creationDate.toISOString(),
             dateOfBirth: dateOfBirth.toISOString()
         }
     	
-    	UsersDB.usersList.push(newUser)
-    	return [200, UsersDB.usersList]
+    	DB.userList.push(newUser)
+    	return [200, DB.userList]
     }
 })
 
 Mock.onPost('/api/users/delete').reply((config) => {
     let { userId } = JSON.parse(config.data)
-    let usersList = UsersDB.usersList.filter((user) => user.id !== userId)
-    UsersDB.usersList = usersList
-    return [200, usersList]
+    let userList = DB.userList.filter((user) => user.id !== userId)
+    DB.userList = userList
+    return [200, userList]
 })
 
 Mock.onPost('/api/auth/login').reply(async (config) => {
@@ -80,7 +59,7 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const { email, password } = JSON.parse(config.data);
-    const user = UsersDB.usersList.find((u) => u.email === email);
+    const user = DB.userList.find((u) => u.email === email);
 
     if (!user) {
       return [400, { message: 'User not registered' }];
@@ -116,7 +95,7 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
 // Mock.onPost('/api/auth/register').reply((config) => {
 //   try {
 //     const { email, username } = JSON.parse(config.data);
-//     const user = UsersDB.usersList.find((u) => u.email === email);
+//     const user = DB.userList.find((u) => u.email === email);
 
 //     if (user) {
 //       return [400, { message: 'User already exists!' }];
@@ -130,7 +109,7 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
 //       avatar: '/assets/images/face-6.jpg',
 //       age: 25,
 //     };
-//     UsersDB.usersList.push(newUser);
+//     DB.userList.push(newUser);
 
 //     const accessToken = jwt.sign({ userId: newUser.id }, JWT_SECRET, {
 //       expiresIn: JWT_VALIDITY,
@@ -165,7 +144,7 @@ Mock.onGet('/api/auth/profile').reply((config) => {
 
     const accessToken = Authorization.split(' ')[1];
     const { userId } = jwt.verify(accessToken, JWT_SECRET);
-    const user = UsersDB.usersList.find((u) => u.id === userId);
+    const user = DB.userList.find((u) => u.id === userId);
 
     if (!user) {
       return [401, { message: 'Invalid authorization token' }];

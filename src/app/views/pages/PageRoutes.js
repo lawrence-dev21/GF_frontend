@@ -5,6 +5,10 @@ import { lazy } from 'react';
 const User = Loadable(lazy(() => import('./Users')));
 const AddUserForm = Loadable(lazy(() => import('./AddUserForm')));
 
+// School Management
+const School = Loadable(lazy(() => import('./Schools')));
+const AddSchoolForm = Loadable(lazy(() => import('./AddSchoolForm')));
+
 // TODO Create the school managment pages
 
 // Beneficiary Management
@@ -29,6 +33,14 @@ const pageRoutes = [
   {
     path: '/users/add',
     element: <AddUserForm/>
+  },
+  {
+    path: '/schools',
+    element: <School/>
+  },
+  {
+    path: '/schools/add',
+    element: <AddSchoolForm/>
   },
   {
     path: '/boarding',

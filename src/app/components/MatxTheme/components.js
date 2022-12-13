@@ -16,8 +16,7 @@ export const components = {
       },
       root: {
         fontSize: '14px',
-        whiteSpace: 'pre-wrap',
-        wordBreak: 'break-all',
+        wordWrap: "break-word",
         padding: '12px 8px 12px 0px',
       },
     },
