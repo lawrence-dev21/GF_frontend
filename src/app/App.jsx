@@ -6,6 +6,8 @@ import { AuthProvider } from './contexts/JWTAuthContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { Store } from './redux/Store';
 import routes from './routes';
+import { SnackbarProvider } from 'notistack';
+
 
 const App = () => {
   const content = useRoutes(routes);
@@ -14,7 +16,14 @@ const App = () => {
     <Provider store={Store}>
       <SettingsProvider>
         <MatxTheme>
-          <AuthProvider>{content}</AuthProvider>
+          <SnackbarProvider 
+            preventDuplicate
+            maxSnack={1}
+            anchorOrigin={{horizontal: 'right', vertical:'bottom'}}
+            TransitionProps={{ direction: 'up'}}
+          >
+            <AuthProvider>{content}</AuthProvider>
+          </SnackbarProvider>
         </MatxTheme>
       </SettingsProvider>
     </Provider>

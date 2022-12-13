@@ -4,9 +4,11 @@ import { Box, styled, useTheme } from '@mui/system';
 import { Paragraph } from 'app/components/Typography';
 import useAuth from 'app/hooks/useAuth';
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+
+import { useSnackbar } from 'notistack';
 
 const FlexBox = styled(Box)(() => ({ display: 'flex', alignItems: 'center' }));
 
@@ -48,19 +50,31 @@ const validationSchema = Yup.object().shape({
 });
 
 const JwtLogin = () => {
+
+  const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+  useEffect(() => {
+    if(user !== null) {
+          navigate('/dashboard/default');
+          enqueueSnackbar('Successfully logged in', { variant: 'success'})
+      } else {
+        enqueueSnackbar('Please login', { variant: 'info'})
+      }
 
+  },[user])
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
       await login(values.email, values.password);
       navigate('/dashboard/default');
+      enqueueSnackbar('Successfully logged in', { variant: 'success'})
     } catch (e) {
       setLoading(false);
+      enqueueSnackbar('Incorrect email or password', { variant: 'error'})
     }
   };
 
