@@ -1,7 +1,15 @@
 import Mock from '../mock'
 import shortId from 'shortid'
 import jwt from 'jsonwebtoken';
-import { userList } from './data';
+import { 
+    userList,
+    schoolList,
+    provinceList,
+    districtList,
+    categoryList,
+    moduleList,
+    uploadList,
+} from './data';
 
 const JWT_SECRET = 'jwt_secret_key';
 const JWT_VALIDITY = '7 days';
@@ -10,12 +18,46 @@ const JWT_VALIDITY = '7 days';
 
 const DB = {
     userList,
+    schoolList,
+    districtList,
+    provinceList, 
+    categoryList,
+    moduleList,
+    uploadList,
 }
 
 
+const parseQueryString = (url) => {
+  const queryString = url.replace(/.*\?/, '');
+  if (queryString === url || !queryString) {
+    return null;
+  }
+
+  const urlParams = new URLSearchParams(queryString);
+  const result = {};
+
+  urlParams.forEach((val, key) => {
+    if (result.hasOwnProperty(key)) {
+      result[key] = [result[key], val];
+    } else {
+      result[key] = val;
+    }
+  });
+
+  return result;
+}
+
+
+// Users 
 
 Mock.onGet('/api/users').reply((config) => {
-    const response = DB.userList
+    const response = DB.userList.map(user => {
+                    const school = DB.schoolList.filter(school =>  user.schoolId === school.id)[0]
+      return {
+        ...user,
+        school: school.name
+      }
+    })
     return [200, response]
 })
 
@@ -135,6 +177,9 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
 //   }
 // });
 
+
+// Auth
+
 Mock.onGet('/api/auth/profile').reply((config) => {
   try {
     const { Authorization } = config.headers;
@@ -167,3 +212,129 @@ Mock.onGet('/api/auth/profile').reply((config) => {
     return [500, { message: 'Internal server error' }];
   }
 });
+
+
+// Schools
+const getSchools = () => {
+  return DB.schoolList.map(school => {
+      const districtSC =  DB.districtList.filter(district => school.districtId === district.id)[0]
+      console.log('District', districtSC)
+      const provinceSC =  DB.provinceList.filter(province => districtSC.provinceId === province.id)[0]
+      return {
+        ...school,
+        district: districtSC.name,
+        province: provinceSC.name,
+      }
+    })
+}
+
+
+Mock.onGet('/api/schools').reply((config) => {
+    console.log('fetching schools', DB.schoolList)
+    const response = getSchools()
+    return [200, response]
+})
+
+
+Mock.onPost('/api/school/add').reply((config) => {
+    const data = JSON.parse(config.data)
+    const schoolEMISExists = DB.schoolList.filter(school => school.emisId === data.emisId)
+    if(schoolEMISExists.length > 0){
+      return [500, DB.schoolList]
+    } else {
+      const newSchool = {
+            ...data,
+            id: shortId.generate(),
+        }
+      DB.schoolList.push(newSchool)
+      const response = getSchools()
+      return [200, response]
+    }
+})
+
+
+// Provinces 
+
+Mock.onGet('/api/provinces').reply((config) => {
+  const response = DB.provinceList
+  return [200, response];
+})
+
+// Districts 
+
+Mock.onGet(/api\/districts\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  let response = DB.districtList
+  if(!params){
+    return [200, response]
+  }
+  const { provinceId } = params
+  response = response.filter(district => district.provinceId === provinceId)
+  return [200, response];
+})
+
+
+// Categories 
+
+Mock.onGet('/api/categories').reply((config) => {
+    const response = DB.categoryList
+    return [200, response]
+})
+
+// Modules 
+
+const getModules = () => {
+  return DB.moduleList.map(mod => {
+    const category = DB.categoryList.filter(category => category.id === mod.categoryId)[0]
+    return {
+      ...mod,
+      category: category.name
+    }
+
+  })
+}
+
+Mock.onGet('/api/modules').reply((config) => {
+    const response = getModules()
+    return [200, response]
+})
+
+
+const createFile = (data, moduleId) => {
+  const id = shortId.generate()
+  const newFile = {
+    id,
+    moduleId,
+    data
+  }
+  DB.uploadList.push(newFile)
+  return newFile
+}
+
+Mock.onPost('/api/modules/add').reply((config) => {
+    const { title, description, file, categoryId } = JSON.parse(config.data)
+    const id = shortId.generate()
+    const {id: uploadId} = createFile(file, id)
+    const newModule = {
+          id,
+          title,
+          description,
+          uploadId,
+          categoryId
+      }
+
+    DB.moduleList.push(newModule)
+    const response = getModules()
+    return [200, response]
+})
+
+
+Mock.onGet(/api\/upload\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  if(!params){
+    return [500, {message: 'No id sent'}]
+  }
+  const { id: uploadId } = params
+  const response = DB.uploadList.filter(upload => upload.id === uploadId)[0]
+  return [200, response];
+})

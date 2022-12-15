@@ -95,13 +95,13 @@ const MatxVerticalNav = ({ items }) => {
       } else if (item.type === 'extLink') {
         return (
           <ExternalLink
-            key={index}
+            key={index + item.icon}
             href={item.path}
             className={`${mode === 'compact' && 'compactNavItem'}`}
             rel="noopener noreferrer"
             target="_blank"
           >
-            <ButtonBase key={item.name} name="child" sx={{ width: '100%' }}>
+            <ButtonBase key={item.name + item.path} name="child" sx={{ width: '100%' }}>
               {(() => {
                 if (item.icon) {
                   return <Icon className="icon">{item.icon}</Icon>;
@@ -119,16 +119,18 @@ const MatxVerticalNav = ({ items }) => {
         );
       } else {
         return (
-          <InternalLink key={index}>
+          <InternalLink key={index + item.path}>
             <NavLink
               to={item.path}
               className={({ isActive }) =>
                 isActive
-                  ? `navItemActive ${mode === 'compact' && 'compactNavItem'}`
-                  : `${mode === 'compact' && 'compactNavItem'}`
+                  ?
+                   `navItemActive ${mode === 'compact' && 'compactNavItem'}`
+                  :
+                   `${mode === 'compact' && 'compactNavItem'}`
               }
             >
-              <ButtonBase key={item.name} name="child" sx={{ width: '100%' }}>
+              <ButtonBase key={item.name + item.path} name="child" sx={{ width: '100%' }}>
                 {item?.icon ? (
                   <Icon className="icon" sx={{ width: 36 }}>
                     {item.icon}

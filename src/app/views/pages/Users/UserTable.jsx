@@ -47,35 +47,17 @@ const UserTable = () => {
         {
             name: 'lastName',
             label: 'Last Name'
+        },{
+            name: 'role',
+            label: 'Role'
         },
         {
             name: 'email',
             label: 'Email'
+        },{
+            name: 'institution',
+            label: 'Institution'
         },
-        // {
-        //     name: 'nrc',
-        //     label: 'NRC'
-        // },
-        // {
-        //     name: 'gender',
-        //     label: 'Gender'
-        // },
-        {
-            name: 'role',
-            label: 'Role'
-        },
-        // {
-        //     name: 'mobile',
-        //     label: 'Mobile'
-        // },
-        // {
-        //     name: 'dob',
-        //     label: 'DOB'
-        // },
-        // {
-        //     name: 'creation Date',
-        //     label: 'Date Created'
-        // },
     ];
 
     const handleDeleteRows = () => {
@@ -85,10 +67,10 @@ const UserTable = () => {
 
     const options = {
         rowsSelected: selectedRows,
-        selectableRowsHideCheckboxes: false,
-        responsive: 'scroll',
+        selectableRowsHideCheckboxes: true,
+        responsive: 'standard',
         viewColumns: true,
-        Selection: true,
+        Selection: false,
         onRowClick: (s) => {
           console.log(s)
         },
@@ -108,7 +90,7 @@ const UserTable = () => {
                     variant="contained"
                     color="primary"
                     onClick={() => {
-                        navigate('/users/add');
+                        navigate('/add-users');
                     }}
                 >
                     Add User
@@ -121,12 +103,9 @@ const UserTable = () => {
                             user.avatar,
                             user.firstName,
                             user.lastName,
-                            user.email,
-                            // user.nrc,
                             user.role,
-                            user.gender,
-                            user.mobile,
-                            user.dataOfBirth,
+                            user.email,
+                            user.school,
                             user.creationDate,
                             user.id,
                         ]

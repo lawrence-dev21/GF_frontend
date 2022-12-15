@@ -51,9 +51,9 @@ const CSETable = () => {
 ];
 
     const options = {
-        selectableRowsHideCheckboxes: false,
+        selectableRowsHideCheckboxes: true,
         viewColumns: true,
-        Selection: true,
+        Selection: false,
         onRowClick: () => {
           
         }

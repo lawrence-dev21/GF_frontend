@@ -1,9 +1,3 @@
-//                       ['Frank', 'Chaiwa', 'fc@.com','112435/12/1','Software Engineer', '1994-01-01', '2022-11-24'],
-//                       ['Michael', 'chuck', 'mck@.com','112435/12/1','Accounts', '1991-11-10', '2022-11-24'],
-//                       ['Given', 'mwaba', 'gm@.com','112435/12/1','Procurement', '1994-11-7', '2022-11-24'],
-//                       ['David', 'Mbao', 'dm@.com','112435/12/1','Finance', '1977-10-08', '2022-11-24'],
-//                       ['Chewe', 'Chileshe', 'cc@.com','112435/12/1','ICT cyberscurity', '1989-02-03', '2022-11-24'],             
-
 export const userList = [
         {
             firstName: 'Lawrence',
@@ -20,22 +14,56 @@ export const userList = [
             avatar: '',
             id: '323sa680b32497dsfdsgga21rt47',
             password: 'Lusaka@123',
+            schoolId: '9dac7c58-7e02-40iv-9fe5-8b24bad4a63e'
+        },{
+            firstName: 'Frank',
+            lastName: 'Chaiwa',
+            name: 'Frank Chaiwa',
+            email: 'fc@gov.zm',
+            nrc: '123986/12/1',
+            gender: 'Male',
+            role: 'GUEST',
+            position: 'Grade 12 Teacher',
+            mobile: '',
+            dataOfBirth: '1990-12-01',
+            creationDate: '2022-09-01',
+            avatar: '',
+            id: '323sa680b32498dufdsgga21rt47',
+            password: 'Lusaka@123',
+            schoolId: '9dac7c58-7e02-40iv-9fe5-8b24bad4a63e'
+        },{
+            firstName: 'Mwila',
+            lastName: 'Nyirongo',
+            name: 'Mwila Nyirongo',
+            email: 'mn@gov.zm',
+            nrc: '1233346/12/1',
+            gender: 'Male',
+            role: 'ADMIN',
+            position: 'HQ Admin',
+            mobile: '',
+            dataOfBirth: '1990-12-01',
+            creationDate: '2022-09-01',
+            avatar: '',
+            id: '3230k680b32497dsfdsgga21rt47',
+            password: 'Lusaka@123',
+            schoolId: '9dac7c58-7e02-40iv-9fe5-8b24bad4a63e'
         },
         {
             firstName: 'Ngalande',
             lastName: 'Banda',
             name: 'Ngalande Banda',
-            email: 'nb@moe.gov.zm',
+            email: 'nb@gov.zm',
             nrc: '112435/12/1',
             gender: 'Male',
-            role: 'SA',
-            position: 'Full-Stack Developer',
+            role: 'EDITOR',
+            position: 'School Admin',
             mobile: '',
             dataOfBirth: '1986-12-03',
             creationDate: '2022-09-01',
             avatar: '',
             id: 'o23sa680b32497defdsgga21rt47',
             password: 'Lusaka@123',
+            schoolId: '9dac7c58-7e02-40iv-9fe5-8b24bad4a63e'
         }
 ]
 

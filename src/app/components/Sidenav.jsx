@@ -1,9 +1,14 @@
 import { styled } from '@mui/system';
 import { MatxVerticalNav } from 'app/components';
 import useSettings from 'app/hooks/useSettings';
-import { navigations } from 'app/navigations';
 import { Fragment } from 'react';
 import Scrollbar from 'react-perfect-scrollbar';
+import { setNavigationByUser } from 'app/redux/actions'
+import { useSelector, useDispatch  } from 'react-redux'
+import { navigations as ng } from 'app/navigations'
+import { useEffect } from 'react'
+import useAuth from 'app/hooks/useAuth'
+const selectNavigations = state => state.navigations
 
 const StyledScrollBar = styled(Scrollbar)(() => ({
   paddingLeft: '1rem',
@@ -24,6 +29,14 @@ const SideNavMobile = styled('div')(({ theme }) => ({
 }));
 
 const Sidenav = ({ children }) => {
+  const { user } = useAuth()
+  const dispatch = useDispatch() 
+  const navigations = useSelector(selectNavigations)
+  useEffect(() => {
+        if(user)
+          dispatch(setNavigationByUser(user, ng))
+  }, [dispatch, user])
+
   const { settings, updateSettings } = useSettings();
 
   const updateSidebarMode = (sidebarSettings) => {

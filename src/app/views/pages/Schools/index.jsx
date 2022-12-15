@@ -1,6 +1,6 @@
 
 import {styled } from "@mui/system";
-import SchoolsTable from "./SchoolsTable";
+import SchoolTable from "./SchoolTable";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -14,7 +14,7 @@ const Container = styled("div")(({ theme }) => ({
 const Schools = () => {
   return (
     <Container>
-         <SchoolsTable />
+         <SchoolTable/>
     </Container>
   );
 };

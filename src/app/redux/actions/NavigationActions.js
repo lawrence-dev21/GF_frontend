@@ -30,3 +30,14 @@ export function getNavigationByUser() {
     });
   };
 }
+export function setNavigationByUser(user, navigations) {
+  return (dispatch) => {
+
+    let filteredNavigations = getfilteredNavigations(navigations, user.role);
+
+    dispatch({
+      type: SET_USER_NAVIGATION,
+      payload: [...filteredNavigations],
+    });
+  };
+}

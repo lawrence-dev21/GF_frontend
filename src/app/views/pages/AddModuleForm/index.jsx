@@ -1,7 +1,7 @@
-import { Stack } from "@mui/material";
+import { Stack, Grid, Button, Typography, Box } from "@mui/material";
 import {styled } from "@mui/system";
 import { SimpleCard } from "app/components";
-import SchoolForm from "./SchoolForm";
+import ModuleForm from "./ModuleForm";
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -12,16 +12,16 @@ const Container = styled("div")(({ theme }) => ({
   },
 }));
 
-const AddSchoolForm = () => {
+const AddModuleForm = () => {
   return (
     <Container>
      <Stack spacing={3}>
-        <SimpleCard title="Add School">
-          <SchoolForm />
+        <SimpleCard title="Add Module">
+          <ModuleForm />
         </SimpleCard>
       </Stack>
     </Container>
   );
 };
 
-export default AddSchoolForm;
+export default AddModuleForm;

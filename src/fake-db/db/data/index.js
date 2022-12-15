@@ -1,2 +1,5 @@
 export * from './users';
-// export { default as schoolList } from './schools';
+export * from './schools';
+export * from './area';
+export * from './categories';
+export * from './modules';

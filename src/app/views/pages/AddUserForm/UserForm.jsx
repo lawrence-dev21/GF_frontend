@@ -10,18 +10,23 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  Box,
   Divider,
-  OutlinedInput
+  OutlinedInput,
+  CircularProgress
 } from "@mui/material";
+import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { base64ToImage, isMobile, isMdScreen } from '../../../utils/utils'
+import { base64ToImage, isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addUser } from '../../../redux/actions/UserActions'
 import { useDispatch  } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { authRoles } from 'app/auth/authRoles'
+import useAuth from 'app/hooks/useAuth'
 
+import axios from 'axios'
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
   marginBottom: "16px",
@@ -29,12 +34,16 @@ const TextField = styled(TextValidator)(() => ({
 
 
 const UserForm = () => {
+  const { user } = useAuth()
   const [state, setState] = useState({});
-  const title = useTitle(': Add User')
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+  useTitle(': Add User')
   const dispatch = useDispatch()
   const [ spacing ] = useState({
     paddingTop: isMobile() ? '12px' : '24px',
     paddingTopUnder: '12px',
+    paddingTopUnderSelect: isMobile() ? '28px' : '12px',
     marginTop: isMobile() ? 0 : 4
   })
   const inputLabel = useRef(null);
@@ -42,9 +51,16 @@ const UserForm = () => {
   useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
+    const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     dispatch(addUser(state))    
+    setTimeout(() => {
+
+    enqueueSnackbar('User sucessfully entered', { variant: 'success'})
+    navigate('/users')
+    setLoading(false)
+  }, 500)
   };
 
 
@@ -73,15 +89,15 @@ const _handleReaderLoaded = (readerEvent) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
-const [systemRoles] = useState ([
-                          {value: 'SA', label: 'Super Admin'},
-                          {value: 'ADMIN', label: 'Admin'},
-                          {value: 'EDITOR', label: 'Editor'},
-                          {value: 'GUEST', label: 'Guest'},
-                      ])
+const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
+                          [{value: 'SA', label: 'Super Admin'},
+                          {value: 'ADMIN', label: 'HQ'},
+                          {value: 'EDITOR', label: 'School Admin'},
+                          {value: 'GUEST', label: 'Learner'},]
+                        : [{value: 'EDITOR', label: 'School Admin'},
+                          {value: 'GUEST', label: 'Learner'},])
 
   const {
-    avatar,
     firstName,
     lastName,
     email,
@@ -92,7 +108,16 @@ const [systemRoles] = useState ([
     mobile,
     dateOfBirth,
     password,
+    schoolId
   } = state;
+
+  const [schools, setSchools] = useState([])
+  useEffect(() => {
+    if(schools.length === 0){
+      axios.get('/api/schools')
+           .then(({data}) => { setSchools(data)})
+    }
+  },[schools.length])
 
   return (
     <div>
@@ -100,7 +125,7 @@ const [systemRoles] = useState ([
       <Divider />
         <h4 style={{marginTop: '16px'}}>Profile Image Upload</h4>
        <Grid container spacing={6}>
-          <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
+          <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4 }} style={{paddingTop: spacing.paddingTop}}>
             <input
               type="file"
               name="profileImage"
@@ -112,7 +137,7 @@ const [systemRoles] = useState ([
       <Divider />
          <h4 style={{marginTop: '16px'}}>Login Details</h4>
          <Grid container spacing={6}>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }} style={{paddingTop: spacing.paddingTop}}>
             <TextField
                 type="email"
                 name="email"
@@ -126,7 +151,7 @@ const [systemRoles] = useState ([
                 }}
               />
           </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
            <TextField
               name="password"
               type="password"
@@ -145,7 +170,7 @@ const [systemRoles] = useState ([
       <Divider style={{marginTop: '8px'}} />
        <h4 style={{marginTop: '16px'}}>Personal Details</h4>
         <Grid container spacing={6}>
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4, pt: 0 }}  style={{paddingTop: spacing.paddingTop}}>
+            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
               <TextField
                 type="text"
                 name="firstName"
@@ -160,7 +185,7 @@ const [systemRoles] = useState ([
               />
             </Grid>
 
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop, pt: 0 }}  style={{paddingTop: spacing.paddingTop}}>
+            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTop}}>
                 <TextField
                 type="text"
                 name="lastName"
@@ -175,7 +200,7 @@ const [systemRoles] = useState ([
               />
             </Grid>
 
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop, pt: 0 }}  style={{paddingTop: spacing.paddingTopUnder}}>
+            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnder}}>
                 <TextField
                 label="Date of Birth"
                 type="date"
@@ -188,7 +213,7 @@ const [systemRoles] = useState ([
                 }}
               />
             </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop, pt: 0 }}  style={{paddingTop: spacing.paddingTopUnder}}>
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnder}}>
               <TextField
                 type="number"
                 name="nrc"
@@ -229,7 +254,7 @@ const [systemRoles] = useState ([
       <Divider />
          <h4 style={{marginTop: '16px'}}>Job Details</h4>
         <Grid container spacing={6}>
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4, pt: 0 }}  style={{paddingTop: spacing.paddingTop}}>
+        <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
               <TextField
                 type="text"
                 name="position"
@@ -242,10 +267,36 @@ const [systemRoles] = useState ([
                   shrink: true,
                 }}
               />
+            </Grid>
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
+            <FormControl fullWidth variant="outlined">
+                <InputLabel shrink ref={inputLabel} htmlFor="school-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Insitution</InputLabel>
+                <Select
+                  labelId="school-select"
+                  id="mtx-school-select"
+                  name="schoolId"
+                  value={schoolId || ""}
+                  label="School"
+                  disabled={schools.length === 0}
+                  onChange={handleChange}
+                  input={
+                    <OutlinedInput
+                      notched
+                      labelWidth={labelWidth}
+                      name="school"
+                      id="school-select"
+                    />
+                  }
+                >
+                  {schools && schools.map(school =>
+                    <MenuItem value={school.id} key={school.id}>{school.name}</MenuItem>
+                  )}
+                  </Select>
+              </FormControl>
+  
           </Grid>
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop, pt: 0 }}  style={{paddingTop: spacing.paddingTop}}>
-
-             <FormControl fullWidth variant="outlined">
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnderSelect}}>
+           <FormControl fullWidth variant="outlined">
                 <InputLabel shrink ref={inputLabel} htmlFor="role-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Role</InputLabel>
                 <Select
                   labelId="role-select"
@@ -258,7 +309,7 @@ const [systemRoles] = useState ([
                     <OutlinedInput
                       notched
                       labelWidth={labelWidth}
-                      name="age"
+                      name="role"
                       id="role-select"
                     />}
                 >
@@ -269,10 +320,10 @@ const [systemRoles] = useState ([
             </FormControl>
           </Grid>
         </Grid>
-        <Divider style={{marginTop: '16px'}} />
+        <Divider style={{marginTop: '24px'}} />
          <h4 style={{marginTop: '16px'}}>Contact Details</h4>
         <Grid container spacing={6} style={{marginBottom: '24px'}}>
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4, pt: 0 }}  style={{paddingTop: spacing.paddingTop}}>
+            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
             <TextField
               type="text"
               name="mobile"
@@ -285,8 +336,8 @@ const [systemRoles] = useState ([
           </Grid>
         </Grid>
 
-        <Button color="primary" variant="contained" type="submit">
-          <Span sx={{ textTransform: "capitalize" }}>Submit</Span>
+        <Button color="primary" variant="contained" type="submit" disabled={loading}>
+          <Span sx={{ textTransform: "capitalize" }}>{loading ? (<CircularProgress style={{ margin: 'auto', height: 15, width: 15, color: 'white'}}/>) : 'Submit'}</Span>
         </Button>
       </ValidatorForm>
     </div>

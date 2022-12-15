@@ -1,5 +1,6 @@
 import Loadable from 'app/components/Loadable';
 import { lazy } from 'react';
+import { authRoles } from '../../auth/authRoles';
 
 // User Management
 const User = Loadable(lazy(() => import('./Users')));
@@ -8,6 +9,11 @@ const AddUserForm = Loadable(lazy(() => import('./AddUserForm')));
 // School Management
 const School = Loadable(lazy(() => import('./Schools')));
 const AddSchoolForm = Loadable(lazy(() => import('./AddSchoolForm')));
+
+
+// Module Management
+const Module = Loadable(lazy(() => import('./Modules')));
+const AddModuleForm = Loadable(lazy(() => import('./AddModuleForm')));
 
 // TODO Create the school managment pages
 
@@ -28,43 +34,62 @@ const Transferform= Loadable(lazy(() => import('./dataEntry/Transfer/Transfer'))
 const pageRoutes = [
   {
     path: '/users',
-    element: <User/>
+    element: <User/>,
+    auth: authRoles.admin
   },
   {
-    path: '/users/add',
-    element: <AddUserForm/>
+    path: '/add-users',
+    element: <AddUserForm/>,
+    auth: authRoles.admin,
   },
   {
     path: '/schools',
-    element: <School/>
+    element: <School/>,
+    auth: authRoles.admin,
   },
   {
-    path: '/schools/add',
-    element: <AddSchoolForm/>
+    path: '/add-schools',
+    element: <AddSchoolForm/>,
+    auth: authRoles.sa,
+  },{
+    path: '/modules',
+    element: <Module/>,
+    auth: authRoles.guest,
+  },
+  {
+    path: '/add-modules',
+    element: <AddModuleForm/>,
+    auth: authRoles.editor,
   },
   {
     path: '/boarding',
-    element: <WeeklyBoard/>
+    element: <WeeklyBoard/>,
+    // auth: authRoles.sa
   },
   {
     path: '/transfer/add',
-    element: <Transferform/>
+    element: <Transferform/>,
+    // auth: authRoles.sa
   },
   {
     path: '/parent',
-    element: <Parentform/>
+    element: <Parentform/>,
+    // auth: authRoles.sa
   },
   {
     path: '/Disclim/Dis',
-    element: <Disclaimerform/>
+    element: <Disclaimerform/>,
+    // auth: authRoles.sa
   },
   {
     path: '/cse',
-    element: <CSE/>
+    element: <CSE/>,
+    // auth: authRoles.sa
   },
   {
     path: '/beneficiaries',
-    element: <Beneficiaries/>
+    element: <Beneficiaries/>,
+    // auth: authRoles.sa
   },
 ];
 
