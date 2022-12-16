@@ -9,6 +9,9 @@ import {
     categoryList,
     moduleList,
     uploadList,
+    beneficiaryList,
+    parentList,
+    paymentList,
 } from './data';
 
 const JWT_SECRET = 'jwt_secret_key';
@@ -24,6 +27,9 @@ const DB = {
     categoryList,
     moduleList,
     uploadList,
+    beneficiaryList,
+    parentList,
+    paymentList,
 }
 
 
@@ -49,9 +55,12 @@ const parseQueryString = (url) => {
 
 
 // Users 
-
+const getUserAccounts = () => {
+  return DB.userList.filter(user => user?.email && user?.password && user.nrc)
+}
 Mock.onGet('/api/users').reply((config) => {
-    const response = DB.userList.map(user => {
+    const users = getUserAccounts()
+    const response = users.map(user => {
                     const school = DB.schoolList.filter(school =>  user.schoolId === school.id)[0]
       return {
         ...user,
@@ -64,12 +73,12 @@ Mock.onGet('/api/users').reply((config) => {
 
 Mock.onPost('/api/users/add').reply((config) => {
     const data = JSON.parse(config.data)
-    console.log('inside mock', config.data)
-    const userRegExists = DB.userList.filter(user => user.nrc === data.nrc)
-    const userEmailExists = DB.userList.filter(user => user.email === data.email)
-    console.log('User Exists:', userRegExists)
+    const users = getUserAccounts()
+
+    const userRegExists = users.filter(user => user.nrc === data.nrc)
+    const userEmailExists = users.filter(user => user.email === data.email)
     if((userRegExists.length > 0) || (userEmailExists.length > 0) ){
-    	return [500, DB.userList]
+    	return [500, users]
     } else {
         const creationDate = new Date()
         let dateOfBirth = new Date()
@@ -85,7 +94,8 @@ Mock.onPost('/api/users/add').reply((config) => {
         }
     	
     	DB.userList.push(newUser)
-    	return [200, DB.userList]
+
+    	return [200, getUserAccounts()]
     }
 })
 
@@ -93,15 +103,17 @@ Mock.onPost('/api/users/delete').reply((config) => {
     let { userId } = JSON.parse(config.data)
     let userList = DB.userList.filter((user) => user.id !== userId)
     DB.userList = userList
-    return [200, userList]
+    const response = getUserAccounts()
+    return [200, response]
 })
 
 Mock.onPost('/api/auth/login').reply(async (config) => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    const users = getUserAccounts()
 
     const { email, password } = JSON.parse(config.data);
-    const user = DB.userList.find((u) => u.email === email);
+    const user = users.find((u) => u.email === email);
 
     if (!user) {
       return [400, { message: 'User not registered' }];
@@ -336,5 +348,141 @@ Mock.onGet(/api\/upload\/?.*/).reply((config) => {
   }
   const { id: uploadId } = params
   const response = DB.uploadList.filter(upload => upload.id === uploadId)[0]
+  return [200, response];
+})
+
+
+// Beneficiaries
+
+const createUser = (user) => {
+  const id = shortId.generate();
+  const newUser = {
+    email: 'NULL',
+    nrc: 'NULL',
+    password: shortId.generate(),
+    creationDate: (new Date()).toISOString(),
+    id,
+    ...user,
+  }
+  DB.userList.push(newUser)
+  return newUser
+}
+
+const createParent = (parent, beneficiaries, address) => {
+  const id = shortId.generate(); 
+  const newParent = {
+    id,
+    parentId: parent.id,
+    beneficiaries,
+    address
+  }
+  DB.parentList.push(newParent)
+  return newParent
+}
+
+const getParent = (parentId) => {
+    console.log('getParent fetch parent')
+    const parent = DB.parentList.find(parentRow => parentId === parentRow.id)
+    console.log('getParent fetch parent Row', parent)
+    console.log('parent:', parent.id)
+    const parentAccount = DB.userList.find(user => user.id === parent.userId)
+
+    console.log('parent:', parentAccount)
+    return { 
+              parentFirstName: parentAccount.firstName,
+              parentLastName: parentAccount.lastName,
+              parentNRC: parentAccount.nrc,
+              parentMobile: parentAccount.mobile,
+              parentAddress: parent.address,
+            }
+}  
+const getStudent = (userId) => {
+    const student = DB.userList.filter(user => userId === user.id)[0]
+    return { 
+              firstName: student.firstName,
+              lastName: student.lastName,
+              gender: student.gender,
+              dateOfBirth: student.dateOfBirth
+            }
+}  
+const getBeneficiaries = () => {
+  return DB.beneficiaryList.map(student => {
+    console.log('Fetcing parent for beneficiary')
+    const parent = getParent(student.parentId)
+    console.log('Fetcing grade for beneficiary')
+    const grade = DB.categoryList.filter(grade => grade.id === student.gradeId)[0]
+    console.log('Fetcing school for beneficiary')
+    const school = DB.schoolList.filter(school => school.id === student.schoolId)[0]
+    console.log('Fetcing user for beneficiary')
+    const user = getStudent(student.userId)
+
+    const beneficiary = {
+      ...student,
+      ...user,
+      ...parent,
+      grade: grade.name,
+      school: school.name
+    }
+    return beneficiary
+  })
+}
+
+const getBeneficiary = (beneficiaryId) => {
+  const beneficiaries = getBeneficiaries()
+  return beneficiaries.filter(beneficiary => beneficiaryId === beneficiary.id)[0]
+}
+
+
+
+Mock.onPost('/api/modules/add').reply((config) => {
+    const data = JSON.parse(config.data)
+
+    // Create the student
+    const { firstName, lastName, gender } = data
+    let dateOfBirth = new Date()
+    if(data?.dateOfBirth)
+            dateOfBirth = new Date(data.dateOfBirth)
+
+    const student = createUser({
+      firstName,
+      lastName,
+      gender,
+      dateOfBirth
+    }) 
+
+
+    // Create the parent
+    const { parentFirstName, parentLastName, address, nrc, phoneNumber: mobile } = data
+    const parent = createParent(createUser({
+                                  firstName: parentFirstName,
+                                  lastName: parentLastName,
+                                  nrc,
+                                  mobile
+                                }), [student.id], address)
+
+    const { schoolId, gradeId } = data
+    const id = shortId.generate()
+
+    const newBeneficiary = {
+      id,
+      schoolId,
+      gradeId,
+      userId: student.id,
+      parentId: parent.id
+    }
+
+    DB.beneficiaryList.push(newBeneficiary)
+    const response = getBeneficiaries()
+    return [200, response]
+})
+
+Mock.onGet(/api\/beneficiaries\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  let response = getBeneficiaries()
+  console.log('Beneficiaries', response)
+  if(!params){
+    return [200, response]
+  }
+  response = getBeneficiary(params.id)
   return [200, response];
 })
