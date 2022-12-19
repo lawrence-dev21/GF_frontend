@@ -434,7 +434,7 @@ const getBeneficiary = (beneficiaryId) => {
 
 
 
-Mock.onPost('/api/modules/add').reply((config) => {
+Mock.onPost('/api/beneficiaries/add').reply((config) => {
     const data = JSON.parse(config.data)
 
     // Create the student
