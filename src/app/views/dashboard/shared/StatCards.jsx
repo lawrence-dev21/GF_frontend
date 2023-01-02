@@ -1,6 +1,10 @@
+import  { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Box, Card, Grid, Icon, IconButton, styled, Tooltip } from '@mui/material';
 import { Small } from 'app/components/Typography';
-
+import { getModules } from 'app/redux/actions'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch  } from 'react-redux'
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
@@ -27,13 +31,23 @@ const Heading = styled('h6')(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
+const selectModules = state => state.modules.moduleList
 const StatCards = () => {
-  const cardList = [
-    { name: 'New Leads', amount: 3050, icon: 'group' },
-    { name: 'This week Sales', amount: '$80,500', icon: 'attach_money' },
-    { name: 'Inventory Status', amount: '8.5% Stock Surplus', icon: 'store' },
-    { name: 'Orders to deliver', amount: '305 Orders', icon: 'shopping_cart' },
-  ];
+  const navigate = useNavigate();
+  const [cardList, setCardList] = useState([])
+  const dispatch = useDispatch() 
+  const modules = useSelector(selectModules)
+  useEffect(() => {
+      if(!modules.length){
+          dispatch(getModules())
+      }
+  }, [dispatch])
+  useEffect(()=> {
+    if(!cardList.length){
+      setCardList([...cardList,
+          { name: 'Modules', amount: modules.length, icon: 'book', link: '/modules' }])
+    }
+  }, [modules])
 
   return (
     <Grid container spacing={3} sx={{ mb: '24px' }}>
@@ -49,7 +63,7 @@ const StatCards = () => {
             </ContentBox>
 
             <Tooltip title="View Details" placement="top">
-              <IconButton>
+              <IconButton onClick={() => navigate(item.link)}>
                 <Icon>arrow_right_alt</Icon>
               </IconButton>
             </Tooltip>

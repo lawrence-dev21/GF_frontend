@@ -32,7 +32,7 @@ export const navigations = [
     children: [
       { name: 'Beneficiaries', iconText: 'SI', path: '/beneficiaries' },
       // { name: 'Annual Promotion', iconText: 'SU', path: '/session/signup' },
-    ],auth: authRoles.sa
+    ],auth: authRoles.admin
   },
   // {
   //   name: 'CSE',
