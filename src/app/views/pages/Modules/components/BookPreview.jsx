@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
 import List from '@mui/material/List';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import AppBar from '@mui/material/AppBar';
@@ -66,7 +66,7 @@ const DownloadButton = ({bookId}) =>  {
 
 const BookPreview = ({open, handleClose, bookId})  => {
 
-  const viewer = useRef(null);
+  // const viewer = useRef(null);
   const [book, setBook] = useState({})
   const [pageCount, setPageCount] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
