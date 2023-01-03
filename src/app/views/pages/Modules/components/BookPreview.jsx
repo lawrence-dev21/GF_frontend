@@ -16,7 +16,6 @@ import { useSnackbar } from 'notistack';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import { useDrag } from '@use-gesture/react'
-import { Slider } from './Slider'
 import './style.css';
   import { Icon, CircularProgress } from '@mui/material';
 import { CloudDownload } from '@mui/icons-material';
