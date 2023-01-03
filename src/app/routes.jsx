@@ -1,5 +1,4 @@
 import AuthGuard from 'app/auth/AuthGuard';
-import chartsRoute from 'app/views/charts/ChartsRoute';
 import dashboardRoutes from 'app/views/dashboard/DashboardRoutes';
 import pageRoutes from 'app/views/pages/PageRoutes';
 import NotFound from 'app/views/sessions/NotFound';

@@ -65,6 +65,7 @@ const JwtLogin = () => {
         enqueueSnackbar('Please login', { variant: 'info'})
       }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user])
   const handleFormSubmit = async (values) => {
     setLoading(true);

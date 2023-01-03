@@ -26,6 +26,7 @@ const ModuleTable = () => {
         if(!selectedRows.length && !modules.length){
             dispatch(getModules())
         }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
     
     const navigate = useNavigate();

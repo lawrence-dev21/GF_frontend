@@ -1,7 +1,5 @@
-
 import {
   Button,
-  FormControlLabel,
   Grid,
   styled,
   Select,
@@ -15,7 +13,7 @@ import {
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { base64ToImage, isMobile } from '../../../utils/utils'
+import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addModule } from '../../../redux/actions'
 import { useDispatch  } from 'react-redux'
@@ -90,7 +88,6 @@ const _handleReaderLoaded = (readerEvent) => {
 
   const {
     title,
-    file,
     categoryId,
     description
   } = state;
@@ -103,6 +100,7 @@ const _handleReaderLoaded = (readerEvent) => {
       axios.get(`/api/categories`)
             .then(({data}) => {setCategories(data)})
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

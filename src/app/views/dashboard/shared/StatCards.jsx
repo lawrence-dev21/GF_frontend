@@ -1,5 +1,4 @@
 import  { useState, useEffect } from 'react'
-import axios from 'axios'
 import { Box, Card, Grid, Icon, IconButton, styled, Tooltip } from '@mui/material';
 import { Small } from 'app/components/Typography';
 import { getModules } from 'app/redux/actions'
@@ -41,12 +40,14 @@ const StatCards = () => {
       if(!modules.length){
           dispatch(getModules())
       }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
   useEffect(()=> {
     if(!cardList.length){
       setCardList([...cardList,
           { name: 'Modules', amount: modules.length, icon: 'book', link: '/modules' }])
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modules])
 
   return (

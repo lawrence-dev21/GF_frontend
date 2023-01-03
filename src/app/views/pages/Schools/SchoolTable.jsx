@@ -24,6 +24,7 @@ const SchoolTable = () => {
         if(!selectedRows.length && !schools.length){
             dispatch(getSchools())
         }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
     
     const navigate = useNavigate();

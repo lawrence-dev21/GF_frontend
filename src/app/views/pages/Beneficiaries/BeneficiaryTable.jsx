@@ -5,17 +5,12 @@ import React from 'react';
 // material-ui
 import { Grid, Button, Avatar } from '@mui/material';
 import MUIDataTable from 'mui-datatables';
-import { useNavigate } from 'react-router-dom';
 import { getBeneficiaries } from '../../../redux/actions'
 import { useSelector, useDispatch  } from 'react-redux'
-
-import { authRoles } from 'app/auth/authRoles'
-import useAuth from 'app/hooks/useAuth'
 
 const selectBeneficiaries = state => state.beneficiaries.beneficiaryList
 
 const BeneficiaryTable = () => {
-    const { user } = useAuth()
     const dispatch = useDispatch() 
     const beneficiaries = useSelector(selectBeneficiaries)
     const [selectedRows, setSelectedRows] = React.useState([]);
@@ -24,9 +19,9 @@ const BeneficiaryTable = () => {
         if(!selectedRows.length && !beneficiaries.length){
             dispatch(getBeneficiaries())
         }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
     
-    const navigate = useNavigate();
     const columns = [
         {
             name: 'avatar',

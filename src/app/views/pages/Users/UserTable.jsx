@@ -21,6 +21,7 @@ const UserTable = () => {
         if(!selectedRows.length && !users.length){
             dispatch(getUsers())
         }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
     
     const navigate = useNavigate();
