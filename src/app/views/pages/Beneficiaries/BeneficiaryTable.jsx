@@ -7,10 +7,12 @@ import { Grid, Button, Avatar } from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import { getBeneficiaries } from '../../../redux/actions'
 import { useSelector, useDispatch  } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const selectBeneficiaries = state => state.beneficiaries.beneficiaryList
 
 const BeneficiaryTable = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch() 
     const beneficiaries = useSelector(selectBeneficiaries)
     const [selectedRows, setSelectedRows] = React.useState([]);
@@ -82,13 +84,15 @@ const BeneficiaryTable = () => {
       },
     };
     return (
-        <Grid container padding={2} rowSpacing={1.5} columnSpacing={2}>
+    <Grid container padding={2} rowSpacing={1.5} columnSpacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3}>
                 <Button
                     size="large"
                     variant="contained"
                     color="primary"
-                    disabled
+                       onClick={() => {
+                        navigate('/add-modules');
+                    }}
                 >
                     Add Beneficiary
                 </Button>
