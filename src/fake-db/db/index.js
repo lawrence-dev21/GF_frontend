@@ -286,6 +286,18 @@ Mock.onGet(/api\/districts\/?.*/).reply((config) => {
 })
 
 
+Mock.onGet(/api\/users\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  let response = DB.userList
+  if(!params){
+    return [200, response]
+  }
+  const { nrc } = params
+  response = response.find(user => user.nrc.startsWith(nrc))
+  return [200, response];
+})
+
+
 // Categories 
 
 Mock.onGet('/api/categories').reply((config) => {

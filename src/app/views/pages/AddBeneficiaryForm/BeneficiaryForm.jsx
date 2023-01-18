@@ -124,6 +124,8 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
 
   const [schools, setSchools] = useState([])
   const [categories, setCategories] = useState([])
+  const [parent, setParent] = useState(null)
+
   useEffect(() => {
     if(schools.length === 0 && categories.length === 0){
       axios.get('/api/schools')
@@ -133,6 +135,29 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
     }
   },[schools.length, categories.length])
 
+
+
+  useEffect(() => {
+    if(parentNRC)
+    if(parentNRC.length >= 2){
+      console.log('Fetching Parent')
+    axios.get('api/users?nrc='+ parentNRC)
+      .then(({data}) => {
+        if(data){
+          parent !== data && setParent(data)
+        } else {
+          parent && setParent(null)
+        }
+      })
+    }
+  }, [parentNRC])
+
+
+  useEffect(() => {
+    if(parent){
+      setState({ ...state, parentFirstName: parent.firstName });
+    }
+  },[parent])
   return (
     <div>
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
@@ -287,7 +312,27 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                 }}
               />
             </Grid>
+            <p>{parent ? JSON.stringify(parent): 'No Parents :('}</p>
         </Grid>
+      <Grid container spacing={6}>
+            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
+              <TextField
+                type="text"
+                name="parentFirstName"
+                label="Parent First Name"
+                onChange={handleChange}
+                value={parentFirstName || ""}
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                disabled={!parent}
+              />
+            </Grid>
+
+      </Grid>
+
 
 
         <Button color="primary" variant="contained" type="submit" disabled={loading}>
