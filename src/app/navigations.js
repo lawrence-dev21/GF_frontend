@@ -23,15 +23,17 @@ export const navigations = [
     icon: 'menu book',
     children: [
       { name: 'Modules', iconText: 'MO', path: '/modules' },
-      { name: 'Add Modules', iconText: 'MO', path: '/add-modules', auth: authRoles.editor },
+      { name: 'Add Modules', iconText: 'MU', path: '/add-modules', auth: authRoles.editor },
     ],
   },
   {
     name: 'Beneficiary Management',
     icon: 'wc',
     children: [
-      { name: 'Beneficiaries', iconText: 'SI', path: '/beneficiaries' },
-      // { name: 'Annual Promotion', iconText: 'SU', path: '/session/signup' },
+      { name: 'Beneficiaries', iconText: 'YS', path: '/beneficiaries' },
+      { name: 'Add Beneficiaries', iconText: 'YS', path: '/add-beneficiaries', auth: authRoles.editor },
+
+
     ],auth: authRoles.admin
   },
   // {

@@ -89,6 +89,17 @@ const _handleReaderLoaded = (readerEvent) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
+  const handleChangeParentNRC = (event) => {
+      handleChange(event)
+      const parentNRC = event.target.value
+
+      // fetch the user with the nrc x
+
+  };
+
+
+
+
 const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                           [{value: 'SA', label: 'Super Admin'},
                           {value: 'ADMIN', label: 'HQ'},
@@ -100,75 +111,34 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
   const {
     firstName,
     lastName,
-    email,
-    nrc,
     gender,
-    role,
-    position,
-    mobile,
     dateOfBirth,
-    password,
-    schoolId
+    schoolId,
+    categoryId,
+    parentFirstName,
+    parentLastName,
+    parentNRC,
+    parentMobile,
+    parentDateOfBirth,
   } = state;
 
   const [schools, setSchools] = useState([])
+  const [categories, setCategories] = useState([])
   useEffect(() => {
-    if(schools.length === 0){
+    if(schools.length === 0 && categories.length === 0){
       axios.get('/api/schools')
            .then(({data}) => { setSchools(data)})
+      axios.get('/api/categories')
+           .then(({data}) => { setCategories(data)})
     }
-  },[schools.length])
+  },[schools.length, categories.length])
 
   return (
     <div>
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
-      <Divider />
-        <h4 style={{marginTop: '16px'}}>Profile Image Upload</h4>
-       <Grid container spacing={6}>
-          <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4 }} style={{paddingTop: spacing.paddingTop}}>
-            <input
-              type="file"
-              name="profileImage"
-              onChange={handleFileUpload}
-              style={{marginTop: '4px', marginBottom: '16px'}}
-            />
-          </Grid>
-        </Grid>
-      <Divider />
-         <h4 style={{marginTop: '16px'}}>Login Details</h4>
-         <Grid container spacing={6}>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }} style={{paddingTop: spacing.paddingTop}}>
-            <TextField
-                type="email"
-                name="email"
-                label="Email"
-                value={email || ""}
-                onChange={handleChange}
-                validators={["required", "isEmail"]}
-                errorMessages={["this field is required", "email is not valid"]}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-          </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
-           <TextField
-              name="password"
-              type="password"
-              label="Password"
-              value={password || ""}
-              onChange={handleChange}
-              validators={["required"]}
-              errorMessages={["this field is required"]}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </Grid>
-        </Grid>
 
       <Divider style={{marginTop: '8px'}} />
-       <h4 style={{marginTop: '16px'}}>Personal Details</h4>
+       <h4 style={{marginTop: '16px'}}>Beneficiary Details</h4>
         <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
               <TextField
@@ -213,20 +183,6 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                 }}
               />
             </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnder}}>
-              <TextField
-                type="number"
-                name="nrc"
-                label="National Registration Number"
-                onChange={handleChange}
-                value={nrc || ""}
-                validators={["required"]}
-                errorMessages={["this field is required"]}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-
               <RadioGroup
                   row
                   name="gender"
@@ -248,27 +204,14 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                   control={<Radio color="primary" />}
                 />
               </RadioGroup>
-            </Grid>
+
 
         </Grid>
       <Divider />
-         <h4 style={{marginTop: '16px'}}>Job Details</h4>
-        <Grid container spacing={6}>
-        <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
-              <TextField
-                type="text"
-                name="position"
-                label="Job Position"
-                onChange={handleChange}
-                value={position || ""}
-                validators={["required"]}
-                errorMessages={["this field is required"]}
-                  InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
+      <h4 style={{marginTop: '16px'}}>Beneficiary School Details</h4>
+
+      <Grid container spacing={6}>
+         <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
             <FormControl fullWidth variant="outlined">
                 <InputLabel shrink ref={inputLabel} htmlFor="school-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Insitution</InputLabel>
                 <Select
@@ -295,46 +238,57 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
               </FormControl>
 
           </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnderSelect}}>
-           <FormControl fullWidth variant="outlined">
-                <InputLabel shrink ref={inputLabel} htmlFor="role-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Role</InputLabel>
+
+
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
+            <FormControl fullWidth variant="outlined">
+                <InputLabel shrink ref={inputLabel} htmlFor="category-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Grade</InputLabel>
                 <Select
-                  labelId="role-select"
-                  id="mtx-role-select"
-                  name="role"
-                  value={role || ""}
-                  label="Role"
+                  labelId="category-select"
+                  id="mtx-category-select"
+                  name="categoryId"
+                  value={categoryId || ""}
+                  label="Grade"
+                  disabled={categories.length === 0}
                   onChange={handleChange}
-                   input={
+                  input={
                     <OutlinedInput
                       notched
                       labelWidth={labelWidth}
-                      name="role"
-                      id="role-select"
-                    />}
+                      name="categories"
+                      id="categories-select"
+                    />
+                  }
                 >
-                  {systemRoles && systemRoles.map(role =>
-                    <MenuItem value={role.value} key={role.value}>{role.label}</MenuItem>
+                  {categories && categories.map(category =>
+                    <MenuItem value={category.id} key={category.id}>{category.name}</MenuItem>
                   )}
-                </Select>
-            </FormControl>
+                  </Select>
+              </FormControl>
+
           </Grid>
+     </Grid>
+
+     <Divider style={{marginTop: '16px'}}/>
+
+     <h4 style={{marginTop: '16px'}}>Parent Details</h4>
+      <Grid container spacing={6}>
+        <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnder}}>
+              <TextField
+                type="text"
+                name="parentNRC"
+                label="National Registration Number"
+                onChange={handleChange}
+                value={parentNRC || ""}
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Grid>
         </Grid>
-        <Divider style={{marginTop: '24px'}} />
-         <h4 style={{marginTop: '16px'}}>Contact Details</h4>
-        <Grid container spacing={6} style={{marginBottom: '24px'}}>
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
-            <TextField
-              type="text"
-              name="mobile"
-              value={mobile || ""}
-              label="Mobile Number"
-              onChange={handleChange}
-              validators={["required"]}
-              errorMessages={["this field is required"]}
-            />
-          </Grid>
-        </Grid>
+
 
         <Button color="primary" variant="contained" type="submit" disabled={loading}>
           <Span sx={{ textTransform: "capitalize" }}>{loading ? (<CircularProgress style={{ margin: 'auto', height: 15, width: 15, color: 'white'}}/>) : 'Submit'}</Span>

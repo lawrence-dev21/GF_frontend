@@ -19,6 +19,7 @@ const AddModuleForm = Loadable(lazy(() => import('./AddModuleForm')));
 
 // Beneficiary Management
 const Beneficiaries = Loadable(lazy(() => import('./Beneficiaries')));
+const AddBeneficiaryForm = Loadable(lazy(() => import('./AddBeneficiaryForm')));
 
 // CSE Managment
 const CSE = Loadable(lazy(() => import('./CSE')));
@@ -91,6 +92,10 @@ const pageRoutes = [
     element: <Beneficiaries/>,
     // auth: authRoles.sa
   },
+  {
+    path: '/add-beneficiaries',
+    element: <AddBeneficiaryForm/>
+  }
 ];
 
 export default pageRoutes;

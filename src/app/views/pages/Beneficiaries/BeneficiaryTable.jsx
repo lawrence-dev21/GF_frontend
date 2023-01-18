@@ -91,7 +91,7 @@ const BeneficiaryTable = () => {
                     variant="contained"
                     color="primary"
                        onClick={() => {
-                        navigate('/add-modules');
+                        navigate('/add-beneficiaries');
                     }}
                 >
                     Add Beneficiary
