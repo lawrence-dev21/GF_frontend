@@ -515,7 +515,7 @@ Mock.onPost('/api/beneficiaries/add').reply((config) => {
 
     // create the beneficiary
 
-    const { schoolId, gradeId } = data
+    const { schoolId, categoryId: gradeId } = data
     const id = shortId.generate()
 
     const newBeneficiary = {

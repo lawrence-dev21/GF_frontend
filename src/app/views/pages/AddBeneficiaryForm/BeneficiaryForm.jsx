@@ -89,8 +89,11 @@ const {
 
   useEffect(() => {
     if(schools.length === 0 && categories.length === 0){
+      setState({...state, gender:'Male'})
       axios.get('/api/schools')
-           .then(({data}) => { setSchools(data)})
+           .then(({data}) => {
+             setSchools(data)
+          })
       axios.get('/api/categories')
            .then(({data}) => { setCategories(data)})
     }
@@ -186,7 +189,7 @@ const {
                   row
                   name="gender"
                   sx={{ mb: 2 }}
-                  value={gender || "Male"}
+                  value={gender || ""}
                   onChange={handleChange}
               >
                 <FormControlLabel
