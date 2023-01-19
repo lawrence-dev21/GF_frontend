@@ -1,6 +1,7 @@
 
 import {
   Button,
+  Box,
   FormControlLabel,
   Grid,
   Radio,
@@ -12,8 +13,13 @@ import {
   InputLabel,
   Divider,
   OutlinedInput,
-  CircularProgress
+  CircularProgress,
+  Icon
 } from "@mui/material";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
+
 import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
@@ -104,7 +110,7 @@ const {
 
   useEffect(() => {
     if(parentNRC)
-    if(parentNRC.length >= 2){
+    if(parentNRC.length >= 0){
       console.log('Fetching Parent')
     axios.get('api/users?nrc='+ parentNRC)
       .then(({data}) => {
@@ -290,7 +296,23 @@ const {
                 }}
               />
             </Grid>
-            <p>{parent ? JSON.stringify(parent): 'No Parents :('}</p>
+   <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
+    {
+        parent ?
+        <Box style={{alignItems: 'center', display: 'flex'}}>
+            <Icon style={{ color: "#A2F0A2"}}>
+                <CheckCircleIcon />
+            </Icon>
+            <p style={{marginLeft: 4}}>{`Parent Found ${parent.nrc}`}</p>
+        </Box>
+        : <Box style={{alignItems: 'center', display: 'flex'}}>
+            <Icon style={{ color: "#8282F0"}}>
+                <CancelIcon />
+            </Icon>
+            <p style={{marginLeft: 4}}>No Record Exist</p>
+        </Box>
+    }
+</Grid>
         </Grid>
       <Grid container spacing={6}>
             <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>

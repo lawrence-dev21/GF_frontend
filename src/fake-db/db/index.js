@@ -1,8 +1,9 @@
 import Mock from '../mock'
 import shortId from 'shortid'
 import jwt from 'jsonwebtoken';
+
 // import { firestore } from "../../firebase"
-// import { addDoc, collection } from "@firebase/firestore"
+// import { addDoc, collection, query, where } from "@firebase/firestore"
 
 import { 
     userList,
@@ -71,6 +72,8 @@ Mock.onGet('/api/users').reply((config) => {
         school: school.name
       }
     })
+    // const ref  =  collection(firestore, 'users').get()
+    // console.log('user refs', ref)
     return [200, response]
 })
 
@@ -96,8 +99,10 @@ Mock.onPost('/api/users/add').reply((config) => {
             creationDate: creationDate.toISOString(),
             dateOfBirth: dateOfBirth.toISOString()
         }
-        // collection(firestore, 'users')
-    	
+     //    const ref  =  collection(firestore, 'users')
+    	// addDoc(ref, newUser)
+
+        console.log()
     	DB.userList.push(newUser)
 
     	return [200, getUserAccounts()]
