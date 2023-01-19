@@ -18,13 +18,11 @@ import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { base64ToImage, isMobile } from '../../../utils/utils'
+import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
-import { addUser } from '../../../redux/actions/UserActions'
+import { addBeneficiary } from '../../../redux/actions/BeneficiaryActions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { authRoles } from 'app/auth/authRoles'
-import useAuth from 'app/hooks/useAuth'
 
 import axios from 'axios'
 const TextField = styled(TextValidator)(() => ({
@@ -34,7 +32,6 @@ const TextField = styled(TextValidator)(() => ({
 
 
 const BeneficiaryForm = () => {
-  const { user } = useAuth()
   const [state, setState] = useState({});
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -54,34 +51,16 @@ const BeneficiaryForm = () => {
     const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    dispatch(addUser(state))
+    dispatch(addBeneficiary(state))
     setTimeout(() => {
 
-    enqueueSnackbar('User sucessfully entered', { variant: 'success'})
-    navigate('/users')
+    enqueueSnackbar('Beneficiary sucessfully entered', { variant: 'success'})
+    navigate('/beneficiaries')
     setLoading(false)
   }, 500)
   };
 
 
-const handleFileUpload = (event) =>{
-    event.persist();
-    console.log(event.target)
-      const file = event.target.files[0]
-      if(file){
-        console.log('File Exists')
-        const reader = new FileReader();
-        console.log('File Reader initiated')
-        reader.onload =  _handleReaderLoaded
-        console.log('File Reader loaded')
-        reader.readAsBinaryString(file)
-      }
-    }
-
-const _handleReaderLoaded = (readerEvent) => {
-  let binaryString = readerEvent.target.result
-  setState({ ...state, avatar: base64ToImage(btoa(binaryString))})
-}
 
   const handleChange = (event) => {
     if(event.persist)
@@ -89,26 +68,8 @@ const _handleReaderLoaded = (readerEvent) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
-  const handleChangeParentNRC = (event) => {
-      handleChange(event)
-      const parentNRC = event.target.value
 
-      // fetch the user with the nrc x
-
-  };
-
-
-
-
-const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
-                          [{value: 'SA', label: 'Super Admin'},
-                          {value: 'ADMIN', label: 'HQ'},
-                          {value: 'EDITOR', label: 'School Admin'},
-                          {value: 'GUEST', label: 'Learner'},]
-                        : [{value: 'EDITOR', label: 'School Admin'},
-                          {value: 'GUEST', label: 'Learner'},])
-
-  const {
+const {
     firstName,
     lastName,
     gender,
@@ -119,7 +80,7 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
     parentLastName,
     parentNRC,
     parentMobile,
-    parentDateOfBirth,
+    parentAddress,
   } = state;
 
   const [schools, setSchools] = useState([])
@@ -133,6 +94,7 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
       axios.get('/api/categories')
            .then(({data}) => { setCategories(data)})
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[schools.length, categories.length])
 
 
@@ -150,14 +112,25 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
         }
       })
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [parentNRC])
 
 
   useEffect(() => {
     if(parent){
-      setState({ ...state, parentFirstName: parent.firstName });
+      setState({
+        ...state,
+        parentFirstName: parent?.firstName,
+        parentLastName: parent?.lastName,
+        parentAddress: parent?.address,
+        parentMobile: parent?.mobile,
+        parentId: parent?.parentId,
+        parentUserId: parent?.id,
+      });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[parent])
+
   return (
     <div>
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
@@ -208,11 +181,12 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                 }}
               />
             </Grid>
+            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnder}}>
               <RadioGroup
                   row
                   name="gender"
                   sx={{ mb: 2 }}
-                  value={gender || ""}
+                  value={gender || "Male"}
                   onChange={handleChange}
               >
                 <FormControlLabel
@@ -229,6 +203,7 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                   control={<Radio color="primary" />}
                 />
               </RadioGroup>
+              </Grid>
 
 
         </Grid>
@@ -327,9 +302,61 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                 InputLabelProps={{
                   shrink: true,
                 }}
-                disabled={!parent}
+                style={{backgroundColor: parent && '#F0F0F0'}}
+                disabled={parent}
               />
             </Grid>
+        <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
+              <TextField
+                type="text"
+                name="parentLastName"
+                label="Parent Last Name"
+                onChange={handleChange}
+                value={parentLastName || ""}
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                style={{backgroundColor: parent && '#F0F0F0'}}
+                disabled={parent}
+              />
+        </Grid>
+
+      </Grid>
+      <Grid container spacing={6}>
+            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
+              <TextField
+                type="text"
+                name="parentAddress"
+                label="Address"
+                onChange={handleChange}
+                value={parentAddress || ""}
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                style={{backgroundColor: (parent && parent?.address) &&  '#F0F0F0'}}
+                disabled={parent && parent?.address}
+              />
+            </Grid>
+        <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
+              <TextField
+                type="text"
+                name="parentMobile"
+                label="Mobile Number"
+                onChange={handleChange}
+                value={parentMobile || ""}
+                validators={["required"]}
+                errorMessages={["this field is required"]}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                style={{backgroundColor: (parent && parent?.mobile) && '#F0F0F0'}}
+                disabled={parent && parent?.mobile}
+              />
+        </Grid>
 
       </Grid>
 

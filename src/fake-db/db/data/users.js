@@ -83,7 +83,7 @@ export const userList = [
             lastName: 'Mwaba',
             name: 'Given Mwaba',
             email: 'NULL',
-            nrc: '112435/12/1',
+            nrc: '36363/12/1',
             role: 'PARENT',
             mobile: '0936637726',
             creationDate: '2022-09-01',

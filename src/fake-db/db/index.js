@@ -1,6 +1,9 @@
 import Mock from '../mock'
 import shortId from 'shortid'
 import jwt from 'jsonwebtoken';
+// import { firestore } from "../../firebase"
+// import { addDoc, collection } from "@firebase/firestore"
+
 import { 
     userList,
     schoolList,
@@ -32,6 +35,7 @@ const DB = {
     paymentList,
 }
 
+// firebase.collection('users').add
 
 const parseQueryString = (url) => {
   const queryString = url.replace(/.*\?/, '');
@@ -92,6 +96,7 @@ Mock.onPost('/api/users/add').reply((config) => {
             creationDate: creationDate.toISOString(),
             dateOfBirth: dateOfBirth.toISOString()
         }
+        // collection(firestore, 'users')
     	
     	DB.userList.push(newUser)
 
@@ -294,6 +299,13 @@ Mock.onGet(/api\/users\/?.*/).reply((config) => {
   }
   const { nrc } = params
   response = response.find(user => user.nrc.startsWith(nrc))
+  if(response){
+    const parent = DB.parentList.find(parent => parent.userId === response.id)
+    if(parent){
+      response = {...response, address: parent.address, parentId: parent.id}
+    }
+  }
+
   return [200, response];
 })
 
@@ -384,7 +396,7 @@ const createParent = (parent, beneficiaries, address) => {
   const id = shortId.generate(); 
   const newParent = {
     id,
-    parentId: parent.id,
+    userId: parent.id,
     beneficiaries,
     address
   }
@@ -460,17 +472,48 @@ Mock.onPost('/api/beneficiaries/add').reply((config) => {
       lastName,
       gender,
       dateOfBirth
-    }) 
+    })
+
+    console.log('Student')
+
+    const { parentFirstName, parentLastName, parentAddress: address, parentId, parentUserId, parentNRC: nrc, parentMobile: mobile } = data
+
+    // Create the user
+    let user = {}
+    if(parentUserId){
+        const parentUserIndex = DB.userList.findIndex(x =>  x.id === parentUserId)
+        DB.userList[parentUserIndex] = { ...DB.userList[parentUserIndex], mobile }
+        user = DB.userList[parentUserIndex]
+    } else {
+      createUser({firstName: parentFirstName,
+                  lastName: parentLastName,
+                  nrc,
+                  mobile,
+                })
+    }
+    console.log('User')
 
 
-    // Create the parent
-    const { parentFirstName, parentLastName, address, nrc, phoneNumber: mobile } = data
-    const parent = createParent(createUser({
-                                  firstName: parentFirstName,
-                                  lastName: parentLastName,
-                                  nrc,
-                                  mobile
-                                }), [student.id], address)
+    // create the parent
+
+    let parent = {}
+    if(parentId){
+      const parentIndex = DB.parentList.findIndex(parent => parent.id === parentId)
+      DB.parentList[parentIndex] = {
+                  ...DB.parentList[parentIndex],
+                  address,
+                  beneficiaries: [
+                    ...DB.parentList[parentIndex].beneficiaries,
+                    student.id
+                  ],
+                }
+      parent = DB.parentList[parentIndex]
+    } else {
+      parent = createParent(user, [student.id], address)
+    }
+    console.log('Parent', parent)
+
+    // create the beneficiary
 
     const { schoolId, gradeId } = data
     const id = shortId.generate()
@@ -480,8 +523,9 @@ Mock.onPost('/api/beneficiaries/add').reply((config) => {
       schoolId,
       gradeId,
       userId: student.id,
-      parentId: parent.id
+      parentId: parent.id,
     }
+        console.log('Beneficiary', newBeneficiary)
 
     DB.beneficiaryList.push(newBeneficiary)
     const response = getBeneficiaries()

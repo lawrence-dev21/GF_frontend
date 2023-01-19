@@ -15,7 +15,7 @@ export const getBeneficiaries = ()  => (dispatch) => {
 
 
 export const addBeneficiary = (beneficiary) => (dispatch) => {
-	axios.post('api/beneficiarys/add', beneficiary).then(res => {
+	axios.post('api/beneficiaries/add', beneficiary).then(res => {
 	    dispatch({
 	      type: ADD_BENEFICIARY,
 	      payload: res.data,
