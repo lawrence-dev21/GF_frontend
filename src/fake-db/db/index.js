@@ -78,7 +78,7 @@ Mock.onGet('/api/users').reply(async (config) => {
     })
    // const ref  =  collection(firestore, 'users').get()
     // console.log('user refs', ref)
-    return [200, response]
+    return [200, userData]
 })
 
 
