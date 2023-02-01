@@ -3,4 +3,5 @@ export * from './schools';
 export * from './area';
 export * from './categories';
 export * from './modules';
-export * from './beneficiaries'
+export * from './beneficiaries';
+export * from './clubs';

@@ -16,6 +16,7 @@ import {
     beneficiaryList,
     parentList,
     paymentList,
+    clubList,
 } from './data';
 
 const JWT_SECRET = 'jwt_secret_key';
