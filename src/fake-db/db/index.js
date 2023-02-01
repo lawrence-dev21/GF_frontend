@@ -1,9 +1,8 @@
 import Mock from '../mock'
 import shortId from 'shortid'
 import jwt from 'jsonwebtoken';
-
-// import { firestore } from "../../firebase"
-// import { addDoc, collection, query, where } from "@firebase/firestore"
+import { firestore } from "../../firebase"
+import { getDocs, collection, query, where } from "@firebase/firestore"
 
 import { 
     userList,
@@ -64,7 +63,7 @@ const parseQueryString = (url) => {
 const getUserAccounts = () => {
   return DB.userList.filter(user => user?.email && user?.password && user.nrc)
 }
-Mock.onGet('/api/users').reply((config) => {
+Mock.onGet('/api/users').reply(async (config) => {
     const users = getUserAccounts()
     const response = users.map(user => {
                     const school = DB.schoolList.filter(school =>  user.schoolId === school.id)[0]
@@ -73,7 +72,11 @@ Mock.onGet('/api/users').reply((config) => {
         school: school.name
       }
     })
-    // const ref  =  collection(firestore, 'users').get()
+    await getDocs(collection(firestore, 'users')).then((querySnapshot) => {
+      const userData = querySnapshot.docs.map((doc) => ({...doc.data(), id: doc.id}))
+      response.push(userData)
+    })
+   // const ref  =  collection(firestore, 'users').get()
     // console.log('user refs', ref)
     return [200, response]
 })
