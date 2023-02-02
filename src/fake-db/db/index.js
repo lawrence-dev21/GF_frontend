@@ -65,7 +65,7 @@ const getUserAccounts = () => {
 }
 Mock.onGet('/api/users').reply(async (config) => {
     const users = getUserAccounts()
-    const response = users.map(user => {
+    let response = users.map(user => {
                     const school = DB.schoolList.filter(school =>  user.schoolId === school.id)[0]
       return {
         ...user,
@@ -74,11 +74,11 @@ Mock.onGet('/api/users').reply(async (config) => {
     })
     await getDocs(collection(firestore, 'users')).then((querySnapshot) => {
       const userData = querySnapshot.docs.map((doc) => ({...doc.data(), id: doc.id}))
-      response.push(userData)
+      response = userData
     })
    // const ref  =  collection(firestore, 'users').get()
     // console.log('user refs', ref)
-    return [200, userData]
+    return [200, response]
 })
 
 
