@@ -2,7 +2,7 @@ import Mock from '../mock'
 import shortId from 'shortid'
 import jwt from 'jsonwebtoken';
 import { firestore } from "../../firebase"
-import { getDocs, collection, query, where } from "firebase/firestore"
+import { getDocs, collection } from "firebase/firestore"
 
 import { 
     userList,
@@ -15,7 +15,6 @@ import {
     beneficiaryList,
     parentList,
     paymentList,
-    clubList,
 } from './data';
 
 const JWT_SECRET = 'jwt_secret_key';
