@@ -77,7 +77,7 @@ Mock.onGet('/api/student-count').reply(config => {
 })
 Mock.onGet('/api/student-gender-count').reply(config => {
   const studentGenderCount = getBeneficiaries.reduce((acc, cum) => {
-    cum.gender === male ? acc.male++ : acc.female++
+    cum.gender === 'Male' ? acc.male++ : acc.female++
     return acc
   }, {male:0,female:0})
   return [200, studentGenderCount]
