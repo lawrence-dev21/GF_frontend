@@ -37,10 +37,14 @@ const StatCards = () => {
   const dispatch = useDispatch() 
   const modules = useSelector(selectModules)
   const [count, setCount] = useState(null)
+  const [gender, setGender] = useState(null)
   useEffect(() => {
       if(!count){
-        fetch('/api/student-count').then(({data}),setCount(data))
+        fetch('/api/student-count').then(({data}) => setCount(data))
       }
+if(!gender){
+        fetch('/api/student-gender-count').then(({data}) => setGender(data))
+}
       if(!modules.length){
           dispatch(getModules())
       }
