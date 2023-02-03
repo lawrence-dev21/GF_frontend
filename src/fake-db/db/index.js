@@ -62,19 +62,37 @@ const parseQueryString = (url) => {
 const getUserAccounts = () => {
   return DB.userList.filter(user => user?.email && user?.password && user.nrc)
 }
+
+const getCollection = async (name) => {
+  let response = []
+    await getDocs(collection(firestore, name)).then((querySnapshot) => {
+      response = querySnapshot.docs.map((doc) => ({...doc.data(), id: doc.id}))
+      
+    })
+    return response
+}
+Mock.onGet('/api/student-count').reply(config => {
+  const studentCount = DB.beneficiaryList.length
+  return [200, studentCount]
+})
+Mock.onGet('/api/student-gender-count').reply(config => {
+  const studentGenderCount = getBeneficiaries.reduce((acc, cum) => {
+    cum.gender === male ? acc.male++ : acc.female++
+    return acc
+  }, {male:0,female:0})
+  return [200, studentGenderCount]
+})
+
 Mock.onGet('/api/users').reply(async (config) => {
     const users = getUserAccounts()
-    let response = users.map(user => {
+    const response = users.map(user => {
                     const school = DB.schoolList.filter(school =>  user.schoolId === school.id)[0]
       return {
         ...user,
         school: school.name
       }
     })
-    await getDocs(collection(firestore, 'users')).then((querySnapshot) => {
-      const userData = querySnapshot.docs.map((doc) => ({...doc.data(), id: doc.id}))
-      response = userData
-    })
+    // response = await getCollection('users')
    // const ref  =  collection(firestore, 'users').get()
     // console.log('user refs', ref)
     return [200, response]
