@@ -36,15 +36,20 @@ const StatCards = () => {
   const [cardList, setCardList] = useState([])
   const dispatch = useDispatch() 
   const modules = useSelector(selectModules)
+  const [count, setCount] = useState(null)
   useEffect(() => {
+      if(!count){
+        fetch('/api/student-count').then(({data}),setCount(data))
+      }
       if(!modules.length){
           dispatch(getModules())
       }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch])
+  }, [dispatch, count])
   useEffect(()=> {
     if(!cardList.length){
       setCardList([...cardList,
+      {name: 'Learners', amount: count, icon: 'user', link: '/beneficiaries'},
           { name: 'Modules', amount: modules.length, icon: 'book', link: '/modules' }])
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
