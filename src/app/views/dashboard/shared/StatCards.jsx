@@ -57,7 +57,7 @@ if(!gender){
           { name: 'Modules', amount: modules.length, icon: 'book', link: '/modules' }])
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modules])
+  }, [modules,count])
 
   return (
     <Grid container spacing={3} sx={{ mb: '24px' }}>
