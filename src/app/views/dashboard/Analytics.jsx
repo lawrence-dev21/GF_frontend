@@ -25,16 +25,18 @@ const Analytics = () => {
     <Fragment>
       <ContentBox className="analytics">
         <Grid container spacing={3}>
-          <Grid item lg={8} md={8} sm={12} xs={12}>
-            <StatCards />
-          </Grid>
-
           <Grid item lg={4} md={4} sm={12} xs={12}>
             <Card sx={{ px: 3, py: 2, mb: 3 }}>
               <Title>Traffic Sources</Title>
               <SubTitle>providing all the details</SubTitle>
             </Card>
           </Grid>
+         
+          <Grid item lg={8} md={8} sm={12} xs={12}>
+            <StatCards />
+          </Grid>
+
+         
         </Grid>
       </ContentBox>
     </Fragment>
