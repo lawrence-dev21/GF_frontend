@@ -62,7 +62,7 @@ const parseQueryString = (url) => {
 const getUserAccounts = () => {
   return DB.userList.filter(user => user?.email && user?.password && user.nrc)
 }
-
+// eslint-disable-next-line no-unused-vars
 const getCollection = async (name) => {
   let response = []
     await getDocs(collection(firestore, name)).then((querySnapshot) => {
