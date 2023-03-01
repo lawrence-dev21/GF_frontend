@@ -208,7 +208,17 @@ const CSE = () => {
       {/* Enrollment */}
       <Box sx={{mt: 4}}>
         <Typography variant="h5">CSE Student List</Typography>
-        <Button disabled variant="contained" sx={{mb: 2, mt: 2}}>Enroll Student</Button>
+        <Button
+                    sx={{mb: 2, mt: 2}}
+                    size="large"
+                    variant="contained"
+                    color="primary"
+                       onClick={() => {
+                        navigate('/enroll-cse');
+                    }}
+                >
+                    Enroll Student
+          </Button>
         <CSETable />
       </Box>
     </Container>

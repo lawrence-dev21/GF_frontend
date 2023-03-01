@@ -95,6 +95,18 @@ export const userList = [
             creationDate: '2022-09-01',
         },
         {
+            id: '39jc7c58-7e02-40iv-9fe5-8b24bad4a63e',
+            firstName: 'Christopher',
+            lastName: 'Mwaba',
+            name: 'Christopher Mwaba',
+            email: 'NULL',
+            nrc: 'NULL',
+            gender: 'Female',
+            role: 'Student',
+            dateOfBirth: '1986-12-03',
+            creationDate: '2022-09-01',
+        },
+        {
             id: 'givenmwabab32497defdsgga21r902',
             firstName: 'Given',
             lastName: 'Mwaba',

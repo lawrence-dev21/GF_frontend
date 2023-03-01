@@ -658,9 +658,23 @@ Mock.onGet(/api\/cse-students\/?.*/).reply((config) => {
   if(!params){
     return [400, {todo: 'bad request'}]
   }
-  const school = schools.find(x => x.id === params.id)
-  const cse = DB.clubList.find(x => x.schoolId === school.id)
-  const response = getCSEStudents(cse)
+  const cse = DB.clubList.find(x => x.schoolId === params.id)
+  let response = getCSEStudents(cse)
+  console.log('Students Query')
+  console.log(params)
+  console.log(response)
+  if(params.cse === 'false'){
+    const beneficiaries = getBeneficiaries()
+    console.log(beneficiaries)
+    response = beneficiaries.filter(x => {
+      console.log(x.schoolId)
+      console.log(params.id)
+      return x.schoolId.startsWith(params.id)})
+    console.log('filtered', response)
+    response = response.filter(x => x.cse !== 'true')
+    console.log('filtered x2', response)
+  }
+  console.log(response)
   return [200, response]
 })
 
@@ -682,4 +696,3 @@ Mock.onGet(/api\/cse-attendence\/?.*/).reply((config) => {
                             })
   return [200, response];
 })
-

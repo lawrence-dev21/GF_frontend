@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import {styled } from "@mui/system";
 import { SimpleCard } from "app/components";
 
-import BeneficiaryForm from "./CSEEnrollmentForm"
+import EnrollForm from "./EnrollForm"
 
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
@@ -17,8 +17,8 @@ const EnrollCSEForm = () => {
   return (
     <Container>
      <Stack spacing={3}>
-        <SimpleCard title="Add Enroll Student">
-          <BeneficiaryForm />
+        <SimpleCard title="CSE: Enroll Student">
+          <EnrollForm />
         </SimpleCard>
       </Stack>
     </Container>

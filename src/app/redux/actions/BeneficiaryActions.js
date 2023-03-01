@@ -10,7 +10,7 @@ export const getBeneficiaries = ()  => (dispatch) => {
 	      type: GET_BENEFICIARIES,
 	      payload: res.data,
 	    });	
-	}).catch(err => console.log)
+	}).catch(err => console.log(err))
 }
 
 

@@ -23,7 +23,8 @@ export const navigations = [
     icon: 'menu book',
     children: [
       { name: 'CSE', iconText: 'MO', path: '/cse' },
-      { name: 'CSE Attendance', iconText: 'MO', path: '/add-cse' },
+      { name: 'CSE Attendance', iconText: 'CS', path: '/add-cse' },
+      { name: 'CSE Enrollment', iconText: 'CE', path: '/enroll-cse' },
     ],
   },
   {
