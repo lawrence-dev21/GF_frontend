@@ -23,6 +23,7 @@ const AddBeneficiaryForm = Loadable(lazy(() => import('./AddBeneficiaryForm')));
 
 // CSE Managment
 const CSE = Loadable(lazy(() => import('./CSE')));
+const AddCSEForm = Loadable(lazy(() => import('./AddCSEForm')));
 
 
 // Data Entry
@@ -85,6 +86,11 @@ const pageRoutes = [
   {
     path: '/cse',
     element: <CSE/>,
+    // auth: authRoles.sa
+  },
+  {
+    path: '/add-cse',
+    element: <AddCSEForm/>,
     // auth: authRoles.sa
   },
   {

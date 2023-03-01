@@ -47,9 +47,9 @@ const UserForm = () => {
     marginTop: isMobile() ? 0 : 4
   })
   const inputLabel = useRef(null);
-  const [labelWidth, setLabelWidth] = useState(0);
+  const [labelwidth, setLabelwidth] = useState(0);
   useEffect(() => {
-    setLabelWidth(inputLabel.current.offsetWidth);
+    setLabelwidth(inputLabel.current.offsetWidth);
   }, []);
     const navigate = useNavigate();
 
@@ -282,7 +282,7 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                   input={
                     <OutlinedInput
                       notched
-                      labelWidth={labelWidth}
+                      labelwidth={labelwidth}
                       name="school"
                       id="school-select"
                     />
@@ -308,7 +308,7 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                    input={
                     <OutlinedInput
                       notched
-                      labelWidth={labelWidth}
+                      labelwidth={labelwidth}
                       name="role"
                       id="role-select"
                     />}

@@ -19,11 +19,11 @@ export const navigations = [
     ]
   },
   {
-    name: 'Module Management',
+    name: 'CSE',
     icon: 'menu book',
     children: [
-      { name: 'Modules', iconText: 'MO', path: '/modules' },
-      { name: 'Add Modules', iconText: 'MU', path: '/add-modules', auth: authRoles.editor },
+      { name: 'CSE', iconText: 'MO', path: '/cse' },
+      { name: 'CSE Attendance', iconText: 'MO', path: '/add-cse' },
     ],
   },
   {

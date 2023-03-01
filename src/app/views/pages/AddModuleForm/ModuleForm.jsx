@@ -42,9 +42,9 @@ const ModuleForm = () => {
     marginTop: isMobile() ? 0 : 4
   })
   const inputLabel = useRef(null);
-  const [labelWidth, setLabelWidth] = useState(0);
+  const [labelwidth, setLabelwidth] = useState(0);
   useEffect(() => {
-    setLabelWidth(inputLabel.current.offsetWidth);
+    setLabelwidth(inputLabel.current.offsetWidth);
   }, []);
     const navigate = useNavigate();
 
@@ -167,7 +167,7 @@ const _handleReaderLoaded = (readerEvent) => {
                   input={
                     <OutlinedInput
                       notched
-                      labelWidth={labelWidth}
+                      labelwidth={labelwidth}
                       name="age"
                       id="category-select"
                     />

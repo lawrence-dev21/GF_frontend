@@ -14,7 +14,24 @@ export const userList = [
             avatar: '',
             id: '323sa680b32497dsfdsgga21rt47',
             password: 'Lusaka@123',
-            schoolId: '9dac7c58-7e02-40iv-9fe5-8b24bad4a63e'
+            schoolId: '9dac7c58-7e02-40iv-9fe5-8b24bad4a63e',
+        },
+        {
+            firstName: 'Mwila',
+            lastName: 'Nyirongo',
+            name: 'Mwila Nyirongo',
+            email: 'mwila.nyirongo@szi.gov.zm',
+            nrc: '123423/12/1',
+            gender: 'Male',
+            role: 'TE',
+            position: 'Secondary School Teacher',
+            mobile: '',
+            dateOfBirth: '1990-12-01',
+            creationDate: '2022-09-01',
+            avatar: '',
+            id: '2f323sa680b32497dsfdsgga21rt47',
+            password: 'Lusaka@123',
+            schoolId: '9dac7c8x-7e02-40iv-9fe5-8b24bad4a63e'
         },{
             firstName: 'Frank',
             lastName: 'Chaiwa',

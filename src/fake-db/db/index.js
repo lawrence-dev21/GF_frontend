@@ -15,6 +15,9 @@ import {
     beneficiaryList,
     parentList,
     paymentList,
+    clubList,
+    clubTopicList,
+    clubAttendenceList,
 } from './data';
 
 const JWT_SECRET = 'jwt_secret_key';
@@ -33,6 +36,9 @@ const DB = {
     beneficiaryList,
     parentList,
     paymentList,
+    clubList,
+    clubTopicList,
+    clubAttendenceList,
 }
 
 // firebase.collection('users').add
@@ -168,6 +174,7 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
           email: user.email,
           name: user.name,
           role: user.role,
+          schoolId: user?.schoolId || ''
         },
       },
     ];
@@ -247,6 +254,7 @@ Mock.onGet('/api/auth/profile').reply((config) => {
           email: user.email,
           name: user.name,
           role: user.role,
+          schoolId: user?.schoolId || ''
         },
       },
     ];
@@ -261,7 +269,6 @@ Mock.onGet('/api/auth/profile').reply((config) => {
 const getSchools = () => {
   return DB.schoolList.map(school => {
       const districtSC =  DB.districtList.filter(district => school.districtId === district.id)[0]
-      console.log('District', districtSC)
       const provinceSC =  DB.provinceList.filter(province => districtSC.provinceId === province.id)[0]
       return {
         ...school,
@@ -431,13 +438,9 @@ const createParent = (parent, beneficiaries, address) => {
 }
 
 const getParent = (parentId) => {
-    console.log('getParent fetch parent')
     const parent = DB.parentList.find(parentRow => parentId === parentRow.id)
-    console.log('getParent fetch parent Row', parent)
-    console.log('parent:', parent.id)
     const parentAccount = DB.userList.find(user => user.id === parent.userId)
 
-    console.log('parent:', parentAccount)
     return { 
               parentFirstName: parentAccount.firstName,
               parentLastName: parentAccount.lastName,
@@ -457,13 +460,9 @@ const getStudent = (userId) => {
 }  
 const getBeneficiaries = () => {
   return DB.beneficiaryList.map(student => {
-    console.log('Fetcing parent for beneficiary')
     const parent = getParent(student.parentId)
-    console.log('Fetcing grade for beneficiary')
     const grade = DB.categoryList.filter(grade => grade.id === student.gradeId)[0]
-    console.log('Fetcing school for beneficiary')
     const school = DB.schoolList.filter(school => school.id === student.schoolId)[0]
-    console.log('Fetcing user for beneficiary')
     const user = getStudent(student.userId)
 
     const beneficiary = {
@@ -483,7 +482,28 @@ const getBeneficiary = (beneficiaryId) => {
 }
 
 
+Mock.onPost('/api/cse/add').reply((config) => {
+    const data = JSON.parse(config.data)
+    console.log('CSE Data', data)
+    const id = shortId.generate()
+    const {
+      students: attendence,
+      totalRegistered,
+      schoolId,
+      teacherId,
+      date: creationDate,
+      topicId
+    } = data
+    const attendenceRegister =  {
+      id, attendence, totalRegistered, schoolId, teacherId, creationDate, topicId 
+    }
 
+    const cseIndex = DB.clubList.findIndex(x => x.schoolId.startsWith(schoolId))
+    DB.clubList[cseIndex].attendence.push(id)
+    DB.clubAttendenceList.push(attendenceRegister)
+    return [200, attendenceRegister]
+    
+})
 Mock.onPost('/api/beneficiaries/add').reply((config) => {
     const data = JSON.parse(config.data)
 
@@ -568,3 +588,98 @@ Mock.onGet(/api\/beneficiaries\/?.*/).reply((config) => {
   response = getBeneficiary(params.id)
   return [200, response];
 })
+
+
+
+
+const getCSEStudents = (cse) => {
+  const beneficiaries = getBeneficiaries()
+  console.log('students', cse.students)
+  return cse?.students.map(studentId => {
+    return beneficiaries.find(x => x.id.startsWith(studentId))
+  })
+}
+
+const getCSETeachers = (cse) => {
+  const users = getUserAccounts()
+  return cse?.teachers.map(teacherId => {
+    return users.find(x => x.teacherId === teacherId)
+  })
+}
+
+const getCSETopics = (cse) => {
+  const topics = cse?.topics.map(topicId => {
+    return DB.clubTopicList.find(x => x.id.startsWith(topicId))
+  })
+  return topics
+}
+
+const getCSE = (cse) => {
+  const cseStudents = getCSEStudents(cse)
+  const cseTeachers = getCSETeachers(cse)
+  const cseTopics = getCSETopics(cse)
+  return {
+    ...cse,
+    students: cseStudents,
+    teachers: cseTeachers,
+    topics: cseTopics,
+  }
+}
+
+Mock.onGet(/api\/cse-all\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  let schools = getSchools()
+  if(!params){
+    return [200, DB.clubList]
+  }
+  const school = schools.find(x => x.id === params.id)
+  const cse = DB.clubList.find(x => x.schoolId === school.id)
+  const response = getCSE(cse)
+  return [200, response];
+})
+
+Mock.onGet(/api\/cse-topics\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  let schools = getSchools()
+  if(!params){
+    return [200, DB.clubTopicList]
+  }
+  const school = schools.find(x => x.id === params.id)
+
+  const cse = DB.clubList.find(x => x.schoolId.startsWith(school.id))
+  console.log('CSE', cse)
+  const response = getCSETopics(cse)
+  return [200, response]
+})
+
+Mock.onGet(/api\/cse-students\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  let schools = getSchools()
+  if(!params){
+    return [400, {todo: 'bad request'}]
+  }
+  const school = schools.find(x => x.id === params.id)
+  const cse = DB.clubList.find(x => x.schoolId === school.id)
+  const response = getCSEStudents(cse)
+  return [200, response]
+})
+
+Mock.onGet(/api\/cse-attendence\/?.*/).reply((config) => {
+  const params = parseQueryString(config.url);
+  let schools = getSchools()
+  if(!params){
+    return [200, DB.clubList]
+  }
+  const school = schools.find(x => x.id === params.id)
+  const cse = DB.clubList.find(x => x.schoolId === school.id)
+  const response = cse.attendence.map(attendendceId => {
+                            const attendence = DB.clubAttendenceList.find(x => x.id.startsWith(attendendceId))
+                            const topic = DB.clubTopicList.find(x => x.id.startsWith(attendence.topicId))
+                            return {...attendence, 
+                              attendenceCount: `${attendence.attendence.length}/${attendence.totalRegistered}`,
+                              topic: topic.name
+                            }
+                            })
+  return [200, response];
+})
+
