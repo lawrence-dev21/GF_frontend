@@ -14,7 +14,7 @@ import { useState, useRef, useEffect } from "react";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
-import { addCSEAttendence } from '../../../redux/actions/CSEActions'
+import { enrollCSE } from '../../../redux/actions/CSEActions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -44,9 +44,9 @@ const CSEEnrollmentForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    dispatch(addCSEAttendence(state))
+    dispatch(enrollCSE(state))
     setTimeout(() => {
-    enqueueSnackbar('Attendence sucessfully entered', { variant: 'success'})
+    enqueueSnackbar('Students successfully enrolled', { variant: 'success'})
     navigate('/cse')
     setLoading(false)
   }, 500)
@@ -84,6 +84,7 @@ const CSEEnrollmentForm = () => {
               rowsPerPageOptions={[5]}
               checkboxSelection
               onSelectionModelChange={(selectedRows) => {
+                console.log(selectedRows)
                 setState({ ...state, students: selectedRows})
               }}
             />

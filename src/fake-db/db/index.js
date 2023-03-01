@@ -504,6 +504,29 @@ Mock.onPost('/api/cse/add').reply((config) => {
     return [200, attendenceRegister]
     
 })
+
+Mock.onPost('/api/cse/enroll').reply((config) => {
+    const data = JSON.parse(config.data)
+    console.log('CSE Data', data)
+    const {
+      students,
+      schoolId
+    } = data
+    
+    const cseIndex = DB.clubList.findIndex(x => x.schoolId.startsWith(schoolId))
+    
+    students.map(student => {
+      DB.clubList[cseIndex].students.push(student)
+      console.log('CSE ClubList After Post:', DB.clubList)
+      const studentIndex = DB.beneficiaryList.findIndex(x => x.id.startsWith(student))
+      console.log(DB.beneficiaryList[studentIndex])
+      DB.beneficiaryList[studentIndex].cse = 'true'
+    })
+    console.log('CSE ClubList After Post:', DB.clubList)
+
+    return [200, students]
+    
+})
 Mock.onPost('/api/beneficiaries/add').reply((config) => {
     const data = JSON.parse(config.data)
 
@@ -589,9 +612,6 @@ Mock.onGet(/api\/beneficiaries\/?.*/).reply((config) => {
   return [200, response];
 })
 
-
-
-
 const getCSEStudents = (cse) => {
   const beneficiaries = getBeneficiaries()
   console.log('students', cse.students)
@@ -654,25 +674,17 @@ Mock.onGet(/api\/cse-topics\/?.*/).reply((config) => {
 
 Mock.onGet(/api\/cse-students\/?.*/).reply((config) => {
   const params = parseQueryString(config.url);
-  let schools = getSchools()
   if(!params){
     return [400, {todo: 'bad request'}]
   }
   const cse = DB.clubList.find(x => x.schoolId === params.id)
   let response = getCSEStudents(cse)
-  console.log('Students Query')
-  console.log(params)
-  console.log(response)
+  console.log('CSE ClubList:', DB.clubList)
   if(params.cse === 'false'){
     const beneficiaries = getBeneficiaries()
-    console.log(beneficiaries)
     response = beneficiaries.filter(x => {
-      console.log(x.schoolId)
-      console.log(params.id)
       return x.schoolId.startsWith(params.id)})
-    console.log('filtered', response)
     response = response.filter(x => x.cse !== 'true')
-    console.log('filtered x2', response)
   }
   console.log(response)
   return [200, response]
@@ -686,6 +698,9 @@ Mock.onGet(/api\/cse-attendence\/?.*/).reply((config) => {
   }
   const school = schools.find(x => x.id === params.id)
   const cse = DB.clubList.find(x => x.schoolId === school.id)
+  console.log('DB.clubList')
+  console.log(DB.clubList)
+  console.log(DB.clubTopicList)
   const response = cse.attendence.map(attendendceId => {
                             const attendence = DB.clubAttendenceList.find(x => x.id.startsWith(attendendceId))
                             const topic = DB.clubTopicList.find(x => x.id.startsWith(attendence.topicId))

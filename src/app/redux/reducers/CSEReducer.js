@@ -1,6 +1,8 @@
 import {
 	GET_CSE,
+	ENROLL_CSE,
 	ADD_CSE_ATTENDENCE,
+	
 } from '../actions/CSEActions';
 
 
@@ -20,6 +22,12 @@ const ModuleReducer = function (state = initialState, action) {
 			}
 		}
 		case ADD_CSE_ATTENDENCE: {
+			return {
+				...state,
+				cseAttendenceList: [...action.payload]
+			}
+		}
+		case ENROLL_CSE: {
 			return {
 				...state,
 				cseAttendenceList: [...action.payload]
