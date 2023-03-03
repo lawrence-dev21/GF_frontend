@@ -68,15 +68,7 @@ const parseQueryString = (url) => {
 const getUserAccounts = () => {
   return DB.userList.filter(user => user?.email && user?.password && user.nrc)
 }
-// eslint-disable-next-line no-unused-vars
-const getCollection = async (name) => {
-  let response = []
-    await getDocs(collection(firestore, name)).then((querySnapshot) => {
-      response = querySnapshot.docs.map((doc) => ({...doc.data(), id: doc.id}))
-      
-    })
-    return response
-}
+
 Mock.onGet('/api/student-count').reply(config => {
   const studentCount = DB.beneficiaryList.length
   return [200, studentCount]

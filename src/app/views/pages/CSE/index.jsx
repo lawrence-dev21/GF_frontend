@@ -43,22 +43,12 @@ const popOverOptions = {
 }
 
 // to fix later
-const CSEModal = (props) => {
-  const { open = false, setModalToggle } = props.props
-  const [ modalOpen, setModalOpen ] = useState(open)
-  const handleClose = () => {
-    setModalOpen(false)
-    setModalToggle(false)
-  }
-
-  useEffect(() => {
-    console.log(`Modal has ${open ? 'opened' : 'closed'}.`, modalOpen)
-    setModalOpen(open)
-  }, [open])
-
+const CSEModal = ({isOpen, handleClose}) => {
+  // const { props: {isOpen, handleClose}} = props
+  console.log('isOpen', isOpen)
   return(
     <Modal
-    open={modalOpen}
+    open={isOpen}
     onClose={handleClose}
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
@@ -91,9 +81,9 @@ const CSEClassTable = () => {
 
   const [ anchorEl, setAnchorEl ] = useState(null);
   const [ popOverToggle, setPopOverToggle ] = useState(false)
-  const [ modalToggle, setModalToggle ] = useState(false)
-  
-  // Popover
+  const [ modalOpen, setModalOpen ] = useState(false)
+
+  // Popover - works 
   const handleClick = (event) => {
     if(!popOverToggle)
       setAnchorEl(event.currentTarget)
@@ -102,13 +92,12 @@ const CSEClassTable = () => {
     setPopOverToggle(!popOverToggle)
   }
   
-  const [ modalProps, setModalProps ] = useState({open: modalToggle, setModalToggle: setModalToggle})
-  // Modal
-
-  const handleModalClick = (event) => {
-    setModalProps({open: modalToggle ? false : true, setModalToggle: setModalToggle})
-    setModalToggle(!modalToggle)
-    console.log(modalProps)
+  const handleModalClose = () => {
+    setModalOpen(false)
+  }
+  const handleModalClick = () => {
+    setModalOpen(true)
+    // close the popover menu
     setAnchorEl(null)
     setPopOverToggle(!popOverToggle)
   }
@@ -163,7 +152,7 @@ const CSEClassTable = () => {
   }, [])
   return (
     <>
-      <CSEModal props={modalProps}/>
+      <CSEModal isOpen={modalOpen} handleClose={handleModalClose}/>
       <Popover 
           open={popOverToggle}
           onClose={handleClick}

@@ -11,7 +11,7 @@ import {
   OutlinedInput,
   CircularProgress,
 } from "@mui/material";
-import { DataGrid, selectedGridRowsCountSelector } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
 import useAuth from 'app/hooks/useAuth'
 import { useSnackbar } from 'notistack';

@@ -10,7 +10,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import useAuth from 'app/hooks/useAuth'
 import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
