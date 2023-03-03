@@ -25,6 +25,7 @@ const AuthGuard = ({ children }) => {
 
     const hasPermission = userHasPermission(pathname, user, routes);
     let authenticated = isAuthenticated && hasPermission;
+    // let authenticated = isAuthenticated && hasPermission;
   return (
     <>
       {authenticated ? (

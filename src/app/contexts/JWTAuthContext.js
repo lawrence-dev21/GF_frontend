@@ -13,13 +13,13 @@ const isValidToken = (accessToken) => {
     if (!accessToken) {
         return false
     }
-
     const decodedToken = jwtDecode(accessToken)
     const currentTime = Date.now() / 1000
+    console.log(decodedToken.exp > currentTime ? 'Valid Token': 'Invalid Token')
     return decodedToken.exp > currentTime
 }
 
-const setSession = (accessToken) => {
+const setSession = async (accessToken) => {
     if (accessToken) {
         localStorage.setItem('accessToken', accessToken)
         axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
@@ -43,7 +43,7 @@ const reducer = (state, action) => {
         }
         case 'LOGIN': {
             const { user } = action.payload
-
+            console.log('Authenticating user');
             return {
                 ...state,
                 isAuthenticated: true,
@@ -79,19 +79,40 @@ const AuthContext = createContext({
     logout: () => { },
     register: () => Promise.resolve(),
 })
+const sanitizeUser = (user) => {
+    const newUser = {
+        ...user,
+        name: `${user.firstName} ${user.lastName}`,
+        role: user.role.name
+    }
+    return newUser
+}
 
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
-    const login = async (email, password) => {
-        const response = await axios.post('/api/auth/login', {
-            email,
+    const login = async (identifier, password) => {
+        // fetch the jwt
+
+        console.log('Logging in')
+        const response = await axios.post('http://localhost:1337/api/auth/local', {
+            identifier,
             password,
         })
-        const { accessToken, user } = response.data
+        const { jwt: accessToken } = response.data
+        // console.log('access token of type:', typeof(accessToken))
+        await setSession(accessToken)
+        // // the fetch the user
+        // const userResponse = await axios.get('http://localhost:1337/api/users/me?populate=*', {
+        //     headers: { }
+        // })
 
-        setSession(accessToken)
-
+        const uResponse = await fetch('http://localhost:1337/api/users/me', 
+                { headers: { Authorization: `Bearer ${accessToken}`}})
+        let user = await uResponse.json() 
+        user = sanitizeUser(user)
+        // const user = await userResponse.data 
+        console.log(user)
         dispatch({
             type: 'LOGIN',
             payload: {
@@ -109,7 +130,7 @@ export const AuthProvider = ({ children }) => {
 
         const { accessToken, user } = response.data
 
-        setSession(accessToken)
+        await setSession(accessToken)
 
         dispatch({
             type: 'REGISTER',
@@ -119,21 +140,23 @@ export const AuthProvider = ({ children }) => {
         })
     }
 
-    const logout = () => {
-        setSession(null)
+    const logout = async () => {
+        await setSession(null)
         dispatch({ type: 'LOGOUT' })
     }
 
     useEffect(() => {
-        ; (async () => {
+        (async () => {
             try {
                 const accessToken = window.localStorage.getItem('accessToken')
-
                 if (accessToken && isValidToken(accessToken)) {
-                    setSession(accessToken)
-                    const response = await axios.get('/api/auth/profile')
-                    const { user } = response.data
-
+                    await setSession(accessToken)
+                    const uResponse = await fetch('http://localhost:1337/api/users/me', 
+                    { headers: { Authorization: `Bearer ${accessToken}`}})
+                    let user = await uResponse.json()
+                    user = sanitizeUser(user)
+                    console.log('Getting User', user)
+                    
                     dispatch({
                         type: 'INIT',
                         payload: {

@@ -58,11 +58,12 @@ const JwtLogin = () => {
 
   const { login, user } = useAuth();
   useEffect(() => {
-    if(user !== null) {
-          navigate('/dashboard/default');
-          enqueueSnackbar('Successfully logged in', { variant: 'success'})
-      } else {
-        enqueueSnackbar('Please login', { variant: 'info'})
+    console.log(user)
+    if(!user) {
+      enqueueSnackbar('Please login', { variant: 'info'})
+    } else {
+        navigate('/dashboard/default');
+        enqueueSnackbar('Successfully logged in', { variant: 'success'})
       }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
