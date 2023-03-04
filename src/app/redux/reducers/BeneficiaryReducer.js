@@ -8,8 +8,6 @@ const initialState = {
   beneficiaryList: [],
 };
 
-
-
 const ModuleReducer = function (state = initialState, action) {
 	switch(action.type) {
 		case GET_BENEFICIARIES: {

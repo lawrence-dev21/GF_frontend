@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, forwardRef } from 'react'
-import axios from 'axios'
+import axiosInstance from "axios";
 import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
@@ -34,7 +34,7 @@ const DownloadButton = ({bookId}) =>  {
     setLoading(true);
 
     // Call the API to fetch the base64 encoded PDF
-    axios.get('/api/upload?id=' + bookId)
+    axiosInstance.get('/api/upload?id=' + bookId)
       .then(({data}) => {
       // .then(response => {
         // Create a Blob from the base64 PDF string
@@ -82,7 +82,7 @@ const BookPreview = ({open, handleClose, bookId})  => {
 
   // Create custom hook to fetch the book
   useEffect(() => {
-      axios.get('/api/upload?id=' + bookId)
+      axiosInstance.get('/api/upload?id=' + bookId)
               .then(({data}) => {
                 setBook(data);
               })

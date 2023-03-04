@@ -20,7 +20,7 @@ import { useTitle } from '../../../hooks/useTitle'
 import { addSchool } from '../../../redux/actions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axiosInstance from "axios";
 
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
@@ -98,12 +98,12 @@ const _handleReaderLoaded = (readerEvent) => {
   useEffect(() => {
     if(provinces.length === 0){
       console.log('Fetching Provinces')
-      axios.get(`/api/provinces`)
+      axiosInstance.get(`/api/provinces`)
             .then(({data}) => {setProvinces(data)})
     }
     provinceId && console.log('Fetching Districts')
     const provinceParam = provinceId ? '?provinceId=' + provinceId : ''
-    axios.get('/api/districts' + provinceParam )
+    axiosInstance.get('/api/districts' + provinceParam )
           .then(({data}) => {setDistricts(data)})
 
   }, [provinceId, provinces.length])

@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useReducer } from 'react'
 import jwtDecode from 'jwt-decode'
-import axios from 'axios.js'
+import axiosInstance from "axios";
 import { MatxLoading } from 'app/components'
 
 const initialState = {
@@ -19,15 +19,6 @@ const isValidToken = (accessToken) => {
     return decodedToken.exp > currentTime
 }
 
-const setSession = async (accessToken) => {
-    if (accessToken) {
-        localStorage.setItem('accessToken', accessToken)
-        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
-    } else {
-        localStorage.removeItem('accessToken')
-        delete axios.defaults.headers.common.Authorization
-    }
-}
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -87,7 +78,17 @@ const sanitizeUser = (user) => {
     }
     return newUser
 }
-
+const setSession = async (accessToken) => {
+    if (accessToken) {
+        console.log('setting the session')
+        localStorage.setItem('accessToken', accessToken)
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+    } else {
+        localStorage.removeItem('accessToken')
+        delete axiosInstance.defaults.headers.common.Authorization
+    }
+  }
+  
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -95,7 +96,7 @@ export const AuthProvider = ({ children }) => {
         // fetch the jwt
 
         console.log('Logging in')
-        const response = await axios.post('http://localhost:1337/api/auth/local', {
+        const response = await axiosInstance.post('http://localhost:1337/api/auth/local', {
             identifier,
             password,
         })
@@ -103,7 +104,7 @@ export const AuthProvider = ({ children }) => {
         // console.log('access token of type:', typeof(accessToken))
         await setSession(accessToken)
         // // the fetch the user
-        // const userResponse = await axios.get('http://localhost:1337/api/users/me?populate=*', {
+        // const userResponse = await axiosInstance.get('http://localhost:1337/api/users/me?populate=*', {
         //     headers: { }
         // })
 
@@ -122,7 +123,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const register = async (email, username, password) => {
-        const response = await axios.post('/api/auth/register', {
+        const response = await axiosInstance.post('/api/auth/register', {
             email,
             username,
             password,

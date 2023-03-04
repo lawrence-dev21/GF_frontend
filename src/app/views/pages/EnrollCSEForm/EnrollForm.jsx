@@ -18,7 +18,7 @@ import { enrollCSE } from '../../../redux/actions/CSEActions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import axios from 'axios'
+import axiosInstance from "axios";
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -56,7 +56,7 @@ const CSEEnrollmentForm = () => {
 
   useEffect(() => {
     if(cseStudents.length === 1){
-      axios.get(`/api/cse-students?id=${user.schoolId}&cse=false`)
+      axiosInstance.get(`/api/cse-students?id=${user.schoolId}&cse=false`)
            .then(({data}) => {
              setCSEStudents(data)
              setState({...state,

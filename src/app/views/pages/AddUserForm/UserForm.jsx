@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom'
 import { authRoles } from 'app/auth/authRoles'
 import useAuth from 'app/hooks/useAuth'
 
-import axios from 'axios'
+import axiosInstance from "axios";
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
   marginBottom: "16px",
@@ -114,7 +114,7 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
   const [schools, setSchools] = useState([])
   useEffect(() => {
     if(schools.length === 0){
-      axios.get('/api/schools')
+      axiosInstance.get('/api/schools')
            .then(({data}) => { setSchools(data)})
     }
   },[schools.length])

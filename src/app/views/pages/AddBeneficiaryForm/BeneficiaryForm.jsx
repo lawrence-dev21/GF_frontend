@@ -30,7 +30,7 @@ import { addBeneficiary } from '../../../redux/actions/BeneficiaryActions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import axios from 'axios'
+import axiosInstance from "axios";
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
   marginBottom: "16px",
@@ -96,11 +96,11 @@ const {
   useEffect(() => {
     if(schools.length === 0 && categories.length === 0){
       setState({...state, gender:'Male'})
-      axios.get('/api/schools')
+      axiosInstance.get('/api/schools')
            .then(({data}) => {
              setSchools(data)
           })
-      axios.get('/api/categories')
+      axiosInstance.get('/api/categories')
            .then(({data}) => { setCategories(data)})
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -112,7 +112,7 @@ const {
     if(parentNRC)
     if(parentNRC.length >= 0){
       console.log('Fetching Parent')
-    axios.get('api/users?nrc='+ parentNRC)
+    axiosInstance.get('api/users?nrc='+ parentNRC)
       .then(({data}) => {
         if(data){
           parent !== data && setParent(data)

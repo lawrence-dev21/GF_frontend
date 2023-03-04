@@ -19,7 +19,7 @@ import { addModule } from '../../../redux/actions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import axios from 'axios'
+import axiosInstance from "axios";
 
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
@@ -97,7 +97,7 @@ const _handleReaderLoaded = (readerEvent) => {
   useEffect(() => {
     if(categories.length === 0){
       console.log('Fetching categories')
-      axios.get(`/api/categories`)
+      axiosInstance.get(`/api/categories`)
             .then(({data}) => {setCategories(data)})
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

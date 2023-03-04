@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { Grid} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import useAuth from 'app/hooks/useAuth'
-import axios from 'axios'
+import axiosInstance from "axios";
 
 const CSETable = () => {
     
@@ -40,7 +40,7 @@ const CSETable = () => {
       };
       // fetch data from the clubs of the students
       useEffect(() => {
-        axios.get(`api/cse-students?id=${user.schoolId}`)
+        axiosInstance.get(`api/cse-students?id=${user.schoolId}`)
             .then(res => setDataList(res.data))
             .catch(err => console.log(err))
       }, [])

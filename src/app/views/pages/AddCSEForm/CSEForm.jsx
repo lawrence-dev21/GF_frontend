@@ -24,7 +24,7 @@ import { addCSEAttendence } from '../../../redux/actions/CSEActions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import axios from 'axios'
+import axiosInstance from "axios";
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
   marginBottom: "16px",
@@ -87,7 +87,7 @@ const {
   useEffect(() => {
     if(topics.length === 0){
       console.log('Getting topics for', user)
-      axios.get(`/api/cse-topics?id=${user.schoolId}`)
+      axiosInstance.get(`/api/cse-topics?id=${user.schoolId}`)
            .then(({data}) => {
              setTopics(data)
           })
@@ -97,7 +97,7 @@ const {
 
   useEffect(() => {
     if(cseStudents.length === 1){
-      axios.get(`/api/cse-students?id=${user.schoolId}`)
+      axiosInstance.get(`/api/cse-students?id=${user.schoolId}`)
            .then(({data}) => {
              setCSEStudents(data)
              setState({...state,

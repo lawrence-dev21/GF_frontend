@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from "axios";
 
 export const GET_SCHOOLS = 'GET_SCHOOLS';
 export const ADD_SCHOOL = 'ADD_SCHOOL';
@@ -6,17 +6,24 @@ export const DELETE_SCHOOL = 'DELETE_SCHOOL';
 export const UPDATE_SCHOOL = 'UPDATE_SCHOOL';
 
 export const getSchools = ()  => (dispatch) => {
-	axios.get('api/schools').then(res => {
+	const accessToken = window.localStorage.getItem('accessToken')
+	fetch('http://localhost:1337/api/schools', {
+		headers: {
+			Authorization: `Bearer ${accessToken}`
+		}
+	}).then(res => res.json())
+	  .then(({data}) => {
 	    dispatch({
 	      type: GET_SCHOOLS,
-	      payload: res.data,
+	      payload: data,
 	    });	
 	}).catch(err => console.log)
 }
 
 
 export const addSchool = (school) => (dispatch) => {
-	axios.post('api/school/add', school).then(res => {
+	const payload = { data: school }
+	axiosInstance.post('http://localhost:1337/api/schools', payload).then(res => {
 	    dispatch({
 	      type: ADD_SCHOOL,
 	      payload: res.data,

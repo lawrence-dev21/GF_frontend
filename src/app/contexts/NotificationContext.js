@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useReducer } from 'react'
-import axios from 'axios'
+import axiosInstance from "axios";
 
 const reducer = (state, action) => {
     switch (action.type) {
@@ -40,7 +40,7 @@ export const NotificationProvider = ({ settings, children }) => {
 
     const deleteNotification = async (notificationID) => {
         try {
-            const res = await axios.post('/api/notification/delete', {
+            const res = await axiosInstance.post('/api/notification/delete', {
                 id: notificationID,
             })
             dispatch({
@@ -54,7 +54,7 @@ export const NotificationProvider = ({ settings, children }) => {
 
     const clearNotifications = async () => {
         try {
-            const res = await axios.post('/api/notification/delete-all')
+            const res = await axiosInstance.post('/api/notification/delete-all')
             dispatch({
                 type: 'CLEAR_NOTIFICATIONS',
                 payload: res.data,
@@ -66,7 +66,7 @@ export const NotificationProvider = ({ settings, children }) => {
 
     const getNotifications = async () => {
         try {
-            const res = await axios.get('/api/notification')
+            const res = await axiosInstance.get('/api/notification')
             dispatch({
                 type: 'LOAD_NOTIFICATIONS',
                 payload: res.data,
@@ -77,7 +77,7 @@ export const NotificationProvider = ({ settings, children }) => {
     }
     const createNotification = async (notification) => {
         try {
-            const res = await axios.post('/api/notification/add', {
+            const res = await axiosInstance.post('/api/notification/add', {
                 notification,
             })
             dispatch({

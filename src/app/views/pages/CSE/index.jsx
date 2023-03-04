@@ -7,7 +7,7 @@ import CSETable from "./CSETable";
 import { useNavigate } from "react-router-dom";
 import MUIDataTable from 'mui-datatables';
 import useAuth from 'app/hooks/useAuth'
-import axios from 'axios'
+import axiosInstance from "axios";
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
   [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -146,7 +146,7 @@ const CSEClassTable = () => {
   };
   // fetch data from the clubs of the students
   useEffect(() => {
-    axios.get(`api/cse-attendence?id=${user.schoolId}`)
+    axiosInstance.get(`api/cse-attendence?id=${user.schoolId}`)
         .then(res => setDataList(res.data))
         .catch(err => console.log(err))
   }, [])

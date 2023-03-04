@@ -23,7 +23,7 @@ const SchoolTable = () => {
     React.useEffect(() => {
         if(!selectedRows.length && !schools.length){
             dispatch(getSchools())
-        }
+        } 
   // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
     
@@ -87,7 +87,6 @@ const SchoolTable = () => {
     return (
         <Grid container padding={2} rowSpacing={1.5} columnSpacing={2}>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-
                 { authRoles.sa.includes(user.role) && (<Button
                                 size="large"
                                 variant="contained"
@@ -104,11 +103,11 @@ const SchoolTable = () => {
             <Grid item padding={2}>
                 <MUIDataTable title={'Schools'} data={schools.map(school => {
                     return [
-                            school.avatar,
-                            school.emisId,
-                            school.name,
-                            school.district,
-                            school.province,
+                            school?.attributes?.avatar,
+                            school?.attributes?.emisId,
+                            school?.attributes?.name,
+                            school?.attributes?.district,
+                            school?.attributes?.province,
                         ]
                 })} columns={columns} options={options} />
             </Grid>
