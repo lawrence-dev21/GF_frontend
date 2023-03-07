@@ -6,7 +6,7 @@ export const DELETE_USER = 'DELETE_USER';
 export const UPDATE_USER = 'UPDATE_USER';
 
 export const getUsers = ()  => (dispatch) => {
-	axiosInstance.get('api/users').then(res => {
+	axiosInstance.get('http://localhost:1337/api/users').then(res => {
 	    dispatch({
 	      type: GET_USERS,
 	      payload: res.data,
@@ -16,8 +16,22 @@ export const getUsers = ()  => (dispatch) => {
 
 
 export const addUser = (user) => (dispatch) => {
-	console.log('Adding user:', user)
-	axiosInstance.post('api/users/add', user).then(res => {
+	const payload = {
+		...user,
+		confirmed: false,
+		role: {
+			connect: [{
+				id: user.role
+			}]
+		},
+		school: {
+			connect: [{
+				id: user.school
+			}]
+		}
+	}
+	console.log('Adding user to strapi', payload)
+	axiosInstance.post('http://localhost:1337/api/users', user).then(res => {
 	    dispatch({
 	      type: ADD_USER,
 	      payload: res.data,

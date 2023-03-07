@@ -18,9 +18,7 @@ const UserTable = () => {
     const [selectedRows, setSelectedRows] = React.useState([]);
 
     React.useEffect(() => {
-        if(!selectedRows.length && !users.length){
-            dispatch(getUsers())
-        }
+        dispatch(getUsers())
   // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch])
     
@@ -104,10 +102,10 @@ const UserTable = () => {
                             user.avatar,
                             user.firstName,
                             user.lastName,
-                            user.role,
+                            user.role?.name  || 'N/A',
                             user.email,
-                            user.school,
-                            user.creationDate,
+                            user.school?.name || 'N/A',
+                            user.createdAt,
                             user.id,
                         ]
                 })} columns={columns} options={options} />

@@ -23,7 +23,9 @@ export const getSchools = ()  => (dispatch) => {
 
 export const addSchool = (school) => (dispatch) => {
 	const payload = { data: school }
-	axiosInstance.post('http://localhost:1337/api/schools', payload).then(res => {
+	axiosInstance.post('http://localhost:1337/api/schools', payload)
+		.then(res => {
+			// console.log(res.data)
 	    dispatch({
 	      type: ADD_SCHOOL,
 	      payload: res.data,

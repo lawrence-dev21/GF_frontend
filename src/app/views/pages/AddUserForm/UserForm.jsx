@@ -89,15 +89,18 @@ const _handleReaderLoaded = (readerEvent) => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
-const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
-                          [{value: 'SA', label: 'Super Admin'},
-                          {value: 'ADMIN', label: 'HQ'},
-                          {value: 'EDITOR', label: 'School Admin'},
-                          {value: 'GUEST', label: 'Learner'},]
-                        : [{value: 'EDITOR', label: 'School Admin'},
-                          {value: 'GUEST', label: 'Learner'},])
+
+
+const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role) ?
+                          [{value: '3', label: 'Super Admin'},
+                          {value: '1', label: 'HQ'},
+                          {value: '2', label: 'School Admin'},
+                          {value: '2', label: 'Learner'},]
+                        : [{value: '2', label: 'School Admin'},
+                          {value: '2', label: 'Learner'},])
 
   const {
+    username,
     firstName,
     lastName,
     email,
@@ -112,12 +115,32 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
   } = state;
 
   const [schools, setSchools] = useState([])
+  const [roles, setRoles] = useState([])
+
+  
   useEffect(() => {
+    // fetch the schools
     if(schools.length === 0){
-      axiosInstance.get('/api/schools')
-           .then(({data}) => { setSchools(data)})
+      axiosInstance.get('http://localhost:1337/api/schools')
+           .then(res => {
+            const {data} = res.data
+            const systemSchools = (data.map(school => {return {value: school.id, label: school.attributes.name}}))
+             setSchools(systemSchools)
+            })
     }
+    // fetch the roles
+    if(roles.length === 0) {
+      axiosInstance.get('http://localhost:1337/api/users-permissions/roles')
+                .then(res => {
+                  const { roles } = res.data
+                  const systemRoles = roles.map(userRole => { return {value: userRole.id, label: userRole.name}})
+                  setSystemRoles(systemRoles)
+                  })
+    }
+
   },[schools.length])
+
+  
 
   return (
     <div>
@@ -137,6 +160,20 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
       <Divider />
          <h4 style={{marginTop: '16px'}}>Login Details</h4>
          <Grid container spacing={6}>
+         <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }} style={{paddingTop: spacing.paddingTop}}>
+            <TextField
+                type="username"
+                name="username"
+                label="Username"
+                value={username || ""}
+                onChange={handleChange}
+                validators={["required"]}
+              errorMessages={["this field is required", "username is not valid"]}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+          </Grid>
           <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }} style={{paddingTop: spacing.paddingTop}}>
             <TextField
                 type="email"
@@ -289,7 +326,7 @@ const [systemRoles] = useState (authRoles.sa.includes(user.role) ?
                   }
                 >
                   {schools && schools.map(school =>
-                    <MenuItem value={school.id} key={school.id}>{school.name}</MenuItem>
+                    <MenuItem value={school.value} key={school.value}>{school.label}</MenuItem>
                   )}
                   </Select>
               </FormControl>
