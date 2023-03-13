@@ -42,13 +42,13 @@
     cse: CSE[]
 }
 
-Grade {
+** Grade {
     id: text
     students: Student[]
     name: text
 }
 
-CSE {
+* CSE {
     id: text
     school: School
     students: Students[]
@@ -59,20 +59,21 @@ CSE {
     grade: Grade[]
 }
 
-CSETopics {
-    id: text
-    name: text
-    schools: School[]
-    modules: Module[]
-}
 
-Attendence {
+* Attendence {
     id: text
     students: Student[]
     totalRegistered: number
     school: School
     teachers: Teacher
     topic: CSETopic
+}
+
+CSETopics {
+    id: text
+    name: text
+    schools: School[]
+    modules: Module[]
 }
 
 Module {
