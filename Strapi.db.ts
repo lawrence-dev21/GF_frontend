@@ -14,7 +14,9 @@ District {
 Debs {
     id: text
     district: Disctrict
+    officer: User[]
 }
+
 
 Teacher {
     id: text
