@@ -11,11 +11,24 @@ District {
     schools: School[]
 }
 
+Debs {
+    id: text
+    district: Disctrict
+}
+
 Teacher {
     id: text
     school: School
     grades: Grade[]
     cse: CSE[]
+    role: text
+    // role: SchoolRole
+}
+
+SchoolRole {
+    id: text
+    role: text
+    hierarchy: number
 }
 
 Student {
@@ -66,4 +79,10 @@ Module {
     upload: text
     grade: Grade[]
     description: text
+}
+
+Uploads {
+    id: text
+    module: Module
+    data: text
 }
