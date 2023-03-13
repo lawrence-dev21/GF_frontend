@@ -1,24 +1,24 @@
-Province {
+** Province {
     id: text
     name: text
     district: District
 }
 
-District {
+** District {
     id: text
     name: text
     province: text
     schools: School[]
 }
 
-Debs {
+** Deb {
     id: text
     district: Disctrict
     officer: User[]
 }
 
 
-Teacher {
+** Teacher {
     id: text
     school: School
     grades: Grade[]
@@ -27,13 +27,13 @@ Teacher {
     // role: SchoolRole
 }
 
-SchoolRole {
-    id: text
-    role: text
-    hierarchy: number
-}
+// SchoolRole {
+//     id: text
+//     role: text
+//     hierarchy: number
+// }
 
-Student {
+** Student {
     id: text
     school: School
     user: User
