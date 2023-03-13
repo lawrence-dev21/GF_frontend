@@ -1,5 +1,5 @@
 
-import { Grid, Box, Popover, Button, IconButton, Paper, Modal, TableContainer, Typography, TableBody, TableCell, Table, TableRow, TableHead } from "@mui/material";
+import { Grid, Box, Popover, Button, IconButton, Paper, Modal, TableContainer, Typography, TableBody, TableCell, Table, TableRow, TableHead, Select, MenuItem } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {styled } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -176,7 +176,10 @@ const CSE = () => {
   const navigate  = useNavigate()
   return (
     <Container>
-
+      {/* select option with multiple cse's */}
+      {/* <Select>
+        <MenuItem>+ Add CSE</MenuItem>
+      </Select> */}
       {/* Previous Classes */}
         <div className="">
           <Typography variant="h5">CSE Classes</Typography>
