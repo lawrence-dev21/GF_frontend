@@ -24,6 +24,7 @@
     grades: Grade[]
     cse: CSE[]
     role: text
+    user: User
     // role: SchoolRole
 }
 
@@ -41,6 +42,12 @@
     payments: Payment[]
     cse: CSE[]
 }
+** Student {
+    id: text
+    address: text
+    students: Student
+    user: User
+}
 
 ** Grade {
     id: text
@@ -48,7 +55,7 @@
     name: text
 }
 
-* CSE {
+** CSE {
     id: text
     school: School
     students: Students[]
@@ -60,7 +67,7 @@
 }
 
 
-* Attendence {
+** Attendence {
     id: text
     students: Student[]
     totalRegistered: number
@@ -69,23 +76,18 @@
     topic: CSETopic
 }
 
-CSETopics {
+** CSETopics {
     id: text
     name: text
     schools: School[]
     modules: Module[]
 }
 
-Module {
+** Module {
     id: text
     title: text
     upload: text
     grade: Grade[]
     description: text
-}
-
-Uploads {
-    id: text
-    module: Module
     data: text
 }
