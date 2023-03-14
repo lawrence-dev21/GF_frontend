@@ -11,7 +11,8 @@ import {
   OutlinedInput,
   CircularProgress
 } from "@mui/material";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
+import { useNavigate } from 'react-router-dom'
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
@@ -19,7 +20,6 @@ import { base64ToImage, isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addSchool } from '../../../redux/actions'
 import { useDispatch  } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import axiosInstance from "axios";
 
 const TextField = styled(TextValidator)(() => ({
@@ -29,10 +29,14 @@ const TextField = styled(TextValidator)(() => ({
 
 
 const SchoolForm = () => {
+	
+  const { enqueueSnackbar } = useSnackbar();
+    
+  
   const [state, setState] = useState({});
   const [loading, setLoading] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
   useTitle(': Add School')
+  
   const dispatch = useDispatch()
   const [ spacing ] = useState({
     paddingTop: isMobile() ? '12px' : '24px',
@@ -46,17 +50,14 @@ const SchoolForm = () => {
   useEffect(() => {
     setLabelwidth(inputLabel.current.offsetWidth);
   }, []);
-    const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    dispatch(addSchool(state))    
-    setTimeout(() => {
-
-    enqueueSnackbar('School sucessfully entered', { variant: 'success'})
-    navigate('/schools')
+  const handleSubmit = async (event) => {
+    const message = await dispatch(addSchool({...state, province: state.provinceId, district: state.districtId}))
+    if(message.message)
+    enqueueSnackbar(message.message, {variant: 'error'})
     setLoading(false)
-  }, 500)
-};
+  }
+
 
 
 const handleFileUpload = (event) =>{
@@ -94,19 +95,39 @@ const _handleReaderLoaded = (readerEvent) => {
   // const [selectLoading, setSelectLoading ] = useState(false)
   const [ provinces, setProvinces ] = useState([])
   const [ districts, setDistricts ] = useState([])
-
   useEffect(() => {
     if(provinces.length === 0){
       console.log('Fetching Provinces')
-      axiosInstance.get(`/api/provinces`)
-            .then(({data}) => {setProvinces(data)})
-    }
-    provinceId && console.log('Fetching Districts')
-    const provinceParam = provinceId ? '?provinceId=' + provinceId : ''
-    axiosInstance.get('/api/districts' + provinceParam )
-          .then(({data}) => {setDistricts(data)})
+      axiosInstance.get(`http://localhost:1337/api/provinces`)
+      .then(({data: {data}}) => {
+        console.log(data)
+        setProvinces(data.map(province => {
+          return {label: province.attributes.name, value: province.id}
+        }))})
+      }
+ 
+  }, [provinces.length])
 
-  }, [provinceId, provinces.length])
+  useEffect(() => {
+    if(provinceId){ 
+      const param = encodeURI(`?filters[province][id][$eq]=${provinceId}`)
+      console.log(encodeURI(param))
+      const accessToken = localStorage.getItem('accessToken')
+      fetch(`http://localhost:1337/api/districts${param}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }      
+      })
+      .then(res => res.json()) 
+      .then(({data}) => {
+        console.log(data)
+        setDistricts(data.map(district => {
+          return {label: district.attributes.name, value: district.id}
+        }))
+      })
+    }
+  }, [provinceId])
+  
 
   return (
     <div>
@@ -179,7 +200,7 @@ const _handleReaderLoaded = (readerEvent) => {
                   }
                 >
                   {provinces && provinces.map(province =>
-                    <MenuItem value={province.id} key={province.id}>{province.name}</MenuItem>
+                    <MenuItem value={province.value} key={province.value}>{province.label}</MenuItem>
                   )}
                 </Select>
             </FormControl>
@@ -205,7 +226,7 @@ const _handleReaderLoaded = (readerEvent) => {
                 }
               >
                 {districts && districts.map(district =>
-                  <MenuItem value={district.id} key={district.id}>{district.name}</MenuItem>
+                  <MenuItem value={district.value} key={district.value}>{district.label}</MenuItem>
                 )}
               </Select>
             </FormControl>

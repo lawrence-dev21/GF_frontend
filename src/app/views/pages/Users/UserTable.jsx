@@ -28,6 +28,7 @@ const UserTable = () => {
             name: 'avatar',
             label: 'Image',
             options: {
+                filter: false,
                 customBodyRender: (img) => {
                   return (
                     <Avatar variant="rounded" src={img} >

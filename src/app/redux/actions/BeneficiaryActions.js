@@ -5,10 +5,10 @@ export const ADD_BENEFICIARY = 'ADD_BENEFICIARY';
 
 export const getBeneficiaries = ()  => (dispatch) => {
 	console.log('Dispacthing action, beneficiaries')
-	axiosInstance.get('api/beneficiaries').then(res => {
+	axiosInstance.get('http://localhost:1337/api/students?populate=*').then(({data: {data}}) => {
 	    dispatch({
 	      type: GET_BENEFICIARIES,
-	      payload: res.data,
+	      payload: data,
 	    });	
 	}).catch(err => console.log(err))
 }

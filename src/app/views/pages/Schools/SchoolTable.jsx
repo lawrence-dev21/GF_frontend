@@ -31,6 +31,7 @@ const SchoolTable = () => {
             name: 'avatar',
             label: 'Image',
             options: {
+                filter: false,
                 customBodyRender: (img) => {
                   return (
                     <Avatar variant="rounded" src={img} >
@@ -104,8 +105,8 @@ const SchoolTable = () => {
                             school?.attributes?.avatar,
                             school?.attributes?.emisId,
                             school?.attributes?.name,
-                            school?.attributes?.district,
-                            school?.attributes?.province,
+                            school?.attributes?.district?.data?.attributes?.name,
+                            school?.attributes?.district?.data?.attributes?.province?.data?.attributes?.name,
                         ]
                 })} columns={columns} options={options} />
             </Grid>
