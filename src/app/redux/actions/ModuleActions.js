@@ -16,10 +16,13 @@ export const getModules = ()  => (dispatch) => {
 
 
 export const addModule = (module) => (dispatch) => {
-	axiosInstance.post('api/modules/add', module).then(res => {
+	const payload = {
+		data: module
+	}
+	axiosInstance.post('http://localhost:1337/api/modules', payload).then(({data}) => {
 	    dispatch({
 	      type: ADD_MODULE,
-	      payload: res.data,
+	      payload: data
 	    });	
 	})
 }

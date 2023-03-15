@@ -51,9 +51,16 @@ const ModuleForm = () => {
   const handleSubmit = (event) => {
     setLoading(true)
     console.log('New Module:', state)
-    dispatch(addModule(state))    
-    setTimeout(() => {
+   // create a new object with the FILEDs ; title, data, grade, description
+   const newobject = {
+    title: state.title,
+    data: state.file,
+    grades: categoriesSelection,
+    description: state?.description}
+    dispatch(addModule(newobject))  
 
+    setTimeout(() => {
+     
       enqueueSnackbar('Module sucessfully entered', { variant: 'success'})
       navigate('/modules')
       setLoading(false)
@@ -77,8 +84,14 @@ const handleFileUpload = (event) =>{
 
 const _handleReaderLoaded = (readerEvent) => {
   let binaryString = readerEvent.target.result
-  setState({ ...state, file: btoa(binaryString)})
+  let textString = "";
+  for (let i = 0; i < binaryString.length; i++) {
+    textString += String.fromCharCode(binaryString.charCodeAt(i) & 0xff);
+  } 
+  setState({...state, file: textString})
 }
+
+
 
   const handleChange = (event) => {
     if(event.persist)
@@ -88,17 +101,20 @@ const _handleReaderLoaded = (readerEvent) => {
 
   const {
     title,
-    categoryId,
-    description
+   description
   } = state;
 
   const [ categories, setCategories ] = useState([])
+  const [ categoriesSelection, setCategoriesSelection ] = useState([])
+
 
   useEffect(() => {
     if(categories.length === 0){
       console.log('Fetching categories')
-      axiosInstance.get(`/api/categories`)
-            .then(({data}) => {setCategories(data)})
+      axiosInstance.get(`http://localhost:1337/api/grades`)
+            .then(({data:{data}}) => {setCategories(data.map(grade =>{
+              return {value: grade.id, label: grade.attributes.name}
+            }))})
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -157,13 +173,17 @@ const _handleReaderLoaded = (readerEvent) => {
               <FormControl fullWidth variant="outlined">
                 <InputLabel shrink ref={inputLabel} htmlFor="category-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Category</InputLabel>
                 <Select
+                  multiple
                   labelId="category-select"
                   id="mtx-category-select"
                   name="categoryId"
-                  value={categoryId || ""}
+                  value={categoriesSelection}
                   label="Category"
+                  
                   disabled={categories.length === 0}
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    console.log(e.target.value)
+                    setCategoriesSelection(e.target.value)}}
                   input={
                     <OutlinedInput
                       notched
@@ -172,10 +192,13 @@ const _handleReaderLoaded = (readerEvent) => {
                       id="category-select"
                     />
                   }
+                  
                 >
-                  {categories && categories.map(category =>
-                    <MenuItem value={category.id} key={category.id}>{category.name}</MenuItem>
-                  )}
+                  {categories && categories.map((category) => (
+                    <MenuItem key={category.value} value={category.value}>
+                      {category.label}
+                    </MenuItem>
+                  ))}
                 </Select>
             </FormControl>
           </Grid>
