@@ -6,10 +6,10 @@ export const DELETE_MODULE = 'DELETE_MODULE';
 export const UPDATE_MODULE = 'UPDATE_SCHOOL';
 
 export const getModules = ()  => (dispatch) => {
-	axiosInstance.get('api/modules').then(res => {
+	axiosInstance.get('http://localhost:1337/api/modules?fields[0]=title&fields[1]=description&populate[0]=grades').then(res => {
 	    dispatch({
 	      type: GET_MODULES,
-	      payload: res.data,
+	      payload: res.data.data,
 	    });	
 	}).catch(err => console.log)
 }

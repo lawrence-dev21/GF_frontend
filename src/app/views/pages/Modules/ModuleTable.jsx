@@ -106,10 +106,10 @@ const ModuleTable = () => {
                 <MUIDataTable title={'Modules'} data={modules.map(mod => {
                     return [
                             // mod.avatar,
-                            mod.title,
-                            mod.category,
-                            mod.uploadId,
-                            mod.description,
+                            mod.attributes.title,
+                            JSON.stringify(mod.attributes.grades.data.map(grade => grade.attributes.name)),
+                            mod.id,
+                            mod.attributes.description,
                         ]
                 })} columns={columns} options={options} />
             </Grid>
