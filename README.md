@@ -1,13 +1,30 @@
 # GlobalFund MIS
 
 The Global Fund MIS was developed by the the Ministry of Education and Smart Zambia Institute.
+
 The System includes: 
 	- User Management
 	- School Management
 	- PDF Upload and viewing
-	- 
+
+The general flow for the user experience in described as being in tabular format.
+
+The users will eventually require a CSE management area, in which the UX can be pushed to its limits
+while offering simplicity.
 
 
+School Management
+School Dashboard
+Student Enrollment
+Student Attendance
+
+Beneficiary Management
+Beneficiary Enrollment
+Beneficiary Engagment
+
+CSE Management
+CSE Dashboard 
+CSE Enrollment
 
 
 # API Documentation
@@ -114,8 +131,15 @@ GET api/categories {
 ```
 
 ## TODO
-1. Dashboard
+1. User Get Route
+	Find out what parameters we need
 
-2. Beneficiary management
+2. User Post Route
+
+
+3. Dashboard
+
+4. Beneficiary management
 	a. View Beneficiary
 	b. View Beneficiary Payments
+

@@ -25,14 +25,7 @@
     cse: CSE[]
     role: text
     user: User
-    // role: SchoolRole
 }
-
-// SchoolRole {
-//     id: text
-//     role: text
-//     hierarchy: number
-// }
 
 ** Student {
     id: text
