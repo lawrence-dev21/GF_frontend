@@ -101,18 +101,16 @@ const BeneficiaryTable = () => {
             <Grid item padding={2}>
                 <MUIDataTable title={'Beneficiaries'} data={beneficiaries.map(beneficiary => {
                     return [
-                            beneficiary?.avatar,
-                            beneficiary?.firstName + ' ' + beneficiary?.lastName,
-                            beneficiary?.school,
-                            beneficiary?.grade,
-                            beneficiary?.gender,
-                            beneficiary?.dateOfBirth,
-                            beneficiary?.parentFirstName + ' ' + beneficiary?.parentLastName,
-                            beneficiary?.parentAddress,
-                            beneficiary?.parentNRC,
-                            beneficiary?.parentMobile,
-
-
+                            beneficiary?.attributes?.user?.data?.attributes?.avatar,
+                            beneficiary?.attributes?.user?.data?.attributes?.firstName + ' ' + beneficiary?.attributes?.user?.data?.attributes?.lastName,
+                            beneficiary?.attributes?.school?.data?.attributes?.name,
+                            beneficiary?.attributes?.grade?.data?.attributes?.name,
+                            beneficiary?.attributes?.user?.data?.attributes?.gender,
+                            beneficiary?.attributes?.user?.data?.attributes?.dateOfBirth,
+                            beneficiary?.attributes?.parent?.data?.attributes?.users_permissions_user?.data?.attributes?.firstName + ' ' + beneficiary?.attributes?.parent?.data?.attributes?.users_permissions_user?.data?.attributes?.lastName,
+                            beneficiary?.attributes?.parent?.data?.attributes?.address,
+                            beneficiary?.attributes?.parent?.data?.attributes?.users_permissions_user?.data?.attributes?.nrc,
+                            beneficiary?.attributes?.parent?.data?.attributes?.users_permissions_user?.data?.attributes?.mobile,
                         ]
                 })} columns={columns} options={options} />
             </Grid>

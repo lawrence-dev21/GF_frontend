@@ -5,7 +5,7 @@ export const ADD_BENEFICIARY = 'ADD_BENEFICIARY';
 
 export const getBeneficiaries = ()  => (dispatch) => {
 	console.log('Dispacthing action, beneficiaries')
-	axiosInstance.get('http://localhost:1337/api/students?populate=*').then(({data: {data}}) => {
+	axiosInstance.get('http://localhost:1337/api/students?populate[0]=parent.users_permissions_user&populate[1]=user&populate[2]=school&populate[3]=grade&populate[4]=user').then(({data: {data}}) => {
 	    dispatch({
 	      type: GET_BENEFICIARIES,
 	      payload: data,
