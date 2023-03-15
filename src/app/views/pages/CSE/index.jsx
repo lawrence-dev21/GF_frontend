@@ -1,5 +1,5 @@
 
-import { Grid, Box, Popover, Button, IconButton, Paper, Modal, TableContainer, Typography, TableBody, TableCell, Table, TableRow, TableHead, Select, MenuItem } from "@mui/material";
+import { Grid, Chip, Box, Popover, Button, IconButton, Paper, Modal, TableContainer, Typography, TableBody, TableCell, Table, TableRow, TableHead, Select, MenuItem } from "@mui/material";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {styled } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -41,6 +41,97 @@ const popOverOptions = {
   },
 
 }
+
+const CSETimeTable = () => {
+    
+  const [datalist, setDataList] = useState([
+    ['CSE 1', ['Topic 1', 'Topic 2', 'Topic 3'], ['Grade 10', 'Grade 11'], '2022', '20 Students'],
+    ['CSE 2', ['Topic 1', 'Topic 2'], ['Grade 10', 'Grade 11', 'Grade 12'], '2023', '26 Students']
+  ])
+    const columns = [
+        {
+            name: 'name',
+            label: 'Name',
+        },
+        {
+            name: 'topics',
+            label: 'Topics',
+            options: {
+              customBodyRender: (topicItems) => {
+                console.log(topicItems)
+                return (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    {topicItems.map((topic, index) => (
+                      <Chip key={index} label={topic} sx={{ my: 0.5 }} />
+                    ))}
+                  </Box>
+                )
+              }
+          }
+        },
+        {
+            name: 'grades',
+            label: 'Grades',
+            options: {
+              customBodyRender: (gradeItems) => {
+                console.log(gradeItems)
+                return (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    {gradeItems.map((grade, index) => (
+                      <Chip key={index} label={grade} sx={{ my: 0.5 }} />
+                    ))}
+                  </Box>
+                )
+              }
+          }
+
+        },
+        {
+            name: 'dates',
+            label: 'Dates',
+            options: {
+              customBodyRender: (year) => {
+                return (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
+                    {/* if the year is the current year use the primary color else secondary */}
+                      <Chip label={year} sx={{ my: 0.5 }} color={year === (new Date().getFullYear()).toString()  ? 'primary' : 'secondary'} />
+                  </Box>
+                )
+              }
+          }
+        },
+        {
+            name: 'enrollments',
+            label: 'Students Enrolled'
+        },
+        {
+            name: 'edit',
+            label: ' ',
+            options: {
+              customBodyRender: () => {
+                return (
+                  <IconButton aria-label="view option" variant="contained">
+                    <MoreHorizIcon />
+                  </IconButton>
+                )
+              }
+          }
+        }
+    ];
+
+    const options = {
+        viewColumns: true,
+        Selection: false,
+      };
+    return (
+        <Grid container padding={2} rowSpacing={1.5} columnSpacing={2}>
+            <Grid item padding={2}>
+                <MUIDataTable title={'Comprehensive Sexiual Education materials'} data={datalist} columns={columns} options={options} />
+            </Grid>
+        </Grid>
+    );
+};
+
 
 // to fix later
 const CSEModal = ({isOpen, handleClose}) => {
@@ -176,6 +267,8 @@ const CSE = () => {
   const navigate  = useNavigate()
   return (
     <Container>
+
+      <CSETimeTable />
       {/* select option with multiple cse's */}
       {/* <Select>
         <MenuItem>+ Add CSE</MenuItem>
