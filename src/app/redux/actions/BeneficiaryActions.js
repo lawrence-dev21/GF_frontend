@@ -5,7 +5,7 @@ export const ADD_BENEFICIARY = 'ADD_BENEFICIARY';
 
 export const getBeneficiaries = ()  => (dispatch) => {
 	console.log('Dispacthing action, beneficiaries')
-	axiosInstance.get('http://localhost:1337/api/students?populate[0]=parent.users_permissions_user&populate[1]=user&populate[2]=school&populate[3]=grade&populate[4]=user').then(({data: {data}}) => {
+	axiosInstance.get('http://localhost:1337/api/students?populate[0]=parent.users_permissions_user&populate[1]=user&populate[2]=school&populate[3]=grade').then(({data: {data}}) => {
 	    dispatch({
 	      type: GET_BENEFICIARIES,
 	      payload: data,
@@ -15,11 +15,15 @@ export const getBeneficiaries = ()  => (dispatch) => {
 
 
 export const addBeneficiary = (beneficiary) => (dispatch) => {
-	axiosInstance.post('api/beneficiaries/add', beneficiary).then(res => {
-	    dispatch({
-	      type: ADD_BENEFICIARY,
-	      payload: res.data,
-	    });	
+	const payload = {
+		data: beneficiary
+	}
+	axiosInstance.post('http://localhost:1337/api/v1-post-student', payload)
+			.then(({data}) => {
+				dispatch({
+					type: ADD_BENEFICIARY,
+					payload: data,
+				});	
 	})
 }
 

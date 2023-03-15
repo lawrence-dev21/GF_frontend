@@ -23,7 +23,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
-import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
+import { TextValidator, ValidatorForm, ValidatorComponent } from "react-material-ui-form-validator";
 import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addBeneficiary } from '../../../redux/actions/BeneficiaryActions'
@@ -35,6 +35,12 @@ const TextField = styled(TextValidator)(() => ({
   width: "100%",
   marginBottom: "16px",
 }));
+
+class nrcValidation extends ValidatorComponent {
+  renderValidatorComponent() {
+      // return your validated component
+  }
+}
 
 
 const BeneficiaryForm = () => {
@@ -81,7 +87,7 @@ const {
     gender,
     dateOfBirth,
     schoolId,
-    categoryId,
+    gradeId,
     parentFirstName,
     parentLastName,
     parentNRC,
@@ -90,21 +96,27 @@ const {
   } = state;
 
   const [schools, setSchools] = useState([])
-  const [categories, setCategories] = useState([])
+  const [grades, setGrades] = useState([])
   const [parent, setParent] = useState(null)
 
   useEffect(() => {
-    if(schools.length === 0 && categories.length === 0){
+    if(schools.length === 0 && grades.length === 0){
       setState({...state, gender:'Male'})
-      axiosInstance.get('/api/schools')
-           .then(({data}) => {
-             setSchools(data)
+        axiosInstance.get(`http://localhost:1337/api/schools`)
+        .then(({data: {data}}) => {
+             setSchools(data.map(school => {
+              return {label: school.attributes.name, value: school.id}
+             }))
           })
-      axiosInstance.get('/api/categories')
-           .then(({data}) => { setCategories(data)})
+          axiosInstance.get(`http://localhost:1337/api/grades`)
+          .then(({data: {data}}) => {
+               setGrades(data.map(grade => {
+                return {label: grade.attributes.name, value: grade.id}
+               }))
+            })
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[schools.length, categories.length])
+  },[schools.length, grades.length])
 
 
 
@@ -112,10 +124,18 @@ const {
     if(parentNRC)
     if(parentNRC.length >= 0){
       console.log('Fetching Parent')
-    axiosInstance.get('api/users?nrc='+ parentNRC)
+    axiosInstance.get('http://localhost:1337/api/users?limit=1&populate[0]=parent&filters[nrc][$startsWith]='+ parentNRC)
       .then(({data}) => {
-        if(data){
-          parent !== data && setParent(data)
+        const [ parentUser ] = data
+        if(parentUser){
+          const address = parentUser?.parent ? parentUser?.parent.address : ''
+          const newParent = {
+            firstName: parentUser.firstName,
+            lastName: parentUser.lastName,
+            mobile: parentUser.mobile,
+            address: address
+          }
+          parent !== newParent && setParent(newParent) 
         } else {
           parent && setParent(null)
         }
@@ -131,10 +151,8 @@ const {
         ...state,
         parentFirstName: parent?.firstName,
         parentLastName: parent?.lastName,
-        parentAddress: parent?.address,
         parentMobile: parent?.mobile,
-        parentId: parent?.parentId,
-        parentUserId: parent?.id,
+        parentAddress: parent?.address,
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,7 +160,7 @@ const {
 
   return (
     <div>
-      <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
+      <ValidatorForm debounceTime={500} onSubmit={handleSubmit} onError={() => null}>
 
       <Divider style={{marginTop: '8px'}} />
        <h4 style={{marginTop: '16px'}}>Beneficiary Details</h4>
@@ -241,7 +259,7 @@ const {
                   }
                 >
                   {schools && schools.map(school =>
-                    <MenuItem value={school.id} key={school.id}>{school.name}</MenuItem>
+                    <MenuItem value={school.value} key={school.value}>{school.label}</MenuItem>
                   )}
                   </Select>
               </FormControl>
@@ -251,26 +269,26 @@ const {
 
           <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
             <FormControl fullWidth variant="outlined">
-                <InputLabel shrink ref={inputLabel} htmlFor="category-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Grade</InputLabel>
+                <InputLabel shrink ref={inputLabel} htmlFor="grade-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Grade</InputLabel>
                 <Select
-                  labelId="category-select"
-                  id="mtx-category-select"
-                  name="categoryId"
-                  value={categoryId || ""}
+                  labelId="grade-select"
+                  id="mtx-grade-select"
+                  name="gradeId"
+                  value={gradeId || ""}
                   label="Grade"
-                  disabled={categories.length === 0}
+                  disabled={grades.length === 0}
                   onChange={handleChange}
                   input={
                     <OutlinedInput
                       notched
                       labelwidth={labelwidth}
-                      name="categories"
-                      id="categories-select"
+                      name="grades"
+                      id="grades-select"
                     />
                   }
                 >
-                  {categories && categories.map(category =>
-                    <MenuItem value={category.id} key={category.id}>{category.name}</MenuItem>
+                  {grades && grades.map(grade =>
+                    <MenuItem value={grade.value} key={grade.value}>{grade.label}</MenuItem>
                   )}
                   </Select>
               </FormControl>
@@ -289,8 +307,8 @@ const {
                 label="National Registration Number"
                 onChange={handleChange}
                 value={parentNRC || ""}
-                validators={["required"]}
-                errorMessages={["this field is required"]}
+                validators={["required", "matchRegexp:^\\d{8}1$"]}
+                errorMessages={["This field is required", "Input must be 9 digits and end with 1"]}
                 InputLabelProps={{
                   shrink: true,
                 }}
