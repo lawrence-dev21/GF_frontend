@@ -42,7 +42,7 @@ const ModuleTable = () => {
             name: 'category',
             label: 'Category',
              options: {
-                customBodyRender: (value, tableMeta, updateValue) => {
+                customBodyRender: (value) => {
                     return (
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.2 }}>
                         {value.map((item) => (
@@ -57,23 +57,7 @@ const ModuleTable = () => {
                       </Box>
                     );
                   }
-                  
-           
-           
-           
-            //    customBodyRender: (value, tableMeta, updateValue) => {
-            //      return (
-            //         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            //             <Chip
-            //                 label={value}
-            //                  color="primary"
-            //                  size="small"
-            //                  />
-            //                  </Box>
-            //              )
-            //  }
-             
-                  
+                         
         },
          
             
