@@ -23,7 +23,9 @@ const AddBeneficiaryForm = Loadable(lazy(() => import('./AddBeneficiaryForm')));
 
 // CSE Managment
 const CSE = Loadable(lazy(() => import('./CSE')));
+const CSEId = Loadable(lazy(() => import('./CSEId')));
 const AddCSEForm = Loadable(lazy(() => import('./AddCSEForm')));
+const AddCSEAttendenceForm = Loadable(lazy(() => import('./AddCSEForm')));
 const EnrollCSEForm = Loadable(lazy(() => import('./EnrollCSEForm')));
 
 
@@ -90,12 +92,22 @@ const pageRoutes = [
     // auth: authRoles.sa
   },
   {
+    path: '/cse/:id',
+    element: <CSEId/>,
+    // auth: authRoles.sa
+  },
+  {
     path: '/add-cse',
     element: <AddCSEForm/>,
     // auth: authRoles.sa
   },
   {
-    path: '/enroll-cse',
+    path: '/cse-attendence/:id',
+    element: <AddCSEAttendenceForm/>,
+    // auth: authRoles.sa
+  },
+  {
+    path: '/enroll-cse/:id',
     element: <EnrollCSEForm/>,
     // auth: authRoles.sa
   },

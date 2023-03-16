@@ -121,7 +121,7 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
   useEffect(() => {
     // fetch the schools
     if(schools.length === 0){
-      axiosInstance.get('http://localhost:1337/api/schools')
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/schools`)
            .then(res => {
             const {data} = res.data
             const systemSchools = (data.map(school => {return {value: school.id, label: school.attributes.name}}))
@@ -130,7 +130,7 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
     }
     // fetch the roles
     if(roles.length === 0) {
-      axiosInstance.get('http://localhost:1337/api/users-permissions/roles')
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/users-permissions/roles`)
                 .then(res => {
                   const { roles } = res.data
                   const systemRoles = roles.map(userRole => { return {value: userRole.id, label: userRole.name}})

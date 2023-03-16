@@ -54,21 +54,40 @@ const CSEEnrollmentForm = () => {
 
   const [cseStudents, setCSEStudents] = useState([{id: '1', firstName: '', lastName: '' }])
 
-  useEffect(() => {
-    if(cseStudents.length === 1){
-      axiosInstance.get(`/api/cse-students?id=${user.schoolId}&cse=false`)
-           .then(({data}) => {
-             setCSEStudents(data)
-             setState({...state,
-              totalRegistered: data.length,
-              schoolId: user.schoolId,
-              teacherId: user.id,
-              date: new Date().toISOString().slice(0, 10)
-            })
-          })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[cseStudents.length])
+  //     useEffect(() => {
+      //   if(cseStudents.length === 1){
+  //       axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/cses/${cseId}?populate[0]=students.user&populate[1]=students.grade`)
+  //           .then(res => res.data)
+  //           .then(({data}) => {
+  //               console.log(data)
+  //               setDataList(
+  //               data.attributes.students.data.map(student => ({
+  //                   id: student?.id,
+  //                   firstName: student?.attributes?.user?.data?.attributes?.firstName,
+  //                   lastName: student?.attributes?.user?.data?.attributes?.lastName,
+  //                   grade: student?.attributes?.grade?.data?.attributes?.name
+  //               }))
+  //           )}
+  //           )
+  //           .catch(err => console.log(err))}
+  //     }, [cseStudents.length])
+
+ 
+  // useEffect(() => {
+  //   if(cseStudents.length === 1){
+  //     axiosInstance.get(`/api/cse-students?id=${user.schoolId}&cse=false`)
+  //          .then(({data}) => {
+  //            setCSEStudents(data)
+  //            setState({...state,
+  //             totalRegistered: data.length,
+  //             schoolId: user.schoolId,
+  //             teacherId: user.id,
+  //             date: new Date().toISOString().slice(0, 10)
+  //           })
+  //         })
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // },[cseStudents.length])
 
   return (
     <div>

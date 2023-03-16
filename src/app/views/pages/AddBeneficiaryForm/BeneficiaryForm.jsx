@@ -102,13 +102,13 @@ const {
   useEffect(() => {
     if(schools.length === 0 && grades.length === 0){
       setState({...state, gender:'Male'})
-        axiosInstance.get(`http://localhost:1337/api/schools`)
+        axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/schools`)
         .then(({data: {data}}) => {
              setSchools(data.map(school => {
               return {label: school.attributes.name, value: school.id}
              }))
           })
-          axiosInstance.get(`http://localhost:1337/api/grades`)
+          axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/grades`)
           .then(({data: {data}}) => {
                setGrades(data.map(grade => {
                 return {label: grade.attributes.name, value: grade.id}
@@ -124,7 +124,7 @@ const {
     if(parentNRC)
     if(parentNRC.length >= 0){
       console.log('Fetching Parent')
-    axiosInstance.get('http://localhost:1337/api/users?limit=1&populate[0]=parent&filters[nrc][$startsWith]='+ parentNRC)
+    axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/users?limit=1&populate[0]=parent&filters[nrc][$startsWith]=`+ parentNRC)
       .then(({data}) => {
         const [ parentUser ] = data
         if(parentUser){

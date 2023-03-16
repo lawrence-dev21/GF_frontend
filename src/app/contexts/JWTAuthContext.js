@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
         // fetch the jwt
 
         console.log('Logging in')
-        const response = await axiosInstance.post('http://localhost:1337/api/auth/local', {
+        const response = await axiosInstance.post(`${process.env.REACT_APP_BACKEND}api/auth/local`, {
             identifier,
             password,
         })
@@ -104,11 +104,11 @@ export const AuthProvider = ({ children }) => {
         // console.log('access token of type:', typeof(accessToken))
         await setSession(accessToken)
         // // the fetch the user
-        // const userResponse = await axiosInstance.get('http://localhost:1337/api/users/me?populate=*', {
+        // const userResponse = await axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/users/me?populate=*`, {
         //     headers: { }
         // })
 
-        const uResponse = await fetch('http://localhost:1337/api/users/me', 
+        const uResponse = await fetch(`${process.env.REACT_APP_BACKEND}api/users/me`, 
                 { headers: { Authorization: `Bearer ${accessToken}`}})
         let user = await uResponse.json() 
         user = sanitizeUser(user)
@@ -152,7 +152,7 @@ export const AuthProvider = ({ children }) => {
                 const accessToken = window.localStorage.getItem('accessToken')
                 if (accessToken && isValidToken(accessToken)) {
                     await setSession(accessToken)
-                    const uResponse = await fetch('http://localhost:1337/api/users/me', 
+                    const uResponse = await fetch(`${process.env.REACT_APP_BACKEND}api/users/me`, 
                     { headers: { Authorization: `Bearer ${accessToken}`}})
                     let user = await uResponse.json()
                     user = sanitizeUser(user)

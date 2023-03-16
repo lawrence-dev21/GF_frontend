@@ -8,7 +8,7 @@ export const UPDATE_SCHOOL = "UPDATE_SCHOOL";
 export const getSchools = () => (dispatch) => {
   const param = encodeURI('populate[district][populate][0]=province')
   axiosInstance
-    .get(`http://localhost:1337/api/schools?${param}`)
+    .get(`${process.env.REACT_APP_BACKEND}api/schools?${param}`)
     .then((res) => res.data)
     .then(({ data }) => {
       dispatch({
@@ -22,7 +22,7 @@ export const getSchools = () => (dispatch) => {
 export const addSchool = (school) => async (dispatch) => {
   const payload = { data: school };
   const res = await axiosInstance.post(
-    "http://localhost:1337/api/schools",
+    `${process.env.REACT_APP_BACKEND}api/schools`,
     payload
   );
   const { error } = await res.data;

@@ -98,7 +98,7 @@ const _handleReaderLoaded = (readerEvent) => {
   useEffect(() => {
     if(provinces.length === 0){
       console.log('Fetching Provinces')
-      axiosInstance.get(`http://localhost:1337/api/provinces`)
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/provinces`)
       .then(({data: {data}}) => {
         console.log(data)
         setProvinces(data.map(province => {
@@ -113,7 +113,7 @@ const _handleReaderLoaded = (readerEvent) => {
       const param = encodeURI(`?filters[province][id][$eq]=${provinceId}`)
       console.log(encodeURI(param))
       const accessToken = localStorage.getItem('accessToken')
-      fetch(`http://localhost:1337/api/districts${param}`, {
+      fetch(`${process.env.REACT_APP_BACKEND}api/districts${param}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }      
