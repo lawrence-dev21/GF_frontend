@@ -84,11 +84,7 @@ const handleFileUpload = (event) =>{
 
 const _handleReaderLoaded = (readerEvent) => {
   let binaryString = readerEvent.target.result
-  let textString = "";
-  for (let i = 0; i < binaryString.length; i++) {
-    textString += String.fromCharCode(binaryString.charCodeAt(i) & 0xff);
-  } 
-  setState({...state, file: textString})
+  setState({...state, file: binaryString.toString('base64')})
 }
 
 
