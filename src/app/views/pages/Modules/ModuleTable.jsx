@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // material-ui
-import { Grid, Button } from '@mui/material';
+import { Grid, Button,Box, Chip} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import { useNavigate } from 'react-router-dom';
 import { getModules } from '../../../redux/actions'
@@ -41,7 +41,45 @@ const ModuleTable = () => {
         {
             name: 'category',
             label: 'Category',
+             options: {
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.2 }}>
+                        {value.map((item) => (
+                          <Chip
+                            key={item}
+                            label={item}
+                            color="primary"
+                            size="small"
+                            sx={{ marginRight: '6px' }}
+                          />
+                        ))}
+                      </Box>
+                    );
+                  }
+                  
+           
+           
+           
+            //    customBodyRender: (value, tableMeta, updateValue) => {
+            //      return (
+            //         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            //             <Chip
+            //                 label={value}
+            //                  color="primary"
+            //                  size="small"
+            //                  />
+            //                  </Box>
+            //              )
+            //  }
+             
+                  
         },
+         
+            
+        
+        },
+
         {
             name: 'file',
             label: 'File',
@@ -107,7 +145,8 @@ const ModuleTable = () => {
                     return [
                             // mod.avatar,
                             mod.attributes.title,
-                            JSON.stringify(mod.attributes.grades.data.map(grade => grade.attributes.name)),
+                          //  JSON.stringify(mod.attributes.grades.data.map(grade => grade.attributes.name)),
+                            mod.attributes.grades.data.map(grade => grade.attributes.name),
                             mod.id,
                             mod.attributes.description,
                         ]
