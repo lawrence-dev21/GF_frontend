@@ -292,7 +292,7 @@ const {
 
      <Divider style={{marginTop: '16px'}}/>
 
-     <h4 style={{marginTop: '16px'}}>Parent Details</h4>
+     <h4 style={{marginTop: '16px'}}>Parent/Guardian Details</h4>
       <Grid container spacing={6}>
         <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnder}}>
               <TextField
