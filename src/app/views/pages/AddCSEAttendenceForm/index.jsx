@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import {styled } from "@mui/system";
 import { SimpleCard } from "app/components";
-import CSEForm from "./CSEForm"
+import CSEAttendenceForm from "./CSEAttendenceForm"
 
 
 const Container = styled("div")(({ theme }) => ({
@@ -17,8 +17,8 @@ const AddCSEForm = () => {
   return (
     <Container>
      <Stack spacing={3}>
-        <SimpleCard title="Add CSE">
-          <CSEForm />
+        <SimpleCard title="CSE: Attendence Sheet">
+          <CSEAttendenceForm />
         </SimpleCard>
       </Stack>
     </Container>

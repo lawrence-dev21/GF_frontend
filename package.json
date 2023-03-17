@@ -35,6 +35,7 @@
     "notistack": "^2.0.8",
     "os-browserify": "^0.3.0",
     "prop-types": "^15.7.2",
+    "qs": "^6.11.1",
     "react": "^17.0.2",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^17.0.2",
@@ -62,7 +63,8 @@
     "build": "react-scripts build --info",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "ghp": "react-scripts build && gh-pages -d build"
+    "ghp": "react-scripts build && gh-pages -d build",
+    "postbuild": "cp -r build/* ../backend/public/"
   },
   "eslintConfig": {
     "extends": "react-app"
