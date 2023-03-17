@@ -16,21 +16,21 @@ import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { enrollCSE } from '../../../redux/actions/CSEActions'
 import { useDispatch  } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate, useParams } from 'react-router-dom'
+import qs from 'qs'
 import axiosInstance from "axios";
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
   { field: 'firstName', headerName: 'First Name', width: 130 },
   { field: 'lastName', headerName: 'Last Name', width: 130 },
-  // { field: 'grade', headerName: 'Grade', width: 130, type: 'number'},
+  { field: 'grade', headerName: 'Grade', width: 130, type: 'number'},
 ]
 
-const CSEEnrollmentForm = () => {
+const CSEEnrollmentForm = ({cseProp}) => {
   const [state, setState] = useState({});
   const { user } = useAuth()
-
+  const { id } = useParams()
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   useTitle(': Attendence Sheet')
@@ -44,50 +44,70 @@ const CSEEnrollmentForm = () => {
   const navigate = useNavigate();
 
   const handleSubmit = () => {
-    dispatch(enrollCSE(state))
+    setLoading(true)
+    console.log('creating attributes', state.students)
+
+    const attributes =  {
+      id,
+      students:{ 
+        connect: state.students.map(row => {
+          return {id: row}
+        })
+      }
+    }
+    console.log('dispatching', attributes)
+    dispatch(enrollCSE(attributes))
     setTimeout(() => {
     enqueueSnackbar('Students successfully enrolled', { variant: 'success'})
-    navigate('/cse')
+    navigate(`/cse/${id}`)
     setLoading(false)
   }, 500)
   };
 
   const [cseStudents, setCSEStudents] = useState([{id: '1', firstName: '', lastName: '' }])
-
-  //     useEffect(() => {
-      //   if(cseStudents.length === 1){
-  //       axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/cses/${cseId}?populate[0]=students.user&populate[1]=students.grade`)
-  //           .then(res => res.data)
-  //           .then(({data}) => {
-  //               console.log(data)
-  //               setDataList(
-  //               data.attributes.students.data.map(student => ({
-  //                   id: student?.id,
-  //                   firstName: student?.attributes?.user?.data?.attributes?.firstName,
-  //                   lastName: student?.attributes?.user?.data?.attributes?.lastName,
-  //                   grade: student?.attributes?.grade?.data?.attributes?.name
-  //               }))
-  //           )}
-  //           )
-  //           .catch(err => console.log(err))}
-  //     }, [cseStudents.length])
-
- 
-  // useEffect(() => {
-  //   if(cseStudents.length === 1){
-  //     axiosInstance.get(`/api/cse-students?id=${user.schoolId}&cse=false`)
-  //          .then(({data}) => {
-  //            setCSEStudents(data)
-  //            setState({...state,
-  //             totalRegistered: data.length,
-  //             schoolId: user.schoolId,
-  //             teacherId: user.id,
-  //             date: new Date().toISOString().slice(0, 10)
-  //           })
-  //         })
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // },[cseStudents.length])
+  // need to get the students that are eligible for the cse 
+      useEffect(() => {
+      const grades = cseProp.data.attributes.grades.data.map((grade) => grade.id)
+      console.log('grades', grades)
+      const query = qs.stringify({
+        populate: ['user', 'grade'] , 
+        filters: {
+        $and: [
+          {
+              $or: grades.map(grade => {
+                  return { grade:{id: {$eq: grade}} }
+                      })
+          },
+          {
+              $or: [
+              {cse: {id: {$null: true}}},
+              {cse: {id: {$not: id}}}
+              ]
+          },
+        ]
+        },
+      }, {
+        encodeValuesOnly: true, // prettify URL
+      });
+        console.log(query)
+        if(cseStudents.length === 1){
+          
+            axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/students?${query}`)
+                  .then(res => res.data)
+                  .then(({data}) => {
+                      console.log(data)
+                      setCSEStudents(
+                      data.map(student => ({
+                          id: student?.id,
+                          firstName: student?.attributes?.user?.data?.attributes?.firstName,
+                          lastName: student?.attributes?.user?.data?.attributes?.lastName,
+                          grade: student?.attributes?.grade?.data?.attributes?.name
+                      }))
+                  )
+                }
+            )
+            .catch(err => console.log(err))}
+      }, [cseStudents.lengths])
 
   return (
     <div>

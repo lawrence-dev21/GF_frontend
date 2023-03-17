@@ -23,8 +23,10 @@ export const addCSEAttendence = (cseAttendence) => (dispatch) => {
 	    });	
 	})
 }
-export const enrollCSE = (students) => (dispatch) => {
-	axiosInstance.post('api/cse/enroll', students).then(res => {
+export const enrollCSE = (attributes) => (dispatch) => {
+	const { id } = attributes;
+	const payload = { data: {students: attributes.students}}
+	axiosInstance.put(`${process.env.REACT_APP_BACKEND}api/cses/${id}`, payload).then(res => {
 	    dispatch({
 	      type: ENROLL_CSE,
 	      payload: res.data,
