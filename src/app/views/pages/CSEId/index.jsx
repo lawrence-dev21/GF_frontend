@@ -1,5 +1,5 @@
 
-import { Grid, Chip, Box, Popover, Button, IconButton, Paper, Modal, TableContainer, Typography, TableBody, TableCell, Table, TableRow, TableHead, Select, MenuItem } from "@mui/material";
+import { Box, Button, Typography} from "@mui/material";
 import {styled } from "@mui/system";
 import { CSEStudentsTable, CSEAttendenceTable } from "./components";
 import { useNavigate, useParams } from "react-router-dom";
@@ -41,7 +41,7 @@ const CSEId = () => {
                 >
                     Take Attendence
           </Button>
-          {/* <CSEAttendenceTable cseId={id} /> */}
+          <CSEAttendenceTable cseId={id} />
         </div>
 
       {/* Enrollment */}

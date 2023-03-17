@@ -25,7 +25,7 @@ const AddBeneficiaryForm = Loadable(lazy(() => import('./AddBeneficiaryForm')));
 const CSE = Loadable(lazy(() => import('./CSE')));
 const CSEId = Loadable(lazy(() => import('./CSEId')));
 const AddCSEForm = Loadable(lazy(() => import('./AddCSEForm')));
-const AddCSEAttendenceForm = Loadable(lazy(() => import('./AddCSEForm')));
+const AddCSEAttendenceForm = Loadable(lazy(() => import('./AddCSEAttendenceForm')));
 const EnrollCSEForm = Loadable(lazy(() => import('./EnrollCSEForm')));
 
 

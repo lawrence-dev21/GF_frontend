@@ -1,5 +1,5 @@
 
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import {styled } from "@mui/system";
 import { CSETable } from "./components";
 import { useNavigate } from "react-router-dom";

@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 // material-ui
 import { Grid} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
-import useAuth from 'app/hooks/useAuth'
 import axiosInstance from "axios";
 
 const CSEStudentsTable = ({cseId}) => {
     
   const [datalist, setDataList] = useState([])
-  const { user } = useAuth()
+//   const { user } = useAuth()
     const columns = [
         {
             name: 'firstName',
@@ -51,6 +50,7 @@ const CSEStudentsTable = ({cseId}) => {
             )}
             )
             .catch(err => console.log(err))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
       }, [])
 
  

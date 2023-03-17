@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import useAuth from "app/hooks/useAuth";
 import axiosInstance from "axios";
 import MUIDataTable from "mui-datatables";
 import { Popover, Paper, Button, Modal, Box, TableContainer, Table, TableBody, TableHead, TableRow, TableCell, Grid, IconButton } from "@mui/material"
@@ -90,7 +89,6 @@ const CSEModal = ({isOpen, handleClose}) => {
     }
   
     const [datalist, setDataList] = useState([])
-    const { user } = useAuth()
     const columns = [
       {
           name: 'creationDate',
@@ -143,6 +141,7 @@ const CSEModal = ({isOpen, handleClose}) => {
               }))
           ))
           .catch(err => console.log(err))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
       <>

@@ -115,7 +115,7 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
   } = state;
 
   const [schools, setSchools] = useState([])
-  const [roles, setRoles] = useState([])
+  const [roles] = useState([])
 
   
   useEffect(() => {
@@ -123,6 +123,7 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
     if(schools.length === 0){
       axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/schools`)
            .then(res => {
+            console.log(res.data)
             const {data} = res.data
             const systemSchools = (data.map(school => {return {value: school.id, label: school.attributes.name}}))
              setSchools(systemSchools)
@@ -138,6 +139,7 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
                   })
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[schools.length])
 
   

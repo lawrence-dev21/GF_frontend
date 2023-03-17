@@ -1,8 +1,6 @@
 import Mock from '../mock'
 import shortId from 'shortid'
 import jwt from 'jsonwebtoken';
-import { firestore } from "../../firebase"
-import { getDocs, collection } from "firebase/firestore"
 
 import { 
     userList,
@@ -479,28 +477,7 @@ Mock.onPost('/api/cse/add').reply((config) => {
     
 })
 
-Mock.onPost('/api/cse/enroll').reply((config) => {
-    const data = JSON.parse(config.data)
-    console.log('CSE Data', data)
-    const {
-      students,
-      schoolId
-    } = data
-    
-    const cseIndex = DB.clubList.findIndex(x => x.schoolId.startsWith(schoolId))
-    
-    students.map(student => {
-      DB.clubList[cseIndex].students.push(student)
-      console.log('CSE ClubList After Post:', DB.clubList)
-      const studentIndex = DB.beneficiaryList.findIndex(x => x.id.startsWith(student))
-      console.log(DB.beneficiaryList[studentIndex])
-      DB.beneficiaryList[studentIndex].cse = 'true'
-    })
-    console.log('CSE ClubList After Post:', DB.clubList)
 
-    return [200, students]
-    
-})
 Mock.onPost('/api/beneficiaries/add').reply((config) => {
     const data = JSON.parse(config.data)
 

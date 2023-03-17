@@ -23,7 +23,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
-import { TextValidator, ValidatorForm, ValidatorComponent } from "react-material-ui-form-validator";
+import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addBeneficiary } from '../../../redux/actions/BeneficiaryActions'
@@ -35,12 +35,6 @@ const TextField = styled(TextValidator)(() => ({
   width: "100%",
   marginBottom: "16px",
 }));
-
-class nrcValidation extends ValidatorComponent {
-  renderValidatorComponent() {
-      // return your validated component
-  }
-}
 
 
 const BeneficiaryForm = () => {

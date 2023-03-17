@@ -22,8 +22,7 @@ import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addCSEAttendence } from '../../../redux/actions/CSEActions'
 import { useDispatch  } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from "axios";
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
@@ -40,6 +39,7 @@ const columns = [
 const CSEAttendenceForm = () => {
   const [state, setState] = useState({});
   const { user } = useAuth()
+  const { id } = useParams()
 
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -81,13 +81,13 @@ const {
   } = state;
 
   const [topics, setTopics] = useState([])
-  const [cseStudents, setCSEStudents] = useState([{id: '1', firstName: '', lastName: '' }])
+  const [cseStudents] = useState([{id: '1', firstName: '', lastName: '' }])
 
 
   useEffect(() => {
     if(topics.length === 0){
       console.log('Getting topics for', user)
-      axiosInstance.get(`/api/cse-topics?id=${user.schoolId}`)
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/cse-topics?filters[cse][id][$eq]=${id}`)
            .then(({data}) => {
              setTopics(data)
           })
@@ -95,25 +95,25 @@ const {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[topics.length])
 
-  useEffect(() => {
-    if(cseStudents.length === 1){
-      axiosInstance.get(`/api/cse-students?id=${user.schoolId}`)
-           .then(({data}) => {
-             setCSEStudents(data)
-             setState({...state,
-              totalRegistered: data.length,
-              schoolId: user.schoolId,
-              teacherId: user.id,
-              date: new Date().toISOString().slice(0, 10)
-            })
-          })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[topics.length])
+  // useEffect(() => {
+  //   if(cseStudents.length === 1){
+  //     axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/students?populate[0]=user&populate[1]=cse&filters[$or][0][cse][id][$null]=true&filters[$or][1][cse][id][$not]=${id}`)
+  //          .then(({data}) => {
+  //            setCSEStudents(data)
+  //            setState({...state,
+  //             totalRegistered: data.length,
+  //             schoolId: user.schoolId,
+  //             teacherId: user.id,
+  //             date: new Date().toISOString().slice(0, 10)
+  //           })
+  //         })
+  //   }
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // },[topics.length])
 
   return (
     <div>
-  
+      <h1>Hello</h1>
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
       <Divider style={{marginTop: '8px'}} />
        <h4 style={{marginTop: '16px'}}>Attendence details</h4>

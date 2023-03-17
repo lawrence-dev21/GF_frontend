@@ -78,8 +78,6 @@ const DownloadButton = ({bookId}) =>  {
 const BookPreview = ({open, handleClose, bookId})  => {
   const [bookUrl, setBookUrl] = useState('');
 
-  // const viewer = useRef(null);
-  const [book, setBook] = useState({})
   const [pageCount, setPageCount] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [direction, setDirection] = useState('next');
@@ -106,6 +104,7 @@ const BookPreview = ({open, handleClose, bookId})  => {
   }
   useEffect(() => {
     fetchBook()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookId])
 
 
