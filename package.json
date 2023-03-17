@@ -63,8 +63,7 @@
     "build": "react-scripts build --info",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "ghp": "react-scripts build && gh-pages -d build",
-    "postbuild": "cp -r build/* ../backend/public/"
+    "ghp": "react-scripts build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
