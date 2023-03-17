@@ -20,7 +20,7 @@ const CSE = () => {
   const navigate  = useNavigate()
   return (
     <Container>
- <Typography variant="h5">CSE Student List</Typography>
+ <Typography variant="h5">CSE List</Typography>
         <Button
                     sx={{mb: 2, mt: 2}}
                     size="large"

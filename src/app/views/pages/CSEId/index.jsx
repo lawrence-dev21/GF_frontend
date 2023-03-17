@@ -18,7 +18,7 @@ const CSEId = () => {
   return (
     <Container>
         <div className="">
-          <Typography variant="h5">CSE {id}</Typography>
+          <Typography variant="h5">CSE: {id}</Typography>
           <Button
                     sx={{mb: 2, mt: 2, mr: 4}}
                     size="large"
