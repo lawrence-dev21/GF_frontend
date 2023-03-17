@@ -32,15 +32,15 @@ const ModuleTable = () => {
     const navigate = useNavigate();
     const columns = [
         {
-            name: 'tite',
+            name: 'title',
             label: 'Title',
             options: {
                 filter: true
               }
         },
         {
-            name: 'category',
-            label: 'Category',
+            name: 'grade',
+            label: 'Grade',
              options: {
                 customBodyRender: (value) => {
                     return (
@@ -71,7 +71,7 @@ const ModuleTable = () => {
                 customBodyRender: (pdf) => {
                   return (
                     <Button onClick={() => {
-                        setUploadId(pdf)
+                        setUploadId(() =>pdf)
                         setDisplayModal(true)
                     }}>View Book</Button>
                   )
@@ -83,12 +83,6 @@ const ModuleTable = () => {
             label: 'Description'
         },
     ];
-
-    // const handleDeleteRows = () => {
-    //     const userIds =  selectedRows.map(row => schools[row].id)
-    //     dispatch(deleteUser(userIds[0]))
-    // }
-
     const options = {
         rowsSelected: selectedRows,
         selectableRowsHideCheckboxes: true,
@@ -126,14 +120,15 @@ const ModuleTable = () => {
                 }
             <Grid item padding={2}>
                 <MUIDataTable title={'Modules'} data={modules.map(mod => {
-                    return [
+                    return {
+
                             // mod.avatar,
-                            mod.attributes.title,
-                          //  JSON.stringify(mod.attributes.grades.data.map(grade => grade.attributes.name)),
-                            mod.attributes.grades.data.map(grade => grade.attributes.name),
-                            mod.id,
-                            mod.attributes.description,
-                        ]
+                            title:mod.attributes.title,
+                            grade:mod.attributes.grades.data.map(grade => grade.attributes.name),
+                            file:mod.id,
+                            description:mod.attributes.description,
+                    }
+                  
                 })} columns={columns} options={options} />
             </Grid>
         </Grid>

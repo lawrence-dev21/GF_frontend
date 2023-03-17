@@ -29,34 +29,45 @@ const Transition = forwardRef(function Transition(props, ref) {
 const DownloadButton = ({bookId}) =>  {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-
   const handleClick = () => {
     setLoading(true);
-
-    // Call the API to fetch the base64 encoded PDF
-    axiosInstance.get('/api/upload?id=' + bookId)
-      .then(({data}) => {
-      // .then(response => {
-        // Create a Blob from the base64 PDF string
-        const blob = new Blob([data.data], { type: 'application/pdf' });
-
-        // Create a link element to trigger the download
-        const downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = 'document.pdf';
-
-        // Add the link to the DOM and click it
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-          enqueueSnackbar('Downloading pdf', { variant: 'success'})
+  
+    // Call the API to fetch the PDF URL
+    axiosInstance
+      .get("http://localhost:1337/api/modules/" + bookId + "?fields[0]=data")
+      .then((res) => {
+        const pdfUrl = res.data.data.attributes.data;
+  
+        // Fetch the PDF file as a Blob
+        return fetch(pdfUrl)
+          .then((response) => response.blob())
+          .then((blob) => {
+            setLoading(false);
+  
+            // Create a link element to trigger the download
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = `${bookId}.pdf`;
+  
+            // Add the link to the DOM and click it
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            enqueueSnackbar("Downloading pdf", { variant: "success" });
+  
+            // Remove the link from the DOM after a short delay
+            setTimeout(() => {
+              document.body.removeChild(downloadLink);
+            }, 100);
+          });
       })
-      .catch(err => enqueueSnackbar('Download Failed. Check your connection.', { variant: 'error'}))
-      .finally(() => {
-        // Remove the link from the DOM
+      .catch((err) => {
         setLoading(false);
-      })
+        enqueueSnackbar("Download Failed. Check your connection.", {
+          variant: "error",
+        });
+      });
   };
-
+  
   return (
     <Button variant="contained" color="primary" onClick={handleClick} disabled={loading} startIcon={loading ? <CircularProgress size={20} /> : <CloudDownload />}>
       Download PDF
@@ -65,6 +76,7 @@ const DownloadButton = ({bookId}) =>  {
 }
 
 const BookPreview = ({open, handleClose, bookId})  => {
+  const [bookUrl, setBookUrl] = useState('');
 
   // const viewer = useRef(null);
   const [book, setBook] = useState({})
@@ -80,14 +92,31 @@ const BookPreview = ({open, handleClose, bookId})  => {
       containerRef.current && console.log('OffsetWidth', containerRef.current.offsetWidth)
     }
 
-  // Create custom hook to fetch the book
+  // Create custom hook to fetch the book from an api 
+  const fetchBook = () => {
+    if (bookId) {
+    axiosInstance.get('http://localhost:1337/api/modules/'+ bookId+ '?fields[0]=data' )
+  .then(res => {
+    // set a book object to the state
+    console.log(res.data)
+    setBookUrl(res.data.data.attributes.data)
+      
+    })
+  }
+  }
   useEffect(() => {
-      axiosInstance.get('/api/upload?id=' + bookId)
-              .then(({data}) => {
-                setBook(data);
-              })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchBook()
   }, [bookId])
+
+
+
+  // useEffect(() => {
+  //     axiosInstance.get('http://localhost:1337/api/modules?fields[1]=data')
+  //             .then(({data}) => {
+  //               setBook(data);
+  //             })
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [bookId])
 
   const reset = () => {
     direction && setDirection('next')
@@ -119,18 +148,18 @@ const BookPreview = ({open, handleClose, bookId})  => {
           </Toolbar>
         </AppBar>
         <List>
-            { book?.id && (<ListItem button>
-                         <ListItemText primary="Book Id" secondary={book.id} />
-                          <DownloadButton bookId={book.id} />
+            { bookId && (<ListItem button>
+                         <ListItemText primary="Book Id" secondary={bookId} />
+                          <DownloadButton bookId={bookId} />
                        </ListItem>)   
             }
 
           <Divider />
         </List>
-        { book?.data  &&
+        { bookUrl  &&
          (<div id="ReaderContainer">
-              <Document className={'PDFDocument'} file={`data:application/pdf;base64,${book.data}`} onLoadSuccess={onDocumentLoadSuccess}>
-                  {pages.map(page => (
+              <Document className={'PDFDocument'} file={bookUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                  {pages.map((page, index) => (
                     <>
                       <Page 
                       className={'PDFPage PDFPageOne'}
@@ -139,7 +168,7 @@ const BookPreview = ({open, handleClose, bookId})  => {
                       renderTextLayer={false}
                       renderAnnotationLayer={false}
                       renderInteractiveForms={false}
-                      key={page}
+                      key={index}
                       />
                     </>
                     ))}
