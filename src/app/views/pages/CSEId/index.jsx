@@ -58,7 +58,7 @@ const CSEId = () => {
                 >
                     Enroll Student
           </Button>
-        {/* <CSEStudentsTable cseId={id} /> */}
+        <CSEStudentsTable cseId={id} />
       </Box>
     </Container>
   );

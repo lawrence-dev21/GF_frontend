@@ -23,6 +23,8 @@ import { useTitle } from '../../../hooks/useTitle'
 import { addCSEAttendence } from '../../../redux/actions/CSEActions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import qs from 'qs'
+
 import axiosInstance from "axios";
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
@@ -37,29 +39,39 @@ const columns = [
 ]
 
 const CSEAttendenceForm = () => {
-  const [state, setState] = useState({});
-  const { user } = useAuth()
-  const { id } = useParams()
+  useTitle(': Attendence Sheet')
 
+  const [state, setState] = useState({});
+  const { id } = useParams()
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  useTitle(': Attendence Sheet')
   const dispatch = useDispatch()
+
   const [ spacing ] = useState({
     paddingTop: isMobile() ? '12px' : '24px',
     paddingTopUnder: '12px',
     paddingTopUnderSelect: isMobile() ? '28px' : '12px',
     marginTop: isMobile() ? 0 : 4
   })
+
   const inputLabel = useRef(null);
   const [labelwidth, setLabelwidth] = useState(0);
+  const {
+    date,
+    topicId,
+  } = state;
+
+  const [topics, setTopics] = useState([])
+  const [cseStudents, setCSEStudents] = useState([{id: '1', firstName: '', lastName: '' }])
+
+
   useEffect(() => {
     setLabelwidth(inputLabel.current.offsetWidth);
   }, []);
     const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    dispatch(addCSEAttendence(state))
+    dispatch(addCSEAttendence({cse: id, cse_topic: state.topicId, totalRegistered: cseStudents.length, ...state}))
     setTimeout(() => {
     enqueueSnackbar('Attendence sucessfully entered', { variant: 'success'})
     navigate('/cse')
@@ -75,41 +87,47 @@ const CSEAttendenceForm = () => {
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
-const {
-    date,
-    topicId,
-  } = state;
-
-  const [topics, setTopics] = useState([])
-  const [cseStudents] = useState([{id: '1', firstName: '', lastName: '' }])
-
 
   useEffect(() => {
+    const params = qs.stringify({
+      populate: ['cse_topics'],
+    })
     if(topics.length === 0){
-      console.log('Getting topics for', user)
-      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/cse-topics?filters[cse][id][$eq]=${id}`)
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/cses/${id}?${params}`)
            .then(({data}) => {
-             setTopics(data)
+            console.log('topics',data.data.attributes.cse_topics.data)
+             setTopics(
+              data.data.attributes.cse_topics.data.map((topic) => {
+                return {
+                  id: topic.id,
+                  name: topic.attributes.name,
+                }
+              })
+             )
           })
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[topics.length])
 
-  // useEffect(() => {
-  //   if(cseStudents.length === 1){
-  //     axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/students?populate[0]=user&populate[1]=cse&filters[$or][0][cse][id][$null]=true&filters[$or][1][cse][id][$not]=${id}`)
-  //          .then(({data}) => {
-  //            setCSEStudents(data)
-  //            setState({...state,
-  //             totalRegistered: data.length,
-  //             schoolId: user.schoolId,
-  //             teacherId: user.id,
-  //             date: new Date().toISOString().slice(0, 10)
-  //           })
-  //         })
-  //   }
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // },[topics.length])
+  useEffect(() => {
+    const params = qs.stringify({
+      populate: ['students.user']
+    })
+    if(cseStudents.length === 1){
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/cses/${id}?${params}`)
+           .then(({data}) => {
+            const studentsList = data.data.attributes.students.data.map((student) => {
+              return {
+                id: student?.id,
+                firstName: student?.attributes?.user?.data.attributes?.firstName,
+                lastName: student?.attributes?.user?.data.attributes?.lastName,
+              }
+            })
+             setCSEStudents(studentsList)
+          })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[topics.length])
 
   return (
     <div>

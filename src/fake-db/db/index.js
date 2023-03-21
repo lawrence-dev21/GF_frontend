@@ -609,19 +609,6 @@ Mock.onGet(/api\/cse-all\/?.*/).reply((config) => {
   return [200, response];
 })
 
-Mock.onGet(/api\/cse-topics\/?.*/).reply((config) => {
-  const params = parseQueryString(config.url);
-  let schools = getSchools()
-  if(!params){
-    return [200, DB.clubTopicList]
-  }
-  const school = schools.find(x => x.id === params.id)
-
-  const cse = DB.clubList.find(x => x.schoolId.startsWith(school.id))
-  console.log('CSE', cse)
-  const response = getCSETopics(cse)
-  return [200, response]
-})
 
 Mock.onGet(/api\/cse-students\/?.*/).reply((config) => {
   const params = parseQueryString(config.url);

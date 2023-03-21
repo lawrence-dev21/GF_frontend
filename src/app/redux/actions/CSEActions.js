@@ -16,7 +16,9 @@ export const getCSE = ()  => (dispatch) => {
 
 
 export const addCSEAttendence = (cseAttendence) => (dispatch) => {
-	axiosInstance.post('api/cse/add', cseAttendence).then(res => {
+	const payload = { data: cseAttendence}
+	console.log(payload)
+	axiosInstance.post(`${process.env.REACT_APP_BACKEND}api/attendences`, payload).then(res => {
 	    dispatch({
 	      type: ADD_CSE_ATTENDENCE,
 	      payload: res.data,
