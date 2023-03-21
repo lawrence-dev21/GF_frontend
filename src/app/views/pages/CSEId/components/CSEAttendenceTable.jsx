@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axiosInstance from "axios";
-import MUIDataTable from "mui-datatables";
+import React, { useState, useEffect } from 'react';
+import axiosInstance from 'axios';
+import MUIDataTable from 'mui-datatables';
 import { Popover, Paper, Button, Modal, Box, TableContainer, Table, TableBody, TableHead, TableRow, TableCell, Grid, IconButton } from "@mui/material"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
+import qs from 'qs';
 // Modal Style
 const style = {
   position: 'absolute',
@@ -65,10 +65,18 @@ const CSEModal = ({isOpen, handleClose}) => {
   
   const CSEAttendenceTable = ({cseId}) => {
   
+
     const [ anchorEl, setAnchorEl ] = useState(null);
     const [ popOverToggle, setPopOverToggle ] = useState(false)
     const [ modalOpen, setModalOpen ] = useState(false)
-  
+    const params = qs.stringify({
+      populate: ['students', 'cse_topic'],
+      filters: {
+        cse: { id : { $eq : cseId }}
+      }
+    })
+
+    
     // Popover - works 
     const handleClick = (event) => {
       if(!popOverToggle)
@@ -91,7 +99,7 @@ const CSEModal = ({isOpen, handleClose}) => {
     const [datalist, setDataList] = useState([])
     const columns = [
       {
-          name: 'creationDate',
+          name: 'date',
           label: 'Date',
           options: {
               filter: true
@@ -130,14 +138,15 @@ const CSEModal = ({isOpen, handleClose}) => {
       }
     };
     useEffect(() => {
-      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/cses/${cseId}?populate[0]=students.user`)
-          .then(res => res.data)
-          .then(data => setDataList(
-              data.students.map(student => ({
-                  id: student._id,
-                  firstName: student.attributes.user.data.attributes.firstName,
-                  lastName: student.attributes.user.data.attributes.lastName,
-                  grade: student.attributes.grade.data.attributes.name
+      console.log('CSEID',cseId)
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/attendences?${params}`)
+                  .then(res => res.data)
+                  .then(({data}) => setDataList(
+              data.map(attendance => ({
+                  id: attendance.id,
+                  date: attendance.attributes.createdAt,
+                  attendenceCount: `${attendance.attributes.students.data.length}/${attendance.attributes.totalRegistered}`,
+                  topic: attendance.attributes.cse_topic.data.attributes.name,
               }))
           ))
           .catch(err => console.log(err))

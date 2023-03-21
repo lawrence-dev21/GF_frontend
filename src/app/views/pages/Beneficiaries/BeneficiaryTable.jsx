@@ -56,19 +56,7 @@ const BeneficiaryTable = () => {
         },{
             name: 'dateOfBirth',
             label: 'Date of Birth'
-        },{
-            name: 'pgName',
-            label: 'P/G Name'
-        },{
-            name: 'pgAddress',
-            label: 'P/G Address'
-        },{
-            name: 'pgNRC',
-            label: 'P/G NRC'
-        },{
-            name: 'pgMobile',
-            label: 'P/G Mobile'
-        },
+        }
     ];
     const options = {
         rowsSelected: selectedRows,
