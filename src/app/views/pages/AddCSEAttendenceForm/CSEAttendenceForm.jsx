@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 
-import useAuth from 'app/hooks/useAuth'
 import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";

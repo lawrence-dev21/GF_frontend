@@ -53,7 +53,6 @@ if(!gender){
   useEffect(()=> {
     if(!cardList.length){
       setCardList([...cardList,
-      {name: 'Learners', amount: count, icon: 'user', link: '/beneficiaries'},
           { name: 'Modules', amount: modules.length, icon: 'book', link: '/modules' }])
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
