@@ -1,21 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import CSEAttendanceModal from './CSEAttendanceModal'
 import axiosInstance from 'axios';
 import MUIDataTable from 'mui-datatables';
-import { Popover, Paper, Button, Modal, Box, TableContainer, Table, TableBody, TableHead, TableRow, TableCell, Grid, IconButton } from "@mui/material"
+import { Popover, Button, Grid, IconButton } from "@mui/material"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import qs from 'qs';
-// Modal Style
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 const popOverOptions = {
   anchorOrigin: {
@@ -29,46 +18,14 @@ const popOverOptions = {
 
 }
 
-const CSEModal = ({isOpen, handleClose}) => {
-    // const { props: {isOpen, handleClose}} = props
-    console.log('isOpen', isOpen)
-    return(
-      <Modal
-      open={isOpen}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-      <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Student Name</TableCell>
-                <TableCell>Grade</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>Student Example</TableCell>
-                <TableCell>Sexual Harrasment</TableCell>
-                <TableCell>1/1</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-  
-      </Box>
-    </Modal>
-    )
-  }
-  
+
   const CSEAttendenceTable = ({cseId}) => {
   
-
     const [ anchorEl, setAnchorEl ] = useState(null);
     const [ popOverToggle, setPopOverToggle ] = useState(false)
     const [ modalOpen, setModalOpen ] = useState(false)
+    const [ attendanceId, setAttendanceId ] = useState(null)
+
     const params = qs.stringify({
       populate: ['students', 'cse_topic'],
       filters: {
@@ -89,11 +46,12 @@ const CSEModal = ({isOpen, handleClose}) => {
     const handleModalClose = () => {
       setModalOpen(false)
     }
-    const handleModalClick = () => {
+    const handleModalClick = (id) => {
       setModalOpen(true)
       // close the popover menu
       setAnchorEl(null)
       setPopOverToggle(!popOverToggle)
+      setAttendanceId(id)
     }
   
     const [datalist, setDataList] = useState([])
@@ -114,12 +72,14 @@ const CSEModal = ({isOpen, handleClose}) => {
           label: 'Attendence Count'
       },
       {
-          name: 'edit',
+          name: 'id',
           label: ' ',
           options: {
-            customBodyRender: () => {
-              return (
-                <IconButton aria-label="view option" variant="contained" onClick={handleClick}>
+            customBodyRender: (id) => {
+              // Todo - fix the attendance modal onclick function 3/21/2023
+              // The custom body render function runs the onclick which is not intended
+              return (  
+                <IconButton aria-label="view option" variant="contained">
                   <MoreHorizIcon />
                 </IconButton>
               )
@@ -154,7 +114,7 @@ const CSEModal = ({isOpen, handleClose}) => {
     }, [])
     return (
       <>
-        <CSEModal isOpen={modalOpen} handleClose={handleModalClose}/>
+        <CSEAttendanceModal isOpen={modalOpen} handleClose={handleModalClose} attendanceId={cseId}/>
         <Popover 
             open={popOverToggle}
             onClose={handleClick}
@@ -168,7 +128,7 @@ const CSEModal = ({isOpen, handleClose}) => {
               <Grid item xs={12} sm={6} md={4} lg={3}>
               </Grid>
               <Grid item padding={2}>
-                  <MUIDataTable title={'Comprehensive Sexiual Education materials'} data={datalist} columns={columns} options={options} />
+                  <MUIDataTable title={'Comprehensive Sexiual Education Attendance'} data={datalist} columns={columns} options={options} />
               </Grid>
           </Grid>
       </>
