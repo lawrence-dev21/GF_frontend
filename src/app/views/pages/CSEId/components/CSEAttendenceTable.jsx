@@ -36,6 +36,7 @@ const popOverOptions = {
     
     // Popover - works 
     const handleClick = (event) => {
+      console.log(attendanceId)
       if(!popOverToggle)
         setAnchorEl(event.currentTarget)
       else

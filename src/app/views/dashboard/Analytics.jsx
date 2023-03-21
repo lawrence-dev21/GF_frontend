@@ -1,7 +1,7 @@
-import { Card, Grid, styled} from '@mui/material';
+import { Grid, styled} from '@mui/material';
 import { Fragment } from 'react';
 import StatCards from './shared/StatCards';
-import { AdvanceAreaChart, AppEchart } from './echarts';
+import { AdvanceAreaChart } from './echarts';
 
 const ContentBox = styled('div')(({ theme }) => ({
   margin: '30px',
@@ -13,11 +13,6 @@ const Title = styled('span')(() => ({
   fontWeight: '500',
   marginRight: '.5rem',
   textTransform: 'capitalize',
-}));
-
-const SubTitle = styled('span')(({ theme }) => ({
-  fontSize: '0.875rem',
-  color: theme.palette.text.secondary,
 }));
 
 

@@ -130,7 +130,6 @@ const CSEAttendenceForm = () => {
 
   return (
     <div>
-      <h1>Hello</h1>
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
       <Divider style={{marginTop: '8px'}} />
        <h4 style={{marginTop: '16px'}}>Attendence details</h4>
