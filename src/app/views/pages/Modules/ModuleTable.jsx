@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // material-ui
-import { Grid, Button,Box, Chip} from '@mui/material';
+import { Grid, Button,Box, Chip, Typography} from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import { useNavigate } from 'react-router-dom';
 import { getModules } from '../../../redux/actions'
@@ -104,24 +104,47 @@ const ModuleTable = () => {
     <>
         <BookPreview open={displayModal} handleClose={handleModalClose} bookId={uploadId}/>
         <Grid container padding={2} rowSpacing={1.5} columnSpacing={2}>
-        { authRoles.editor.includes(user.role) && 
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Button
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        navigate('/add-modules');
-                    }}
-                >
-                    Add Module
-                </Button>
-            </Grid>
-                }
-            <Grid item padding={2}>
-                <MUIDataTable title={'Modules'} data={modules.map(mod => {
-                    return {
+        {modules.length === 0 && (
+          <Grid paddingTop={10} container justifyContent="center" alignItems="center">
+            <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, textAlign: 'center' }} >
+              <Typography variant='h3' component="h2" align='center'>Learning Materials
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 2 }} align='center'>
+                No Learning Materials found. Click below to add one.
+              </Typography>
+              <Button 
+                size="large"
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                navigate('/add-modules');
+                }}
+              // put the button at the center 
+              >
+                Add Learning Material
+              </Button>
+            </Box>
+          </Grid>
+        )}
 
+    {modules.length > 0 && (
+        <Grid item padding={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+          {authRoles.sa.includes(user.role) && (
+               <Button
+               size="large"
+               variant="contained"
+               color="primary"
+               onClick={() => {
+                   navigate('/add-modules');
+               }}
+           >
+               Add Module
+           </Button>
+                  )}
+           </Grid>
+           <MUIDataTable title={'Modules'} data={modules.map(mod => {
+                    return {
                             // mod.avatar,
                             title:mod.attributes.title,
                             grade:mod.attributes.grades.data.map(grade => grade.attributes.name),
@@ -130,7 +153,9 @@ const ModuleTable = () => {
                     }
                   
                 })} columns={columns} options={options} />
-            </Grid>
+        </Grid>
+      )}
+
         </Grid>
     </>
     );
