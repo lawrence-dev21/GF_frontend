@@ -3,15 +3,18 @@
 
 import React from 'react';
 // material-ui
-import { Grid, Button, Avatar } from '@mui/material';
+import { Grid, Button, Avatar, Box,Typography } from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import { getBeneficiaries } from '../../../redux/actions'
 import { useSelector, useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { authRoles } from 'app/auth/authRoles';
+import useAuth from 'app/hooks/useAuth';
 
 const selectBeneficiaries = state => state.beneficiaries.beneficiaryList
 
 const BeneficiaryTable = () => {
+    const { user } = useAuth();
     const navigate = useNavigate()
     const dispatch = useDispatch() 
     const beneficiaries = useSelector(selectBeneficiaries)
@@ -73,21 +76,50 @@ const BeneficiaryTable = () => {
     };
     return (
     <Grid container padding={2} rowSpacing={1.5} columnSpacing={2}>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <Button
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                       onClick={() => {
-                        navigate('/add-beneficiaries');
-                    }}
-                >
-                    Add Beneficiary
-                </Button>
-            </Grid>
 
-            <Grid item padding={2}>
-                <MUIDataTable title={'Beneficiaries'} data={beneficiaries.map(beneficiary => {
+                {beneficiaries.length === 0 && (
+                        <Grid paddingTop={10} container justifyContent="center" alignItems="center">
+                            <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, textAlign: 'center' }} >
+                            <Typography variant='h3' component="h2" align='center'>Beneficiaries
+                            </Typography>
+                            <Typography variant="body1" sx={{ mb: 2 }} align='center'>
+                                No beneficiaries found. Click below to create a new one.
+                            </Typography>
+                            <Button 
+                                size="large"
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                navigate('/add-beneficiaries');
+                
+                                }}
+                            // put the button at the center 
+                            >
+                                Create beneficiary
+                            </Button>
+                            </Box>
+                        </Grid>
+                        )}
+                        
+
+        {beneficiaries.length > 0 && (
+        <Grid item padding={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+          {authRoles.sa.includes(user.role) && (
+           
+           <Button
+           size="large"
+           variant="contained"
+           color="primary"
+              onClick={() => {
+               navigate('/add-beneficiaries');
+           }}
+       >
+           Add Beneficiary
+       </Button>
+                  )}
+           </Grid>
+           <MUIDataTable title={'Beneficiaries'} data={beneficiaries.map(beneficiary => {
                     return [
                             beneficiary?.attributes?.user?.data?.attributes?.avatar,
                             beneficiary?.attributes?.user?.data?.attributes?.firstName + ' ' + beneficiary?.attributes?.user?.data?.attributes?.lastName,
@@ -101,7 +133,8 @@ const BeneficiaryTable = () => {
                             beneficiary?.attributes?.parent?.data?.attributes?.users_permissions_user?.data?.attributes?.mobile,
                         ]
                 })} columns={columns} options={options} />
-            </Grid>
+        </Grid>
+      )}
         </Grid>
     );
 };
