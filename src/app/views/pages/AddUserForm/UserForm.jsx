@@ -23,9 +23,8 @@ import { useTitle } from '../../../hooks/useTitle'
 import { addUser } from '../../../redux/actions/UserActions'
 import { useDispatch  } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { authRoles } from 'app/auth/authRoles'
 import useAuth from 'app/hooks/useAuth'
-
+import { authRouteParams } from "app/utils/authRoutes";
 import axiosInstance from "axios";
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
@@ -54,6 +53,7 @@ const UserForm = () => {
     const navigate = useNavigate();
 
   const handleSubmit = (event) => {
+    console.log(state.school)
     dispatch(addUser(state))    
     setTimeout(() => {
 
@@ -86,18 +86,13 @@ const _handleReaderLoaded = (readerEvent) => {
   const handleChange = (event) => {
     if(event.persist)
       event.persist();
+    
     setState({ ...state, [event.target.name]: event.target.value });
   };
 
 
 
-const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role) ?
-                          [{value: '3', label: 'Super Admin'},
-                          {value: '1', label: 'HQ'},
-                          {value: '2', label: 'School Admin'},
-                          {value: '2', label: 'Learner'},]
-                        : [{value: '2', label: 'School Admin'},
-                          {value: '2', label: 'Learner'},])
+const [systemRoles, setSystemRoles] = useState ([])
 
   const {
     username,
@@ -111,7 +106,7 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
     mobile,
     dateOfBirth,
     password,
-    schoolId
+    school
   } = state;
 
   const [schools, setSchools] = useState([])
@@ -125,13 +120,15 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
            .then(res => {
             console.log(res.data)
             const {data} = res.data
-            const systemSchools = (data.map(school => {return {value: school.id, label: school.attributes.name}}))
+            const systemSchools = (data.map(schoolItem => {return {value: schoolItem.id, label: schoolItem.attributes.name}}))
              setSchools(systemSchools)
             })
     }
     // fetch the roles
     if(roles.length === 0) {
-      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/users-permissions/roles`)
+      console.log('User', user)
+      const rolesParams = authRouteParams.getRolesSelect(user)
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/users-permissions/roles?${rolesParams}`)
                 .then(res => {
                   const { roles } = res.data
                   const systemRoles = roles.map(userRole => { return {value: userRole.id, label: userRole.name}})
@@ -314,7 +311,7 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
                   labelId="school-select"
                   id="mtx-school-select"
                   name="schoolId"
-                  value={schoolId || ""}
+                  value={school || ""}
                   label="School"
                   disabled={schools.length === 0}
                   onChange={handleChange}
@@ -327,8 +324,8 @@ const [systemRoles, setSystemRoles] = useState (authRoles.sa.includes(user.role)
                     />
                   }
                 >
-                  {schools && schools.map(school =>
-                    <MenuItem value={school.value} key={school.value}>{school.label}</MenuItem>
+                  {schools && schools.map(schoolItem =>
+                    <MenuItem value={schoolItem.value} key={schoolItem.value}>{schoolItem.label}</MenuItem>
                   )}
                   </Select>
               </FormControl>
