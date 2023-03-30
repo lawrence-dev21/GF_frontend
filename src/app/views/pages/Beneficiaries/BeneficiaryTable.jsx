@@ -105,7 +105,7 @@ const BeneficiaryTable = () => {
         {beneficiaries.length > 0 && (
         <Grid item padding={2}>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-          {authRoles.sa.includes(user.role) && (
+          {authRoles.sa.includes(user.role) && (                              
            
            <Button
            size="large"
