@@ -16,7 +16,7 @@ import { useSnackbar } from "notistack";
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { base64ToImage, isMobile } from '../../../utils/utils'
+import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addSchool } from '../../../redux/actions'
 import { useDispatch  } from 'react-redux'
@@ -29,7 +29,18 @@ const TextField = styled(TextValidator)(() => ({
 
 
 const SchoolForm = () => {
-	
+
+  const handleFileSelect = (event) => {
+    event.persist();
+    const file = event.target.files[0];
+    if (file) {
+      let formData = new FormData();
+      formData.append('files', file);
+      setState({...state, file: formData});
+    }
+    setSelectedFile(file ? file.name : null);
+  };
+  const [selectedFile, setSelectedFile] = useState(null);
   const { enqueueSnackbar } = useSnackbar();
     
   
@@ -60,24 +71,24 @@ const SchoolForm = () => {
 
 
 
-const handleFileUpload = (event) =>{
-    event.persist();
-    console.log(event.target)
-      const file = event.target.files[0]
-      if(file){
-        console.log('File Exists')
-        const reader = new FileReader();
-        console.log('File Reader initiated')
-        reader.onload =  _handleReaderLoaded
-        console.log('File Reader loaded')
-        reader.readAsBinaryString(file)
-      }
-    }
+// const handleFileUpload = (event) =>{
+//     event.persist();
+//     console.log(event.target)
+//       const file = event.target.files[0]
+//       if(file){
+//         console.log('File Exists')
+//         const reader = new FileReader();
+//         console.log('File Reader initiated')
+//         reader.onload =  _handleReaderLoaded
+//         console.log('File Reader loaded')
+//         reader.readAsBinaryString(file)
+//       }
+//     }
 
-const _handleReaderLoaded = (readerEvent) => {
-  let binaryString = readerEvent.target.result
-  setState({ ...state, avatar: base64ToImage(btoa(binaryString))})
-}
+      // const _handleReaderLoaded = (readerEvent) => {
+      //   let binaryString = readerEvent.target.result
+      //   setState({ ...state, avatar: base64ToImage(btoa(binaryString))})
+      // }
 
   const handleChange = (event) => {
     if(event.persist)
@@ -134,16 +145,23 @@ const _handleReaderLoaded = (readerEvent) => {
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
       <Divider />
       <h4 style={{marginTop: '16px'}}>Profile Image Upload</h4>
-      <Grid container spacing={6}>
-        <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
-          <input
-            type="file"
-            name="profileImage"
-            onChange={handleFileUpload}
-            style={{marginTop: '4px', marginBottom: '16px'}}
-          />
+        <Grid container spacing={6}>
+          <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
+          <Button variant="contained" component="label">
+        Upload
+        <input hidden accept=".pdf" type="file" onChange={handleFileSelect}/>
+           </Button>
+             {selectedFile && <p>file: {selectedFile}</p>}
+           
+            {/* <input
+              type="file"
+              name="fileUpload"
+              onChange={handleFileUpload}
+              style={{marginTop: '4px', marginBottom: '16px'}}
+            /> */}
+          </Grid>
         </Grid>
-      </Grid>
+
       <Divider style={{marginTop: '8px'}} />
       <h4 style={{marginTop: '16px'}}>School Details</h4>
         <Grid container spacing={6}>

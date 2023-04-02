@@ -26,8 +26,26 @@
     marginBottom: "16px",
   }));
 
+  
+   
 
   const ModuleForm = () => {
+    const handleFileSelect = (event) => {
+      event.persist();
+      const file = event.target.files[0];
+      if (file) {
+        let formData = new FormData();
+        formData.append('files', file);
+        setState({...state, file: formData});
+      }
+      setSelectedFile(file ? file.name : null);
+    };
+    
+
+    // setSelectedFile(file ? file.name : null);
+    
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const [state, setState] = useState({});
     const [loading, setLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -70,16 +88,16 @@
     };
 
 
-  const handleFileUpload = (event) =>{
-      event.persist();
-      console.log(event.target)
-        const file = event.target.files[0]
-        if(file){
-          let formData = new FormData();
-          formData.append('files', file)
-          setState({...state, file: formData})
-        }
-      }
+  // const handleFileUpload = (event) =>{
+  //     event.persist();
+  //     console.log(event.target)
+  //       const file = event.target.files[0]
+  //       if(file){
+  //         let formData = new FormData();
+  //         formData.append('files', file)
+  //         setState({...state, file: formData})
+  //       }
+  //     }
 
 
   // const _handleReaderLoaded = (readerEvent) => {
@@ -124,14 +142,22 @@
         <h4 style={{marginTop: '16px'}}>File Upload</h4>
         <Grid container spacing={6}>
           <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
-            <input
+          <Button variant="contained" component="label">
+        Upload
+        <input hidden accept=".pdf" type="file" onChange={handleFileSelect}/>
+           </Button>
+             {selectedFile && <p>file: {selectedFile}</p>}
+           
+            {/* <input
               type="file"
               name="fileUpload"
               onChange={handleFileUpload}
               style={{marginTop: '4px', marginBottom: '16px'}}
-            />
+            /> */}
           </Grid>
         </Grid>
+
+        
         <Divider style={{marginTop: '8px'}} />
         <h4 style={{marginTop: '16px'}}>Module Details</h4>
           <Grid container spacing={6}>
