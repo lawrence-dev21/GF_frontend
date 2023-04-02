@@ -21,7 +21,7 @@ const ModuleReducer = function (state = initialState, action) {
 		case ADD_MODULE: {
 			return {
 				...state,
-				moduleList: [...action.payload]
+				// moduleList: [...state.moduleList, action.payload]
 			}
 		}
 		default: {

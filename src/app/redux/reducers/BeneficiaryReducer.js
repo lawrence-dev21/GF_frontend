@@ -19,7 +19,7 @@ const ModuleReducer = function (state = initialState, action) {
 		case ADD_BENEFICIARY: {
 			return {
 				...state,
-				beneficiaryList: [...action.payload]
+				// beneficiaryList: [...state.beneficiaryList, action.payload]
 			}
 		}
 		default: {

@@ -23,7 +23,7 @@ const SchoolReducer = function (state = initialState, action) {
 		case ADD_SCHOOL: {
 			return {
 				...state,
-				schoolList: [...state.schoolList, ...action.payload]
+				// schoolList: [...state.schoolList, action.payload]
 			}
 		}
 		case DELETE_SCHOOL: {

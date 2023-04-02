@@ -24,13 +24,13 @@ const ModuleReducer = function (state = initialState, action) {
 		case ADD_CSE_ATTENDENCE: {
 			return {
 				...state,
-				cseAttendenceList: [...action.payload]
+				cseAttendenceList: [...state.cseAttendanceList, action.payload]
 			}
 		}
 		case ENROLL_CSE: {
 			return {
 				...state,
-				cseAttendenceList: [...action.payload]
+				cseAttendenceList: [...state.cseAttenceList, action.payload]
 			}
 		}
 		default: {
