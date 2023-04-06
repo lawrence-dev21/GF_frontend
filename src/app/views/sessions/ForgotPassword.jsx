@@ -28,10 +28,32 @@ const ForgotPasswordRoot = styled(JustifyBox)(() => ({
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('globalfund@gmail.com');
+  const [email, setEmail] = useState('');
 
-  const handleFormSubmit = () => {
-    console.log(email);
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:1337/auth/reset-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          url: 'http://localhost:3000/reset-password', // change this to your front-end reset password page URL
+        }),
+      });
+
+      if (response.ok) {
+        alert('A password reset email has been sent to your email address.');
+      } else {
+        alert('Failed to initiate password reset.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to initiate password reset.');
+    }
   };
 
   return (

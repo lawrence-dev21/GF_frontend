@@ -140,7 +140,7 @@
         <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
         <Divider />
         <h4 style={{marginTop: '16px'}}>File Upload</h4>
-        <Grid container spacing={6}>
+        <Grid container spacing={9}>
           <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
           <Button variant="contained" component="label">
         Upload
@@ -148,12 +148,6 @@
            </Button>
              {selectedFile && <p>file: {selectedFile}</p>}
            
-            {/* <input
-              type="file"
-              name="fileUpload"
-              onChange={handleFileUpload}
-              style={{marginTop: '4px', marginBottom: '16px'}}
-            /> */}
           </Grid>
         </Grid>
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Chip, Box, IconButton, Grid, Popover, List, ListItem, ListItemText } from '@mui/material';
+import { Chip, Box, IconButton, Grid, Popover, List, ListItem, ListItemText, Button, Typography } from '@mui/material';
 import MUIDataTable from 'mui-datatables';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import axiosInstance from 'axios';
@@ -152,9 +152,48 @@ const CSETable = () => {
   };
   return (
     <Grid container padding={2} rowSpacing={1.5} columnSpacing={2}>
-      <Grid item padding={2}>
-        <MUIDataTable title={'Comprehensive Sexual Education Clubs'} data={datalist} columns={columns} options={options} />
-      </Grid>
+        {datalist.length === 0 && (
+          <Grid paddingTop={10} container justifyContent="center" alignItems="center">
+            <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, textAlign: 'center' }} >
+              <Typography variant='h4' component="h3" align='center'>Sexual Reproductive Health
+              </Typography>
+              <Typography variant="body1" sx={{ mb: 2 }} align='center'>
+                No CSE club found. Click below to add one.
+              </Typography>
+              <Button 
+                size="large"
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                navigate('/add-cse');
+                }}
+              // put the button at the center 
+              >
+                Create New Club
+              </Button>
+            </Box>
+          </Grid>
+        )}
+         {datalist.length > 0 && (
+        <Grid item padding={2}>
+          <Grid item xs={12} sm={6} md={4} lg={3}>
+               <Button
+               size="large"
+               variant="contained"
+               color="primary"
+               onClick={() => {
+                   navigate('/add-cse');
+               }}
+           >
+               Add CSE
+           </Button>
+                  
+           </Grid>
+           <Grid item padding={1.5}>
+           <MUIDataTable title={'Comprehensive Sexual Education Clubs'} data={datalist} columns={columns} options={options} />
+                </Grid>
+        </Grid>
+      )}
     </Grid>
   );
 };

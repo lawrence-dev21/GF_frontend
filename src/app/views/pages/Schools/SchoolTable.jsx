@@ -110,6 +110,7 @@ const SchoolTable = () => {
             </Button>
                   )}
            </Grid>
+           <Grid item padding={1.5}>
           <MUIDataTable
             title={'Schools'}
             data={schools.map(school => {
@@ -124,6 +125,7 @@ const SchoolTable = () => {
             columns={columns}
             options={options}
           />
+          </Grid>
         </Grid>
       )}
     </Grid>

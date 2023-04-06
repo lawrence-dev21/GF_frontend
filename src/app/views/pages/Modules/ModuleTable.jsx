@@ -143,6 +143,7 @@ const ModuleTable = () => {
            </Button>
                   )}
            </Grid>
+           <Grid item padding={1.5}>
            <MUIDataTable title={'Modules'} data={modules.map(mod => {
                     return {
                             // mod.avatar,
@@ -153,6 +154,7 @@ const ModuleTable = () => {
                     }
                   
                 })} columns={columns} options={options} />
+                </Grid>
         </Grid>
       )}
 

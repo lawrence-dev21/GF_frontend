@@ -1,8 +1,8 @@
 
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import {styled } from "@mui/system";
 import { CSETable } from "./components";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 const Container = styled("div")(({ theme }) => ({
   margin: "30px",
   [theme.breakpoints.down("sm")]: { margin: "16px" },
@@ -17,11 +17,11 @@ const Container = styled("div")(({ theme }) => ({
 
 
 const CSE = () => {
-  const navigate  = useNavigate()
+  // const navigate  = useNavigate()
   return (
     <Container>
  <Typography variant="h5">CSE List</Typography>
-        <Button
+        {/* <Button
                     sx={{mb: 2, mt: 2}}
                     size="large"
                     variant="contained"
@@ -31,7 +31,7 @@ const CSE = () => {
                     }}
                 >
                   Add CSE
-          </Button>
+          </Button> */}
       <CSETable />
     </Container>
   );

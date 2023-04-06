@@ -14,11 +14,12 @@ import {
   OutlinedInput,
   CircularProgress
 } from "@mui/material";
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { useSnackbar } from 'notistack';
 import { Span } from "app/components/Typography";
 import {  useState, useRef, useEffect } from "react";
 import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
-import { base64ToImage, isMobile } from '../../../utils/utils'
+import { isMobile } from '../../../utils/utils'
 import { useTitle } from '../../../hooks/useTitle'
 import { addUser } from '../../../redux/actions/UserActions'
 import { useDispatch  } from 'react-redux'
@@ -62,26 +63,38 @@ const UserForm = () => {
     setLoading(false)
   }, 500)
   };
-
-
-const handleFileUpload = (event) =>{
+  const handleFileSelect = (event) => {
     event.persist();
-    console.log(event.target)
-      const file = event.target.files[0]
-      if(file){
-        console.log('File Exists')
-        const reader = new FileReader();
-        console.log('File Reader initiated')
-        reader.onload =  _handleReaderLoaded
-        console.log('File Reader loaded')
-        reader.readAsBinaryString(file)
-      }
+    const file = event.target.files[0];
+    if (file) {
+      let formData = new FormData();
+      formData.append('files', file);
+      setState({...state, file: formData});
     }
+    setSelectedFile(file ? file.name : null);
+  };
 
-const _handleReaderLoaded = (readerEvent) => {
-  let binaryString = readerEvent.target.result
-  setState({ ...state, avatar: base64ToImage(btoa(binaryString))})
-}
+  const [selectedFile, setSelectedFile] = useState(null);
+
+
+// const handleFileUpload = (event) =>{
+//     event.persist();
+//     console.log(event.target)
+//       const file = event.target.files[0]
+//       if(file){
+//         console.log('File Exists')
+//         const reader = new FileReader();
+//         console.log('File Reader initiated')
+//         reader.onload =  _handleReaderLoaded
+//         console.log('File Reader loaded')
+//         reader.readAsBinaryString(file)
+//       }
+//     }
+
+// const _handleReaderLoaded = (readerEvent) => {
+//   let binaryString = readerEvent.target.result
+//   setState({ ...state, avatar: base64ToImage(btoa(binaryString))})
+// }
 
   const handleChange = (event) => {
     if(event.persist)
@@ -146,16 +159,18 @@ const [systemRoles, setSystemRoles] = useState ([])
       <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
       <Divider />
         <h4 style={{marginTop: '16px'}}>Profile Image Upload</h4>
-       <Grid container spacing={6}>
-          <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4 }} style={{paddingTop: spacing.paddingTop}}>
-            <input
-              type="file"
-              name="profileImage"
-              onChange={handleFileUpload}
-              style={{marginTop: '4px', marginBottom: '16px'}}
-            />
+        <Grid container spacing={9}>
+          <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mt: 4, pt: 0 }} style={{paddingTop: spacing.paddingTop}}>
+          <Button variant="contained" aria-label="upload picture" component="label">
+        <input hidden accept="image/*"type="file" onChange={handleFileSelect}/>
+        <PhotoCamera/>
+           </Button>
+             {selectedFile && <p>file: {selectedFile}</p>}
+           
           </Grid>
         </Grid>
+
+
       <Divider />
          <h4 style={{marginTop: '16px'}}>Login Details</h4>
          <Grid container spacing={6}>
