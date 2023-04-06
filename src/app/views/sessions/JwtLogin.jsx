@@ -90,15 +90,15 @@ const JwtLogin = () => {
             <Typography variant="h5">
             Global Fund MIS
             </Typography></Typography>
-            <JustifyBox p={4} height="85%" sx={{ minWidth: 320 }}>
-              <img src="/assets/images/illustrations/zambia-coats-of-arm.jpg" width="85%" alt="" />
+            <JustifyBox p={3} height="65%" sx={{ minWidth: 320 }}>
+              <img src="/assets/images/illustrations/zambia-coats-of-arm.jpg" width="70%" alt="" />
             </JustifyBox>
           </Grid>
 
           <Grid item sm={6} xs={12}>
           <Typography variant="h5" align='center' paddingTop={1.5}>
             SIGN IN
-            </Typography>;
+            </Typography>
             <ContentBox>
               <Formik
                 onSubmit={handleFormSubmit}

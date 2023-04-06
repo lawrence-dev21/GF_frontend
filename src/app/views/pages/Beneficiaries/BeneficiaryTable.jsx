@@ -119,6 +119,7 @@ const BeneficiaryTable = () => {
        </Button>
                   )}
            </Grid>
+           <Grid item padding={1.5}>
            <MUIDataTable title={'Beneficiaries'} data={beneficiaries.map(beneficiary => {
                     return [
                             beneficiary?.attributes?.user?.data?.attributes?.avatar,
@@ -133,6 +134,7 @@ const BeneficiaryTable = () => {
                             beneficiary?.attributes?.parent?.data?.attributes?.users_permissions_user?.data?.attributes?.mobile,
                         ]
                 })} columns={columns} options={options} />
+                </Grid>
         </Grid>
       )}
         </Grid>
