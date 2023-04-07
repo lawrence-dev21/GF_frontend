@@ -1,7 +1,7 @@
 import { Grid, styled} from '@mui/material';
 import { Fragment } from 'react';
 import StatCards from './shared/StatCards';
-import { AdvanceAreaChart } from './echarts';
+import AttendanceChart from './shared/AttendanceChart';
 
 const ContentBox = styled('div')(({ theme }) => ({
   margin: '30px',
@@ -17,23 +17,31 @@ const Title = styled('span')(() => ({
 
 
 const Analytics = () => {
+
+  const data = [12, 19, 3, 5, 7];
+  const labels = ['2023-04-01', '2023-04-02', '2023-04-03', '2023-04-04', '2023-04-05'];
+  const title = 'Attendance';
+
   return (
     <Fragment>
       <ContentBox className="analytics">
         <Grid container spacing={3}>
-          <Grid item lg={4} md={4} sm={12} xs={12}>
-
+          <Grid item sx={{ mb: 0}}>
            <Title>Global Fund Management System</Title>
           </Grid>
-         
-          <Grid item lg={8} md={8} sm={12} xs={12}>
-            <AdvanceAreaChart />
-          </Grid>
-          <Grid item lg={8} md={8} sm={12} xs={12}>
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
             <StatCards />
           </Grid>
-
-         
+        </Grid>
+        <Grid container spacing={3} sx={{mt: 4}}>
+          <Grid item lg={6} md={6} sm={6} xs={6}>
+              <AttendanceChart data={data} labels={labels} title={title} />
+          </Grid>
+          <Grid item lg={6} md={6} sm={6} xs={6}>
+              <AttendanceChart data={data} labels={labels} title={title} />
+          </Grid>
         </Grid>
       </ContentBox>
     </Fragment>

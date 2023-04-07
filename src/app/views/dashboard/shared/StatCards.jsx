@@ -1,15 +1,12 @@
   import  { useState, useEffect } from 'react'
-import { Box, Card, Grid, Icon, IconButton, styled, Tooltip } from '@mui/material';
+import { Box, Card, Grid, Icon, Button, styled, Tooltip, useTheme } from '@mui/material';
 import { Small } from 'app/components/Typography';
-import { getModules } from 'app/redux/actions'
 import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch  } from 'react-redux'
+import axiosInstance from 'axios';
+// import the theme
+
 const StyledCard = styled(Card)(({ theme }) => ({
-  display: 'flex',
-  flexWrap: 'wrap',
   alignItems: 'center',
-  justifyContent: 'space-between',
-  padding: '24px !important',
   background: theme.palette.background.paper,
   [theme.breakpoints.down('sm')]: { padding: '16px !important' },
 }));
@@ -17,6 +14,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
 const ContentBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
+  padding: '24px !important',
   alignItems: 'center',
   '& small': { color: theme.palette.text.secondary },
   '& .icon': { opacity: 0.6, fontSize: '44px', color: theme.palette.primary.main },
@@ -30,38 +28,66 @@ const Heading = styled('h6')(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
-const selectModules = state => state.modules.moduleList
 const StatCards = () => {
+  const theme = useTheme()  
+
   const navigate = useNavigate();
   const [cardList, setCardList] = useState([])
-  const dispatch = useDispatch() 
-  const modules = useSelector(selectModules)
-  const [count, setCount] = useState(null)
-  const [gender, setGender] = useState(null)
+  const [ gfmisDistricts, setGfmisDistricts] = useState(null)
+  const [ gfmisSchools, setGfmisSchools ] = useState(null)
+  const [ gfmisStudents, setGfmisStudents ] = useState(null)
+  const [ cseMaterials, setCSEMaterials ] = useState(null)
+
+
   useEffect(() => {
-      if(!count){
-        fetch('/api/student-count').then(({data}) => setCount(data))
-      }
-if(!gender){
-        fetch('/api/student-gender-count').then(({data}) => setGender(data))
-}
-      if(!modules.length){
-          dispatch(getModules())
-      }
+    axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/v1-get-district-count`)
+    .then(response => {
+      setGfmisDistricts(response.data.count)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/schools`)
+    .then(response => {
+      console.log(response.data.meta.pagination.total)
+      setGfmisSchools(response.data.meta.pagination.total)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/students`)
+    .then(response => {
+      console.log(response.data.meta.pagination.total)
+      setGfmisStudents(response.data.meta.pagination.total)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/modules`)
+    .then(response => {
+      console.log(response.data.meta.pagination.total)
+      setCSEMaterials(response.data.meta.pagination.total)
+    })
+    .catch(error => {
+      console.log(error)
+    })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, count])
+  }, [])
+
   useEffect(()=> {
-    if(!cardList.length){
-      setCardList([...cardList,
-          { name: 'Modules', amount: modules.length, icon: 'book', link: '/modules' }])
-    }
+      setCardList([
+        { name: 'Global Fund Districts', amount: gfmisDistricts, icon: 'public', link: '/' },
+        { name: 'Global Fund Schools', amount: gfmisSchools, icon: 'school', link: '/schools' },
+        { name: 'Global Fund Learners', amount: gfmisStudents, icon: 'people', link: '/beneficiaries' },
+        { name: 'Learning Materials', amount: cseMaterials, icon: 'book', link: '/modules' },
+        ])
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modules,count])
+  }, [gfmisDistricts,gfmisSchools,gfmisStudents,cseMaterials])
 
   return (
-    <Grid container spacing={3} sx={{ mb: '24px' }}>
+    <Grid container spacing={3} sx={{ mt: '24px' }}>
       {cardList.map((item, index) => (
-        <Grid item xs={12} md={6} key={index}>
+        <Grid item xs={6} md={3} lg={3} key={index}>
           <StyledCard elevation={6}>
             <ContentBox>
               <Icon className="icon">{item.icon}</Icon>
@@ -70,12 +96,13 @@ if(!gender){
                 <Heading>{item.amount}</Heading>
               </Box>
             </ContentBox>
-
-            <Tooltip title="View Details" placement="top">
-              <IconButton onClick={() => navigate(item.link)}>
-                <Icon>arrow_right_alt</Icon>
-              </IconButton>
-            </Tooltip>
+            <Box sx={{ backgroundColor: theme.palette.primary.main, color: 'white', px: 2, py: 1, display: 'flex', justifyContent: 'auto'}}>
+              <Tooltip title="View Details" placement="top">
+                <Button sx={{color: 'white'}} onClick={() => navigate(item.link)}>
+                    View Details
+                </Button>
+              </Tooltip>
+            </Box>
           </StyledCard>
         </Grid>
       ))}
