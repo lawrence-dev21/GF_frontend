@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import axiosInstance from "axios";
 import useAuth from "app/hooks/useAuth";
+import { useNavigate } from "react-router-dom"
+import { useSnackbar } from "notistack";
 
 export const useCSEForm = () => {
   const [state, setState] = useState({});
   const [topics, setTopics] = useState([]);
   const [grades, setGrades] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (topics.length === 0) {
@@ -33,6 +38,7 @@ export const useCSEForm = () => {
   }, [topics.length, grades.length]);
 
   const handleSubmit = (event) => {
+    setLoading(true)
     event.preventDefault();
     const payload = {
       data: {
@@ -48,12 +54,15 @@ export const useCSEForm = () => {
 
     axiosInstance
       .post(`${process.env.REACT_APP_BACKEND}api/cses`, payload)
-      .then((response) => {
+      .then(() => {
         console.log("Form submitted successfully");
+        enqueueSnackbar("Form submitted successfully", {variant: 'success'})
+        navigate('/cse')
       })
       .catch((error) => {
         console.error("Error submitting form:", error);
-      });
+      })
+      .finally(() => setLoading(false))
   };
 
   const handleChange = (event) => {
@@ -61,5 +70,5 @@ export const useCSEForm = () => {
     setState((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  return { state, topics, grades, handleChange, handleSubmit };
+  return { loading, state, topics, grades, handleChange, handleSubmit };
 };

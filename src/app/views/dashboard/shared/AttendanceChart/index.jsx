@@ -2,9 +2,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { BarElement, BarController, Chart, CategoryScale, LinearScale } from 'chart.js';
-import { useTheme, Card } from '@mui/material';
-// import { lch } from 'd3-color';
-// import { quantize, interpolateLch } from 'd3-interpolate';
+import { Card } from '@mui/material';
 import { interpolateRgb } from 'd3-interpolate';
 
 
@@ -43,7 +41,6 @@ const AttendanceChart = ({ data, labels, title }) => {
     return colorInterpolator(normalizedValue);
   });
   
-  const theme = useTheme();
   const chartData = {
     labels: labels,
     datasets: [

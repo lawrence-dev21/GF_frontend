@@ -73,7 +73,7 @@ const CSEAttendenceForm = () => {
     dispatch(addCSEAttendence({cse: id, cse_topic: state.topicId, totalRegistered: cseStudents.length, ...state}))
     setTimeout(() => {
     enqueueSnackbar('Attendence sucessfully entered', { variant: 'success'})
-    navigate('/cse')
+    navigate('/cse/'+ id)
     setLoading(false)
   }, 500)
   };

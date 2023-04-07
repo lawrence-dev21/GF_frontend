@@ -21,6 +21,7 @@ import { useTitle } from '../../../hooks/useTitle'
 import { addSchool } from '../../../redux/actions'
 import { useDispatch  } from 'react-redux'
 import axiosInstance from "axios";
+import { useNavigate } from "react-router-dom"
 
 const TextField = styled(TextValidator)(() => ({
   width: "100%",
@@ -29,6 +30,7 @@ const TextField = styled(TextValidator)(() => ({
 
 
 const SchoolForm = () => {
+  const navigate = useNavigate();
 
   const handleFileSelect = (event) => {
     event.persist();
@@ -62,12 +64,15 @@ const SchoolForm = () => {
     setLabelwidth(inputLabel.current.offsetWidth);
   }, []);
 
-  const handleSubmit = async (event) => {
-    const message = await dispatch(addSchool({...state, province: state.provinceId, district: state.districtId}))
-    if(message.message)
-    enqueueSnackbar(message.message, {variant: 'error'})
+
+  const handleSubmit = (event) => {
+    dispatch(addSchool({...state, province: state.provinceId, district: state.districtId}))
+    setTimeout(() => {
+    enqueueSnackbar('Attendence sucessfully entered', { variant: 'success'})
+    navigate('/schools/')
     setLoading(false)
-  }
+  }, 500)
+  };
 
 
 
