@@ -1,4 +1,4 @@
-import { Grid, styled, Skeleton} from '@mui/material';
+import { Grid, styled} from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import StatCards from './shared/StatCards';
 import AttendanceChart from './shared/AttendanceChart';
@@ -75,21 +75,18 @@ const Analytics = () => {
           </Grid>
         </Grid>
         <Grid container spacing={3} sx={{mt: 4}}>
-          { data.length ? 
-          <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Title>Sexual Reproductive Health</Title>
-              <AttendanceChart data={data} labels={labels} title={title} />
-          </Grid>
-        : 
-        <Skeleton animation="wave" height={400} width={300} />
-          }
-          { data.length ? 
-          <Grid item lg={6} md={6} sm={6} xs={6}>
-              <Title>Sexual Reproductive Health</Title>
-              <AttendanceChart data={data2} labels={labels2} title={title} />
-          </Grid>
-        : 
-        <Skeleton animation="wave" height={400} />
+          { data.length && 
+          (
+          <>
+            <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Title>Sexual Reproductive Health</Title>
+                <AttendanceChart data={data} labels={labels} title={title} />
+            </Grid>
+            <Grid item lg={6} md={6} sm={6} xs={6}>
+                <Title>Sexual Reproductive Health</Title>
+                <AttendanceChart data={data2} labels={labels2} title={title} />
+            </Grid>
+          </>)
           }
         </Grid>
       </ContentBox>
