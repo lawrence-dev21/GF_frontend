@@ -19,11 +19,11 @@ export const navigations = [
     ]
   },
   {
-    name: 'CSE',
+    name: 'SRH Management',
     icon: 'menu_book',
     children: [
-      { name: 'CSE', iconText: 'MO', path: '/cse' },
-      { name: 'Add CSE', iconText: 'CS', path: '/add-cse' },
+      { name: 'SRH', iconText: 'MO', path: '/cse' },
+      { name: 'Add SRH', iconText: 'CS', path: '/add-cse' },
       { name: 'Learning Materials', iconText: 'LM', path: '/modules'}
     ],
   },

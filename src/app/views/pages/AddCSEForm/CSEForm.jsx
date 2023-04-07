@@ -47,7 +47,7 @@ const CSEForm = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControl fullWidth variant="outlined">
-            <InputLabel htmlFor="cse-topics-select">CSE Topics</InputLabel>
+            <InputLabel htmlFor="cse-topics-select">SRH Topics</InputLabel>
             <Select
               multiple
               value={state.topics || []}

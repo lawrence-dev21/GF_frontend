@@ -17,7 +17,7 @@ const AddCSEForm = () => {
   return (
     <Container>
      <Stack spacing={3}>
-        <SimpleCard title="Add CSE">
+        <SimpleCard title="Add SRH">
           <CSEForm />
         </SimpleCard>
       </Stack>

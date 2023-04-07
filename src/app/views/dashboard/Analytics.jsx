@@ -1,7 +1,8 @@
-import { Grid, styled} from '@mui/material';
-import { Fragment } from 'react';
+import { Grid, styled, Skeleton} from '@mui/material';
+import { Fragment, useEffect, useState } from 'react';
 import StatCards from './shared/StatCards';
 import AttendanceChart from './shared/AttendanceChart';
+import axiosInstance from 'axios';
 
 const ContentBox = styled('div')(({ theme }) => ({
   margin: '30px',
@@ -17,9 +18,47 @@ const Title = styled('span')(() => ({
 
 
 const Analytics = () => {
+  const processData = (response) => {
+    console.log(response)
+    console.log('Response Data',response.data)
+    const dataMap = new Map();
 
-  const data = [12, 19, 3, 5, 7];
-  const labels = ['2023-04-01', '2023-04-02', '2023-04-03', '2023-04-04', '2023-04-05'];
+    response.data.forEach((attendance) => {
+      console.log('attendance', attendance)
+        const date = new Date(attendance.attributes.publishedAt).toISOString().slice(0, 10);
+        const studentsCount = attendance.attributes.students.data.length;
+
+        if (dataMap.has(date)) {
+            dataMap.set(date, dataMap.get(date) + studentsCount);
+        } else {
+            dataMap.set(date, studentsCount);
+        }
+    });
+
+    const data = [];
+    const labels = [];
+
+    dataMap.forEach((value, key) => {
+        labels.push(key);
+        data.push(value);
+    });
+
+    return { data, labels };
+};
+  const [ data, setData ] = useState([]);
+  const [ labels, setLabels ] = useState(['2023-04-01', '2023-04-02', '2023-04-03', '2023-04-04', '2023-04-05']);
+  const [ data2 ] = useState([12, 19, 3, 5, 7]);
+  const [ labels2 ] = useState(['2023-04-01', '2023-04-02', '2023-04-03', '2023-04-04', '2023-04-05']);
+
+  useEffect(() => {
+    axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/attendences?populate=students`)
+      .then(res => processData(res.data))
+      .then(({data, labels}) => {
+                                setData(data);
+                               setLabels(labels);
+                              })
+  }, [])
+  
   const title = 'Attendance';
 
   return (
@@ -36,12 +75,22 @@ const Analytics = () => {
           </Grid>
         </Grid>
         <Grid container spacing={3} sx={{mt: 4}}>
+          { data.length ? 
           <Grid item lg={6} md={6} sm={6} xs={6}>
+              <Title>Sexual Reproductive Health</Title>
               <AttendanceChart data={data} labels={labels} title={title} />
           </Grid>
+        : 
+        <Skeleton animation="wave" height={400} width={300} />
+          }
+          { data.length ? 
           <Grid item lg={6} md={6} sm={6} xs={6}>
-              <AttendanceChart data={data} labels={labels} title={title} />
+              <Title>Sexual Reproductive Health</Title>
+              <AttendanceChart data={data2} labels={labels2} title={title} />
           </Grid>
+        : 
+        <Skeleton animation="wave" height={400} />
+          }
         </Grid>
       </ContentBox>
     </Fragment>

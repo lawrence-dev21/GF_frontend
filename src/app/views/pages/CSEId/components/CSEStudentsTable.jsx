@@ -59,7 +59,7 @@ const CSEStudentsTable = ({cseId}) => {
             <Grid item xs={12} sm={6} md={4} lg={3}>
             </Grid>
             <Grid item padding={2}>
-                <MUIDataTable title={'Comprehensive Sexual Education materials'} data={datalist} columns={columns} options={options} />
+                <MUIDataTable title={'Sexual Reproductive Health materials'} data={datalist} columns={columns} options={options} />
             </Grid>
         </Grid>
     );

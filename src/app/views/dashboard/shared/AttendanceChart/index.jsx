@@ -49,7 +49,7 @@ const AttendanceChart = ({ data, labels, title }) => {
         data: data,
         backgroundColor: backgroundColors,
         // backgroundColor: generateShadesOfBlue([theme.palette.primary.main]).map((color) => color.opacity(0.2)),
-        barPercentage: 0.6,
+        // barPercentage: 0.6,
         borderWidth: .6,
         borderRadius: 5,
         barElement: RoundedBarElement,
@@ -78,6 +78,10 @@ const AttendanceChart = ({ data, labels, title }) => {
         grid: {
           display: false
         },
+        ticks: {
+          callback: (value) => Math.round(value), // Round the value to remove decimals
+          beginAtZero: true
+      },
         display: true,
         title: {
           display: true,

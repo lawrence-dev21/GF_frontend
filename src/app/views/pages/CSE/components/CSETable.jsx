@@ -190,7 +190,7 @@ const CSETable = () => {
                   
            </Grid>
            <Grid item padding={1.5}>
-           <MUIDataTable title={'Comprehensive Sexual Education Clubs'} data={datalist} columns={columns} options={options} />
+           <MUIDataTable title={'Sexual Reproductive Health Clubs'} data={datalist} columns={columns} options={options} />
                 </Grid>
         </Grid>
       )}
