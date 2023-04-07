@@ -1,7 +1,8 @@
   import  { useState, useEffect } from 'react'
-import { Box, Card, Grid, Icon, Button, styled, Tooltip, useTheme } from '@mui/material';
+import { Skeleton, Box, Card, Grid, Icon, Button, styled, Tooltip, useTheme } from '@mui/material';
 import { Small } from 'app/components/Typography';
 import { useNavigate } from 'react-router-dom'
+
 import axiosInstance from 'axios';
 // import the theme
 
@@ -88,22 +89,27 @@ const StatCards = () => {
     <Grid container spacing={3} sx={{ mt: '24px' }}>
       {cardList.map((item, index) => (
         <Grid item xs={6} md={3} lg={3} key={index}>
+          {item.amount ? 
           <StyledCard elevation={6}>
-            <ContentBox>
-              <Icon className="icon">{item.icon}</Icon>
-              <Box ml="12px">
-                <Small>{item.name}</Small>
-                <Heading>{item.amount}</Heading>
-              </Box>
-            </ContentBox>
-            <Box sx={{ backgroundColor: theme.palette.primary.main, color: 'white', px: 2, py: 1, display: 'flex', justifyContent: 'auto'}}>
-              <Tooltip title="View Details" placement="top">
-                <Button sx={{color: 'white'}} onClick={() => navigate(item.link)}>
-                    View Details
-                </Button>
-              </Tooltip>
+          <ContentBox>
+            <Icon className="icon">{item.icon}</Icon>
+            <Box ml="12px">
+              <Small>{item.name}</Small>
+              <Heading>{item.amount}</Heading>
             </Box>
-          </StyledCard>
+          </ContentBox>
+          <Box sx={{ backgroundColor: theme.palette.primary.main, color: 'white', px: 2, py: 1, display: 'flex', justifyContent: 'auto'}}>
+            <Tooltip title="View Details" placement="top">
+              <Button sx={{color: 'white'}} onClick={() => navigate(item.link)}>
+                  View Details
+              </Button>
+            </Tooltip>
+          </Box>
+        </StyledCard>  
+        : 
+        <Skeleton animation="wave" height={190} />
+        }
+        
         </Grid>
       ))}
     </Grid>
