@@ -24,6 +24,32 @@ export const addModule = (module) => (dispatch) => {
 	      type: ADD_MODULE,
 	      payload: data
 	    });	
+		dispatch(getModules());
 	})
 }
+export const deleteModule = (moduleId) => (dispatch) => {
+	axiosInstance.delete(`http://localhost:1337/api/modules/${moduleId}`)
+	  .then(() => {
+		dispatch({
+		  type: DELETE_MODULE,
+		  payload: moduleId
+		});	
+		dispatch(getModules());
+	  })
+	  .catch(err => console.log(err));
+  }
+  
+  export const updateModule = (moduleId, updatedModule) => (dispatch) => {
+	const payload = {
+	  data: updatedModule
+	}
+	axiosInstance.put(`http://localhost:1337/api/modules/${moduleId}`, payload)
+	  .then(({ data }) => {
+		dispatch({
+		  type: UPDATE_MODULE,
+		  payload: data
+		});	
+	  })
+	  .catch(err => console.log(err));
+  }
 

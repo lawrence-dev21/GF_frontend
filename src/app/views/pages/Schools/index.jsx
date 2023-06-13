@@ -1,4 +1,4 @@
-
+import { Typography } from "@mui/material";
 import {styled } from "@mui/system";
 import SchoolTable from "./SchoolTable";
 
@@ -14,6 +14,7 @@ const Container = styled("div")(({ theme }) => ({
 const Schools = () => {
   return (
     <Container>
+      <Typography variant="h5">Global Fund Schools</Typography>
          <SchoolTable/>
     </Container>
   );

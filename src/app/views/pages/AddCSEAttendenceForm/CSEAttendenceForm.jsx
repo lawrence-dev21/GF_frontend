@@ -39,6 +39,18 @@ const columns = [
 
 const CSEAttendenceForm = () => {
   useTitle(': Attendence Sheet')
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const handleChange1 = (event) => {
+    const selectedDate = event.target.value;
+    const currentDate = new Date().toISOString().slice(0, 10);
+
+    if (selectedDate <= currentDate) {
+      setDate(selectedDate);
+    } else {
+      // Handle invalid date selection (e.g., show an error message)
+      alert('You can not take a register for future date');
+    }
+  };
 
   const [state, setState] = useState({});
   const { id } = useParams()
@@ -56,7 +68,6 @@ const CSEAttendenceForm = () => {
   const inputLabel = useRef(null);
   const [labelwidth, setLabelwidth] = useState(0);
   const {
-    date,
     topicId,
   } = state;
 
@@ -134,14 +145,14 @@ const CSEAttendenceForm = () => {
       <Divider style={{marginTop: '8px'}} />
        <h4 style={{marginTop: '16px'}}>Attendence details</h4>
         <Grid container spacing={6}>
-            <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }}  style={{paddingTop: spacing.paddingTopUnder}}>
-                <TextField
+        <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{ paddingTop: spacing.paddingTopUnder }}>
+              <TextField
                 label="Date"
                 type="date"
                 name="date"
                 value={date}
-                onChange={handleChange}
-                defaultValue={new Date().toISOString().slice(0, 10)}
+                onChange={handleChange1}
+                defaultValue={date}
                 InputLabelProps={{
                   shrink: true,
                 }}

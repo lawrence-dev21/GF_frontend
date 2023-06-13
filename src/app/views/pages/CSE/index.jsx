@@ -13,21 +13,9 @@ const Container = styled("div")(({ theme }) => ({
 }));
 
 const CSE = () => {
-  // const navigate  = useNavigate()
   return (
     <Container>
  <Typography variant="h5">Sexual Reproductive Health Clubs</Typography>
-        {/* <Button
-                    sx={{mb: 2, mt: 2}}
-                    size="large"
-                    variant="contained"
-                    color="primary"
-                       onClick={() => {
-                        navigate('/add-cse');
-                    }}
-                >
-                  Add CSE
-          </Button> */}
       <CSETable />
     </Container>
   );

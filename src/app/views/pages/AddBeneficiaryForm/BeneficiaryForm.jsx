@@ -84,6 +84,8 @@ const {
     gradeId,
     parentFirstName,
     parentLastName,
+    districtId,
+    provinceId,
     parentNRC,
     parentMobile,
     parentAddress,
@@ -92,16 +94,66 @@ const {
   const [schools, setSchools] = useState([])
   const [grades, setGrades] = useState([])
   const [parent, setParent] = useState(null)
+  const [ provinces, setProvinces ] = useState([])
+  const [ districts, setDistricts ] = useState([])
+
+  useEffect(() => {
+    if(provinces.length === 0){
+      console.log('Fetching Provinces')
+      axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/provinces`)
+      .then(({data: {data}}) => {
+        console.log(data)
+        setProvinces(data.map(province => {
+          return {label: province.attributes.name, value: province.id}
+        }))})
+      }
+ 
+  }, [provinces.length]);
+
+  useEffect(() => {
+    if(provinceId){ 
+      const param = encodeURI(`?filters[province][id][$eq]=${provinceId}`)
+      console.log(encodeURI(param))
+      const accessToken = localStorage.getItem('accessToken')
+      fetch(`${process.env.REACT_APP_BACKEND}api/districts${param}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }      
+      })
+      .then(res => res.json()) 
+      .then(({data}) => {
+        console.log(data)
+        setDistricts(data.map(district => {
+          return {label: district.attributes.name, value: district.id}
+        }))
+      })
+    }
+  }, [provinceId]);
+
+  useEffect(() => {
+    if(districtId){ 
+      const param = encodeURI(`?filters[district][id][$eq]=${districtId}`)
+      console.log(encodeURI(param))
+      const accessToken = localStorage.getItem('accessToken')
+      fetch(`${process.env.REACT_APP_BACKEND}api/schools${param}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }      
+      })
+      .then(res => res.json()) 
+      .then(({data}) => {
+        console.log(data)
+        setSchools(data.map(school => {
+          return {label: school.attributes.name, value: school.id}
+        }))
+      })
+    }
+  }, [districtId]);
+  
 
   useEffect(() => {
     if(schools.length === 0 && grades.length === 0){
       setState({...state, gender:'Male'})
-        axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/schools`)
-        .then(({data: {data}}) => {
-             setSchools(data.map(school => {
-              return {label: school.attributes.name, value: school.id}
-             }))
-          })
           axiosInstance.get(`${process.env.REACT_APP_BACKEND}api/grades`)
           .then(({data: {data}}) => {
                setGrades(data.map(grade => {
@@ -232,6 +284,58 @@ const {
       <h4 style={{marginTop: '16px'}}>Beneficiary School Details</h4>
 
       <Grid container spacing={6}>
+      <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel shrink ref={inputLabel} htmlFor="province-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Province</InputLabel>
+                <Select
+                  labelId="province-select"
+                  id="mtx-province-select"
+                  name="provinceId"
+                  value={provinceId || ""}
+                  label="Province"
+                  disabled={provinces.length === 0}
+                  onChange={handleChange}
+                  input={
+                    <OutlinedInput
+                      notched
+                      labelwidth={labelwidth}
+                      name="age"
+                      id="province-select"
+                    />
+                  }
+                >
+                  {provinces && provinces.map(province =>
+                    <MenuItem value={province.value} key={province.value}>{province.label}</MenuItem>
+                  )}
+                </Select>
+            </FormControl>
+          </Grid>
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 4 }}  style={{paddingTop: spacing.paddingTop}}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel shrink ref={inputLabel} htmlFor="district-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>District</InputLabel>
+              <Select
+                labelId="district-select"
+                id="mtx-district-select"
+                name="districtId"
+                value={districtId || ""}
+                label="District"
+                onChange={handleChange}
+                disabled={districts.length === 0}
+                input={
+                  <OutlinedInput
+                    notched
+                    labelwidth={labelwidth}
+                    name="district"
+                    id="district-select"
+                  />
+                }
+              >
+                {districts && districts.map(district =>
+                  <MenuItem value={district.value} key={district.value}>{district.label}</MenuItem>
+                )}
+              </Select>
+            </FormControl>
+        </Grid>
          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: spacing.marginTop }} style={{paddingTop: spacing.paddingTop}}>
             <FormControl fullWidth variant="outlined">
                 <InputLabel shrink ref={inputLabel} htmlFor="school-select" style={{backgroundColor: '#FFF', paddingLeft: 8, paddingRight: 8}}>Insitution</InputLabel>
