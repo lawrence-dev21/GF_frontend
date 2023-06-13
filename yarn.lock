@@ -4888,6 +4888,18 @@ cyclist@^1.0.1:
   resolved "https://registry.npmjs.org/cyclist/-/cyclist-1.0.1.tgz"
   integrity sha512-NJGVKPS81XejHcLhaLJS7plab0fK3slPh11mESeeDq2W4ZI5kUKK/LRRdVDvjJseojbPB7ZwjnyOybg3Igea/A==
 
+"d3-color@1 - 3", d3-color@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-3.1.0.tgz#395b2833dfac71507f12ac2f7af23bf819de24e2"
+  integrity sha512-zg/chbXyeBtMQ1LbD/WSoW2DpC3I0mpmPdW+ynRTj/x2DAWYrIY7qeZIHidozwV24m4iavr15lNwIwLxRmOxhA==
+
+d3-interpolate@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-3.0.1.tgz#3c47aa5b32c5b3dfb56ef3fd4342078a632b400d"
+  integrity sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==
+  dependencies:
+    d3-color "1 - 3"
+
 d@1, d@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/d/-/d-1.0.1.tgz"
@@ -6899,6 +6911,11 @@ ignore@^5.1.4, ignore@^5.1.8, ignore@^5.2.0:
   version "5.2.0"
   resolved "https://registry.npmjs.org/ignore/-/ignore-5.2.0.tgz"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
+
+imask@^6.6.2:
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/imask/-/imask-6.6.2.tgz#55ecb868201b5c5b7d4c8fd0862d1f6f211bd3bc"
+  integrity sha512-ZcwCYw8zeA0QBSwsebSZUmNLuzXDRdVhgsL/fBf6zfbCXBsdyLvtuYHQh5CFXpm+//Q1u9PuL5YRb95eQl1eCQ==
 
 immer@8.0.1:
   version "8.0.1"
@@ -10631,6 +10648,14 @@ react-form-validator-core@1.1.2:
     promise-polyfill "8.1.0"
     prop-types "^15.0.0"
     react-lifecycles-compat "^3.0.2"
+
+react-imask@^6.4.3:
+  version "6.6.2"
+  resolved "https://registry.yarnpkg.com/react-imask/-/react-imask-6.6.2.tgz#badf1c945481d3ce6b43e0525592a044278e4401"
+  integrity sha512-Qx5WTMjz7rOg/B+iQiox2JxJfQ/V8KG4BBz9EEcxiMF0t2ua0HD5qqQwULNT+mO8CFssR2+mchpLWseHEWCZ3w==
+  dependencies:
+    imask "^6.6.2"
+    prop-types "^15.8.1"
 
 react-infinite-scroll-component@^6.1.0:
   version "6.1.0"
