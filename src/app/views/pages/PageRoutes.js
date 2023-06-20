@@ -10,6 +10,9 @@ const AddUserForm = Loadable(lazy(() => import('./AddUserForm')));
 const School = Loadable(lazy(() => import('./Schools')));
 const AddSchoolForm = Loadable(lazy(() => import('./AddSchoolForm')));
 
+// Payment Modules
+const PaymentChecklist = Loadable(lazy(() => import('./pdf')));
+
 
 // Module Management
 const Module = Loadable(lazy(() => import('./Modules')));
@@ -47,6 +50,11 @@ const pageRoutes = [
     element: <AddUserForm/>,
     auth: authRoles.admin,
   },
+  {
+    path: '/pdf',
+    element: <PaymentChecklist/>,
+  },
+  
   {
     path: '/schools',
     element: <School/>,

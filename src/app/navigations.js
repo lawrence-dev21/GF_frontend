@@ -33,10 +33,16 @@ export const navigations = [
     children: [
       { name: 'Beneficiaries', iconText: 'YS', path: '/beneficiaries' },
       { name: 'Add Beneficiaries', iconText: 'YS', path: '/add-beneficiaries', auth: authRoles.editor },
-
-
     ],auth: authRoles.admin
   },
+  {
+    name: 'Payment Module',
+    icon: 'money',
+    children: [
+      { name: 'Payment checklist', iconText: 'YS', path: '/pdf' },
+      ],auth: authRoles.admin
+  },
+
   // {
   //   name: 'CSE',
   //   icon: 'menu_book',
