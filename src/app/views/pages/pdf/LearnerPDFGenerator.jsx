@@ -147,7 +147,7 @@ const LearnerPDFGenerator = () => {
       (beneficiary) => beneficiary.attributes.school?.data?.id === selectedSchool
     );
   // Generate the table headers
-  const headers = ['No.', 'Name', 'Grade', 'DOB', 'Verified'];
+  const headers = ['No.', 'Name', 'Grade', 'DOB', 'Present'];
   const data = filteredBeneficiaries.map((beneficiary, index) => [
     index + 1,
     beneficiary?.attributes?.user?.data?.attributes?.firstName + ' ' + beneficiary?.attributes?.user?.data?.attributes?.lastName,
@@ -217,7 +217,7 @@ const LearnerPDFGenerator = () => {
       (beneficiary) => beneficiary.attributes.school?.data?.id === selectedSchool
     );
   // Generate the table headers
-  const headers = ['No.', 'Name', 'Grade', 'DOB', 'Verified'];
+  const headers = ['No.', 'Name', 'Grade', 'DOB', 'Present'];
   const data = filteredBeneficiaries.map((beneficiary, index) => [
     index + 1,
     beneficiary?.attributes?.user?.data?.attributes?.firstName + ' ' + beneficiary?.attributes?.user?.data?.attributes?.lastName,

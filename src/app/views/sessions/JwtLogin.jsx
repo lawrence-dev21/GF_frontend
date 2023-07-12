@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Card, Checkbox, Grid, TextField, Typography } from '@mui/material';
+import { Card, Checkbox, Grid, TextField, Typography, AppBar, Toolbar } from '@mui/material';
 import { Box, styled, useTheme } from '@mui/system';
 import { Paragraph } from 'app/components/Typography';
 import useAuth from 'app/hooks/useAuth';
@@ -25,8 +25,8 @@ const JWTRoot = styled(JustifyBox)(() => ({
   background: '#1A2038',
   minHeight: '100% !important',
   '& .card': {
-    maxWidth: 800,
-    minHeight: 400,
+    maxWidth: 635,
+    minHeight: 340,
     margin: '1rem',
     display: 'flex',
     borderRadius: 12,
@@ -82,19 +82,23 @@ const JwtLogin = () => {
 
   return (
     <JWTRoot>
+     <AppBar position="fixed" sx={{ backgroundColor: 'Primary', marginBottom: '1rem' }}>
+      <Toolbar>
+        <img src="/assets/images/illustrations/zambia.png" alt="Logo" style={{ height: '82px', marginRight: '10px' }} />
+      </Toolbar>
+      </AppBar>
       <Card className="card">
         <Grid container>
           <Grid item sm={6} xs={12}>
-          <Typography variant="h4" align='center' paddingTop={1.5} >
+          <Typography variant="h5" align='center' paddingTop={1.5} >
             Ministry of Education
-            <Typography variant="h5">
-            Global Fund MIS
+            <Typography variant="h6">
+            GFMIS
             </Typography></Typography>
-            <JustifyBox p={3} height="65%" sx={{ minWidth: 320 }}>
-              <img src="/assets/images/illustrations/zambia-coats-of-arm.jpg" width="70%" alt="" />
+            <JustifyBox p={3} height="65%" sx={{ minWidth: 250 }}>
+              <img src="/assets/images/illustrations/logo.jpg" width="80%" alt="" />
             </JustifyBox>
           </Grid>
-
           <Grid item sm={6} xs={12}>
           <Typography variant="h5" align='center' paddingTop={1.5}>
             SIGN IN
